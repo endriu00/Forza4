@@ -5,7 +5,7 @@ package gameComponents;
  */
 public class Board 
 {
-	private static String[][] gameBoard;
+	private static Cell[][] gameBoard;
 	private static final int ROWS = 7;
 	private static final int COLUMNS = 6;
 	
@@ -14,7 +14,7 @@ public class Board
 	 */
 	public Board()
 	{
-		gameBoard = new String[ROWS][COLUMNS];	
+		gameBoard = new Cell[ROWS][COLUMNS];	
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class Board
 	public boolean isColumnFull()
 	{
 		for (int j = 0; j < COLUMNS; j++)
-			if (gameBoard[ROWS][j].isEmpty())
+			if (!gameBoard[ROWS][j].isFilled())
 				return false;
 		return true;
 	}
@@ -66,7 +66,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if (gameBoard[i][j].isEmpty())
+				if (!gameBoard[i][j].isFilled())
 					return false;
 		return true;
 	}
@@ -103,7 +103,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if ((gameBoard[i][j].equals(gameBoard[i][j+1]) && (gameBoard[i][j].equals(gameBoard[i][j+2])
+				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i][j+1]) && (gameBoard[i][j].equals(gameBoard[i][j+2])
 						&& (gameBoard[i][j].equals(gameBoard[i][j+3])))))
 				{
 					return true;
@@ -120,7 +120,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if ((gameBoard[i][j].equals(gameBoard[i+1][j]) && (gameBoard[i][j].equals(gameBoard[i+2][j])
+				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i+1][j]) && (gameBoard[i][j].equals(gameBoard[i+2][j])
 						&& (gameBoard[i][j].equals(gameBoard[i+3][j])))))
 				{
 					return true;
@@ -137,7 +137,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if ((gameBoard[i][j].equals(gameBoard[i-1][j-1]) && (gameBoard[i][j].equals(gameBoard[i-2][j-2])
+				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i-1][j-1]) && (gameBoard[i][j].equals(gameBoard[i-2][j-2])
 						&& (gameBoard[i][j].equals(gameBoard[i-3][j-3])))))
 				{
 					return true;
@@ -154,7 +154,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if ((gameBoard[i][j].equals(gameBoard[i+1][j+1]) && (gameBoard[i][j].equals(gameBoard[i+2][j+2])
+				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i+1][j+1]) && (gameBoard[i][j].equals(gameBoard[i+2][j+2])
 						&& (gameBoard[i][j].equals(gameBoard[i+3][j+3])))))
 				{
 					return true;
