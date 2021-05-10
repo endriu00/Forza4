@@ -1,3 +1,5 @@
+package gameComponents;
+
 /*Class that represents a player */
 public class Player {
 
