@@ -1,5 +1,8 @@
 package gameComponents;
 
+/**
+ * Griglia 7x6.
+ */
 public class Board 
 {
 	private static String[][] gameBoard;
@@ -9,23 +12,13 @@ public class Board
 	/**
 	 * Costruisce una griglia vuota.
 	 */
-	public class Board 
-	{
-	private static String[][] gameBoard;
-	private static final int ROWS = 7;
-	private static final int COLUMNS = 6;
-	
-	/**
-	 * Costruisce una griglia vuota.
-	 */
 	public Board()
 	{
-		gameBoard = new String[ROWS][COLUMNS];
-		
+		gameBoard = new String[ROWS][COLUMNS];	
 	}
 	
 	/**
-	 * Stampa la rappresentazione della griglia allo stato iniziale, prima dell'inizio del primo turno.
+	 * Stampa la griglia allo stato iniziale.
 	 */
 	public static void printBoard()
 	{
@@ -42,72 +35,131 @@ public class Board
 		System.out.println("\n");
 	}
 	
-	
-	
-	/*TO DO
 	/**
 	 * Controlla se la mossa è consentita, ossia se la colonna non è vuota e se la griglia non è piena.
 	 * @return true se la mossa è consentita.
 	 */
-	/*TO DO
 	public boolean isAllowed()
 	{
-		 if (isColumnFull() || isBoardFull(String[][] gameBoard))
+		 if (isColumnFull() || isBoardFull())
 		    return false;
 		 return true;
 	}
 	
+	/**
+	 * Controlla se la colonna è piena.
+	 * @return true se la colonna è piena.
+	 */
 	public boolean isColumnFull()
 	{
 		for (int j = 0; j < COLUMNS; j++)
-			if (j == 0)
+			if (gameBoard[ROWS][j].isEmpty())
 				return false;
 		return true;
 	}
 	
-	public boolean isBoardFull(String[][] gameBoard)
+	/**
+	 * Controlla se la griglia è piena.
+	 * @return true se la griglia è piena.
+	 */
+	public boolean isBoardFull()
 	{
-		int i = 0;
-		int j = 0;
-		for (i = 0; i < ROWS; i++)
-			for (j = 0; j < COLUMNS; i++)
-				if (!gameBoard.equals(" "))
-					return true;
-		return false;
+		for (int i = 0; i < ROWS; i++)
+			for (int j = 0; j < COLUMNS; i++)
+				if (gameBoard[i][j].isEmpty())
+					return false;
+		return true;
 	}
 	
-	
+	/**
+	 * Controlla se la partita si è conclusa con un pareggio.
+	 * @return true se se la partita si è conclusa con un pareggio.
+	 */
 	public boolean isDraw()
 	{
 		if (isBoardFull() && !isWin())
 			return true;
+		return false;
 	}
 	
+	/**
+	 * Controlla se la partita è stata vinta da uno dei due giocatori.
+	 * @return true se la partita è stata vinta.
+	 */
 	public boolean isWin()
 	{
 		if (isVerticalWin() || isHorizontalWin() 
-			||isBottomRighttDiagonalWin() || isBottomLeftDiagonalWin())
+			||isBottomRightDiagonalWin() || isBottomLeftDiagonalWin())
 			return true;
 		return false;
 	}
 	
+	/**
+	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
+	 * posizioni contigue per verticale.
+	 * @return true se c'è una vincita verticale.
+	 */
 	public boolean isVerticalWin()
 	{
-		
+		for (int i = 0; i < ROWS; i++)
+			for (int j = 0; j < COLUMNS; i++)
+				if ((gameBoard[i][j].equals(gameBoard[i][j+1]) && (gameBoard[i][j].equals(gameBoard[i][j+2])
+						&& (gameBoard[i][j].equals(gameBoard[i][j+3])))))
+				{
+					return true;
+				}
+		return false;					
 	}
 	
+	/**
+	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
+	 * posizioni contigue per orizzontale.
+	 * @return true se c'è una vincita orizzontale.
+	 */
 	public boolean isHorizontalWin()
 	{
-		
+		for (int i = 0; i < ROWS; i++)
+			for (int j = 0; j < COLUMNS; i++)
+				if ((gameBoard[i][j].equals(gameBoard[i+1][j]) && (gameBoard[i][j].equals(gameBoard[i+2][j])
+						&& (gameBoard[i][j].equals(gameBoard[i+3][j])))))
+				{
+					return true;
+				}
+		return false;
 	}
 	
-	public boolean isBottomRighttDiagonalWin()
+	/**
+	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
+	 * posizioni contigue per diagonale da destra in basso.
+	 * @return true se c'è una vincita diagonale.
+	 */
+	public boolean isBottomRightDiagonalWin()
 	{
-		
+		for (int i = 0; i < ROWS; i++)
+			for (int j = 0; j < COLUMNS; i++)
+				if ((gameBoard[i][j].equals(gameBoard[i-1][j-1]) && (gameBoard[i][j].equals(gameBoard[i-2][j-2])
+						&& (gameBoard[i][j].equals(gameBoard[i-3][j-3])))))
+				{
+					return true;
+				}
+		return false;
 	}
 	
+	/**
+	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
+	 * posizioni contigue per diagonale da sinistra in basso.
+	 * @return true se c'è una vincita diagonale.
+	 */
 	public boolean isBottomLeftDiagonalWin()
 	{
-		
-	}*/
+		for (int i = 0; i < ROWS; i++)
+			for (int j = 0; j < COLUMNS; i++)
+				if ((gameBoard[i][j].equals(gameBoard[i+1][j+1]) && (gameBoard[i][j].equals(gameBoard[i+2][j+2])
+						&& (gameBoard[i][j].equals(gameBoard[i+3][j+3])))))
+				{
+					return true;
+				}
+		return false;
+	}
 }
+
