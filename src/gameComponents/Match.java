@@ -63,6 +63,7 @@ public class Match {
 	        }
 	        FirstPlayerTurn = !FirstPlayerTurn;
 	        Board.printBoard();
+		turn++;
 	    }
 	}
 }
