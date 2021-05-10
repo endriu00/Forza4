@@ -1,5 +1,5 @@
 /**
-* Classe che eseguisce il gioco.
+* Classe che fa eseguire il gioco.
 */
 
 public class ConnectFour {
