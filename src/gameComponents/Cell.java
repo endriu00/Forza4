@@ -1,11 +1,13 @@
 public class Cell 
 {
+	Token token = new Token(null);
 	boolean isFilled;
 	boolean player1;
 	boolean player2;
 	
-	public Cell()
+	public Cell(Token token, boolean isFilled, boolean player1, boolean player2)
 	{
+		this.token = token;
 		isFilled = false;
 		player1 = false;
 		player2 = false;
