@@ -17,6 +17,8 @@ public class Match {
 	/* Variable gameboard is the gameboard of the match */
 	private Board gameboard;
 	
+	Board gameBoard = new Board();
+	
 	/* Variable firstPlayer is the first player of the match, the one who begins inserting token. 
 	 * firstPlayer will play during odd turns (he begins the match at turn = 1, he will play again at turn = 3, and so on). */
 	private Player firstPlayer;
@@ -42,5 +44,25 @@ public class Match {
 	public void grantPlayerMove(Player player) {
 		//int col = GUI Class asks player where does he want to insert the token or lets the user choose with mouse - this one better
 		//player.insertToken(, gameboard);
+	}
+	
+	/**
+	 * Metodo che fa eseguire il turno.
+	 */
+	public void executeTurn()
+	{
+	    boolean FirstPlayerTurn = Math.random() <= .5; 
+	    Board.printBoard();
+	    while (!(gameBoard.isWin()) || !(gameBoard.isDraw()))  //Finché non c'è una vincita o un pareggio
+	    {
+	        if (FirstPlayerTurn) 
+	        {
+	        	grantPlayerMove(firstPlayer);
+	        } else {
+	            grantPlayerMove(secondPlayer);
+	        }
+	        FirstPlayerTurn = !FirstPlayerTurn;
+	        Board.printBoard();
+	    }
 	}
 }
