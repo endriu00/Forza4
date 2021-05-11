@@ -2,15 +2,15 @@ public class Cell
 {
 	Token token = new Token(null);
 	boolean isFilled;
-	boolean player1;
-	boolean player2;
+	boolean firstPlayer;
+	boolean secondPlayer;
 	
-	public Cell(Token token, boolean isFilled, boolean player1, boolean player2)
+	public Cell(Token token, boolean isFilled, boolean firstPlayer, boolean secondPlayer)
 	{
 		this.token = token;
 		isFilled = false;
-		player1 = false;
-		player2 = false;
+		firstPlayer = false;
+		secondPlayer = false;
 	}
 	
 	public void setFilled()
@@ -25,22 +25,22 @@ public class Cell
 	
 	public void setPlayer1()
 	{
-		player1 = true;
+		firstPlayer = true;
 	}
 	
 	public boolean isPlayer1()
 	{
-		return player1;
+		return firstPlayer;
 	}
 	
 	public void setPlayer2()
 	{
-		player2 = true;
+		secondPlayer = true;
 	}
 	
 	public boolean isPlayer2()
 	{
-		return player2;
+		return secondPlayer;
 	}
 	
 }
