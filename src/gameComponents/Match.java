@@ -64,7 +64,7 @@ public class Match {
 	    Board.printBoard();
 	    for ( ; turn <= 42; turn++)
 	    {
-	    	if (!(gameBoard.isWin()) || !(gameBoard.isDraw()))
+	    	if (!isEndGame(gameBoard))
 	    	{
 				if (FirstPlayerTurn) 
 		        {
@@ -76,16 +76,41 @@ public class Match {
 		        Board.printBoard();
 		        turn++;
 	    	}
+	    	else   // Se la partita è finita
+	    	{
+	    		if (gameBoard.isDraw())    // Se è finita con un pareggio
+	    		{
+	    			System.out.print(" The match ended in a draw.");
+	    		}
+	    		else if (gameBoard.isWin())    // Se è finita con una vincita
+	    		{
+	    			System.out.print(" The match ended with a win.");
+	    		}
+	    	}
 	    }	    	    
 	}
 	
 	/**
 	 * Metodo che stabilisce chi tra i due giocatori esegue il turno.
-	 * @return
+	 * @return firstPlayerTurn true se ha il turno, false altrimenti.
 	 */
 	public boolean whoPlays()
 	{
 		boolean FirstPlayerTurn = Math.random() <= .5;
 		return FirstPlayerTurn; 
+	}
+	
+	/**
+	 * Metodo che stabilisce se la partita è finita.
+	 * @param gameBoard
+	 * @return true se la partita è finita.
+	 */
+	public boolean isEndGame(Board gameBoard)
+	{
+		if (gameBoard.isBoardFull() || gameBoard.isDraw() || gameBoard.isWin())
+		{
+			return true;
+		}
+		return false;
 	}
 }
