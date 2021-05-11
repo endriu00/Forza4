@@ -1,4 +1,6 @@
+package gameComponents;
 // Non serve più?
+
 
 public class Cell 
 {
