@@ -1,5 +1,7 @@
 package gameComponents;
 
+import java.util.Scanner;
+
 /*Match class*/
 public class Match {
 
@@ -44,6 +46,13 @@ public class Match {
 	public void grantPlayerMove(Player player) {
 		//int col = GUI Class asks player where does he want to insert the token or lets the user choose with mouse - this one better
 		//player.insertToken(, gameboard);
+		Scanner in = new Scanner(System.in);
+		System.out.println("Player " + player.getName() + ", please insert the column in which you want to insert your token!\n"
+				+ "Columns are numbered from 0 to 6.");
+		int inputCol = in.nextInt();
+		gameboard.insert(player.getToken(), inputCol);
+		
+		
 	}
 	
 	/**

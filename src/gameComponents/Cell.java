@@ -1,3 +1,5 @@
+package gameComponents;
+
 public class Cell 
 {
 	Token token = new Token(null);
