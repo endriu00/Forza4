@@ -1,3 +1,5 @@
+// Non serve più?
+
 public class Cell 
 {
 	Token token = new Token(null);
