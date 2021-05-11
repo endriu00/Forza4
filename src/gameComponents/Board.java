@@ -1,20 +1,20 @@
 package gameComponents;
 
 /**
- * Griglia 7x6.
+ * Griglia 7x6, matrice di Token.
  */
 public class Board 
 {
-	private static Cell[][] gameBoard;
-	private static final int ROWS = 7;
-	private static final int COLUMNS = 6;
+	private static Token[][] gameBoard;
+	private static final int ROWS = 6;
+	private static final int COLUMNS = 7;
 	
 	/**
 	 * Costruisce una griglia vuota.
 	 */
 	public Board()
 	{
-		gameBoard = new Cell[ROWS][COLUMNS];	
+		gameBoard = new Token[ROWS][COLUMNS];	
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class Board
 	public boolean isColumnFull()
 	{
 		for (int j = 0; j < COLUMNS; j++)
-			if (!gameBoard[ROWS][j].isFilled())
+			if (!(gameBoard[ROWS][j] == null))
 				return false;
 		return true;
 	}
@@ -66,7 +66,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if (!gameBoard[i][j].isFilled())
+				if ((gameBoard[i][j] == null))
 					return false;
 		return true;
 	}
@@ -103,7 +103,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i][j+1]) && (gameBoard[i][j].equals(gameBoard[i][j+2])
+				if (gameBoard[i][j] != null && (gameBoard[i][j].equals(gameBoard[i][j+1]) && (gameBoard[i][j].equals(gameBoard[i][j+2])
 						&& (gameBoard[i][j].equals(gameBoard[i][j+3])))))
 				{
 					return true;
@@ -120,7 +120,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i+1][j]) && (gameBoard[i][j].equals(gameBoard[i+2][j])
+				if (gameBoard[i][j] != null && (gameBoard[i][j].equals(gameBoard[i+1][j]) && (gameBoard[i][j].equals(gameBoard[i+2][j])
 						&& (gameBoard[i][j].equals(gameBoard[i+3][j])))))
 				{
 					return true;
@@ -137,7 +137,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i-1][j-1]) && (gameBoard[i][j].equals(gameBoard[i-2][j-2])
+				if (gameBoard[i][j] != null && (gameBoard[i][j].equals(gameBoard[i-1][j-1]) && (gameBoard[i][j].equals(gameBoard[i-2][j-2])
 						&& (gameBoard[i][j].equals(gameBoard[i-3][j-3])))))
 				{
 					return true;
@@ -154,7 +154,7 @@ public class Board
 	{
 		for (int i = 0; i < ROWS; i++)
 			for (int j = 0; j < COLUMNS; i++)
-				if (gameBoard[i][j].isFilled && (gameBoard[i][j].equals(gameBoard[i+1][j+1]) && (gameBoard[i][j].equals(gameBoard[i+2][j+2])
+				if (gameBoard[i][j] != null && (gameBoard[i][j].equals(gameBoard[i+1][j+1]) && (gameBoard[i][j].equals(gameBoard[i+2][j+2])
 						&& (gameBoard[i][j].equals(gameBoard[i+3][j+3])))))
 				{
 					return true;
