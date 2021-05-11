@@ -3,7 +3,7 @@ package gameComponents;
 import customException.FullColumnException;
 
 /**
- * Griglia 7x6.
+ * Griglia 7x6, matrice di Token.
  */
 public class Board 
 {
