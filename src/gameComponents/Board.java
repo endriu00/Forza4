@@ -116,7 +116,7 @@ public class Board
 	public boolean isBoardFull()
 	{
 		for (int i = 0; i < ROWS; i++)
-			for (int j = 0; j < COLUMNS; i++)
+			for (int j = 0; j < COLUMNS; j++)
 				if (gameBoard[i][j] == null)
 					return false;
 		return true;
