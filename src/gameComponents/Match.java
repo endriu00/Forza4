@@ -28,6 +28,9 @@ public class Match {
 	 * secondPlayer will play during even turns (he begins the match at turn = 2 and will play again at turn = 4, ...). */
 	private Player secondPlayer;
 	
+	/* Variable firstPlayerTurn is true if the first player plays first.*/
+	private boolean firstPlayerTurn;
+	
 	/**
 	 * Basic constructor for the Match class
 	 * Note that variable turn is set to 1. So the match will begin with turn labeled to 1.
@@ -57,7 +60,7 @@ public class Match {
 		System.out.println("Player " + player.getName() + ", please insert the column in which you want to insert your token!\n"
 				+ "Columns are numbered from 0 to 6.");
 		int inputCol = in.nextInt();
-		gameboard.insert(player.getToken(), inputCol);
+		gameBoard.insert(player.getToken(), inputCol);
 		
 		
 	}
@@ -68,33 +71,20 @@ public class Match {
 	 */
 	public void executeTurn()
 	{
-		boolean FirstPlayerTurn = false;
-	    whoPlays(); 
+	    whoPlaysFirst(); 
 	    Board.printBoard();
-	    for ( ; turn <= 42; turn++)
+	    for ( ; turn <= 42; turn++)    
 	    {
 	    	if (!isEndGame(gameBoard))
 	    	{
-				if (FirstPlayerTurn) 
+				if (firstPlayerTurn) 
 		        {
 		        	grantPlayerMove(firstPlayer);
 		        } else {
 		            grantPlayerMove(secondPlayer);
 		        }
-		        FirstPlayerTurn = !FirstPlayerTurn;
+		        firstPlayerTurn = !firstPlayerTurn;
 		        Board.printBoard();
-		        turn++;
-	    	}
-	    	else   // Se la partita è finita
-	    	{
-	    		if (gameBoard.isDraw())    // Se è finita con un pareggio
-	    		{
-	    			System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (gameBoard.isWin())    // Se è finita con una vincita
-	    		{
-	    			System.out.print(" The match ended with a win.");
-	    		}
 	    	}
 	    }	    	    
 	}
@@ -103,10 +93,9 @@ public class Match {
 	 * Metodo che stabilisce chi tra i due giocatori esegue il turno.
 	 * @return firstPlayerTurn true se ha il turno, false altrimenti.
 	 */
-	public boolean whoPlays()
+	public boolean whoPlaysFirst()
 	{
-		boolean FirstPlayerTurn = Math.random() <= .5;
-		return FirstPlayerTurn; 
+		return firstPlayerTurn = Math.random() <= .5;
 	}
 	
 	/**
