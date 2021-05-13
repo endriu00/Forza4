@@ -2,6 +2,8 @@ package gameComponents;
 
 import java.util.Scanner;
 
+import customException.FullColumnException;
+
 /*Match class*/
 public class Match {
 
@@ -53,23 +55,36 @@ public class Match {
 		this.turn = turn;
 	}
 	
-	public void grantPlayerMove(Player player) {
+	public void grantPlayerMove(Player player) throws FullColumnException  {
 		//int col = GUI Class asks player where does he want to insert the token or lets the user choose with mouse - this one better
 		//player.insertToken(, gameboard);
+		int inputCol;
 		Scanner in = new Scanner(System.in);
 		System.out.println("Player " + player.getName() + ", please insert the column in which you want to insert your token!\n"
 				+ "Columns are numbered from 0 to 6.");
-		int inputCol = in.nextInt();
-		gameBoard.insert(player.getToken(), inputCol);
-		
-		
+		inputCol = in.nextInt();
+		if (gameBoard.isColumnFull(inputCol))
+		{
+			do
+			{
+			System.out.println("The column is full! Please try inserting the token in another allowed, not-full column!");
+			inputCol = in.nextInt();
+			}
+			while (gameBoard.isColumnFull(inputCol));
+		}
+		else
+		{
+		gameBoard.insert(player.getToken(), inputCol);	
+		}
 	}
+	
 	
 	
 	/**
 	 * Metodo che fa eseguire il turno.
+	 * @throws FullColumnException 
 	 */
-	public void executeTurn()
+	public void executeTurn() throws FullColumnException
 	{
 	    whoPlaysFirst(); 
 	    Board.printBoard();
@@ -111,4 +126,4 @@ public class Match {
 		}
 		return false;
 	}
-}
+
