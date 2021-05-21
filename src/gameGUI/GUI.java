@@ -91,7 +91,7 @@ public class GUI extends javax.swing.JFrame implements ActionListener
   {
       	boardPanel = new JPanel(); 
         boardPanel.setLayout(new GridLayout(6, 7, 5, 5));		// Crea una griglia 6x7
-        boardPanel.setBounds(100, 100, 100, 100);		//cambiare parametri
+        boardPanel.setBounds(70, 60, 50, 50);		//cambiare parametri
         boardCellsPanel = new JPanel[6][7];
            
         columnButtonPanel = new JPanel(new GridLayout(1, 7, 5, 5));		// Crea il pannello per i pulsanti delle colonne
@@ -116,11 +116,11 @@ public class GUI extends javax.swing.JFrame implements ActionListener
         }
 
         homeButton = new JButton();
-        homeButton.setBounds(100, 100, 100, 100); //cambiare parametri
+        homeButton.setBounds(10, 20, 30, 30); //cambiare parametri
         homeButton.addActionListener(this);
 
         resetButton = new JButton();
-        resetButton.setBounds(100, 100, 100, 100);  //cambiare parametri
+        resetButton.setBounds(10, 20, 30, 30);  //cambiare parametri
         resetButton.addActionListener(this);
         
         boardPanel.add(columnButtonPanel, BorderLayout.NORTH);
@@ -136,7 +136,7 @@ public class GUI extends javax.swing.JFrame implements ActionListener
         add(endPanel);
 
         endButton = new JButton();
-        endButton.setBounds(100, 100, 100, 100);
+        endButton.setBounds(10, 20, 30, 30);
         
         endPanel.add(endButton);
         
