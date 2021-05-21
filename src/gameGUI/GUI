@@ -12,8 +12,7 @@ import java.awt.event.ActionEvent;
 
 
 public class GUI extends javax.swing.JFrame implements ActionListener
-{
-	
+{	
     private JPanel boardPanel;		// Pannello contenente board
     private JPanel[][] boardCellsPanel;		 // Array di JPanel che rappresenta la griglia
     private JPanel columnButtonPanel;		// Pannello contenente i pulsanti delle colonne
@@ -26,22 +25,22 @@ public class GUI extends javax.swing.JFrame implements ActionListener
     private JButton resetButton;		 // Pulsante per il reset
     private JButton homeButton;		// Pulsante per tornare alla home
     private JButton[] columnButtons;		// Pulsanti per le colonne
-	  private JButton startGame;		// Bottone per iniziare il gioco
-	  private JButton endButton;		// Bottone per l'esito della partita
+    private JButton startGame;		// Bottone per iniziare il gioco
+    private JButton endButton;		// Bottone per l'esito della partita
     
     private boolean isStartGame;		// Variabile boolena per il controllo del bottone
     private boolean playGame = false;		// Variabile booleana per la partita in corso         
 	
-	  ConnectFour connectFour;
-	  Match match;
-	  Board boardGame;
-	  Player player;
-	  Token token;
+    ConnectFour connectFour;
+    Match match;
+    Board boardGame;
+    Player player;
+    Token token;
 	
 	
-	  public GUI(ConnectFour connectFour, Match match, Player player, Board boardGame, Token token) throws FullColumnException
-	  {
-		    super("ConnectFour");
+    public GUI(ConnectFour connectFour, Match match, Player player, Board boardGame, Token token) throws FullColumnException
+    {
+	super("ConnectFour");
 
         boardPanel = new JPanel();
         boardPanel.setLayout(new BorderLayout());
@@ -67,27 +66,27 @@ public class GUI extends javax.swing.JFrame implements ActionListener
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
 		
-		    connectFour = new ConnectFour(this);
-	    	match = new Match ();
-	    	boardGame = new Board();
-	    	player = new Player();
+	connectFour = new ConnectFour(this);
+	match = new Match ();
+	boardGame = new Board();
+	player = new Player();
 			
-		    displayMenu();	
-	}
+ 	displayMenu();	
+   }
 	
 	
-	// Inizializza il menù iniziale
-	public void displayMenu()
-  {
-	    	startGame = new JButton();
-	    	boardPanel = new JPanel();
+   // Inizializza il menù iniziale
+   public void displayMenu()
+   {
+	startGame = new JButton();
+	boardPanel = new JPanel();
 
         startGame.setBorderPainted(false);
         startGame.setContentAreaFilled(false);
         startGame.addActionListener(this);
     }
 	
-	//Inizializza le componenti GUI del gioco
+  // Inizializza le componenti GUI del gioco
   public void displayGame()
   {
       	boardPanel = new JPanel(); 
@@ -165,9 +164,9 @@ public class GUI extends javax.swing.JFrame implements ActionListener
     }
 	
 
-	@Override
-	public void actionPerformed(ActionEvent e) 
-	{
+    @Override
+    public void actionPerformed(ActionEvent e) 
+    {
         if(e.getSource().equals(startGame))
         {
             displayBoard(e);
