@@ -1,0 +1,212 @@
+package gameGUI;
+
+import gameComponents.*;
+import customException.*;
+import playGame.*;
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+
+public class GUI extends javax.swing.JFrame implements ActionListener
+{
+	
+    private JPanel boardPanel;		// Pannello contenente board
+    private JPanel[][] boardCellsPanel;		 // Array di JPanel che rappresenta la griglia
+    private JPanel columnButtonPanel;		// Pannello contenente i pulsanti delle colonne
+    private JPanel endPanel;		// Pannello contenente informazioni sul'esito della partita
+    
+    private JLabel turnLabel;		// Etichetta contenente il turno								
+    private JLabel playerOneLabel;		// Etichetta contenente il primo giocatore
+    private JLabel playerTwoLabel;		// Etichetta contenente il secondo giocatore
+    
+    private JButton resetButton;		 // Pulsante per il reset
+    private JButton homeButton;		// Pulsante per tornare alla home
+    private JButton[] columnButtons;		// Pulsanti per le colonne
+	  private JButton startGame;		// Bottone per iniziare il gioco
+	  private JButton endButton;		// Bottone per l'esito della partita
+    
+    private boolean isStartGame;		// Variabile boolena per il controllo del bottone
+    private boolean playGame = false;		// Variabile booleana per la partita in corso         
+	
+	  ConnectFour connectFour;
+	  Match match;
+	  Board boardGame;
+	  Player player;
+	  Token token;
+	
+	
+	  public GUI(ConnectFour connectFour, Match match, Player player, Board boardGame, Token token) throws FullColumnException
+	  {
+		    super("ConnectFour");
+
+        boardPanel = new JPanel();
+        boardPanel.setLayout(new BorderLayout());
+        
+        columnButtonPanel = new JPanel();
+        columnButtonPanel.setLayout(new BorderLayout());
+
+        playerOneLabel = new JLabel("Player one");
+        playerTwoLabel = new JLabel("Player two");
+        
+        turnLabel = new JLabel(" ");
+        
+        turnLabel.setHorizontalAlignment(JLabel.CENTER);
+        playerOneLabel.setHorizontalAlignment(JLabel.RIGHT);
+        playerTwoLabel.setHorizontalAlignment(JLabel.LEFT);
+        
+        boardCellsPanel = new JPanel[6][7];
+
+        resetButton = new JButton("Reset");
+        resetButton.addActionListener(this);
+        boardPanel.add(resetButton);
+        
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+		
+		    connectFour = new ConnectFour(this);
+	    	match = new Match ();
+	    	boardGame = new Board();
+	    	player = new Player();
+			
+		    displayMenu();	
+	}
+	
+	
+	// Inizializza il menù iniziale
+	public void displayMenu()
+  {
+	    	startGame = new JButton();
+	    	boardPanel = new JPanel();
+
+        startGame.setBorderPainted(false);
+        startGame.setContentAreaFilled(false);
+        startGame.addActionListener(this);
+    }
+	
+	//Inizializza le componenti GUI del gioco
+  public void displayGame()
+  {
+      	boardPanel = new JPanel(); 
+        boardPanel.setLayout(new GridLayout(6, 7, 5, 5));		// Crea una griglia 6x7
+        boardPanel.setBounds(100, 100, 100, 100);		//cambiare parametri
+        boardCellsPanel = new JPanel[6][7];
+           
+        columnButtonPanel = new JPanel(new GridLayout(1, 7, 5, 5));		// Crea il pannello per i pulsanti delle colonne
+        columnButtons = new JButton[7];
+        boardCellsPanel = new JPanel[6][7];
+        
+        for (int j = 0; j < 7; j++) 
+        {
+            columnButtons[j] = new JButton();
+            columnButtonPanel.add(columnButtons[j]);
+        }
+       
+        for (int i = 0; i < 6; i++)		// Crea i pannelli per inserire i token
+        {
+            for (int j = 0; j < 7; j++)
+            {
+            	JPanel panel = new JPanel();
+                panel.getColorModel();		// Metodo provvisorio per l'assegnazione del colore
+                boardCellsPanel[i][j] = panel;
+                boardPanel.add(panel);
+            }
+        }
+
+        homeButton = new JButton();
+        homeButton.setBounds(100, 100, 100, 100); //cambiare parametri
+        homeButton.addActionListener(this);
+
+        resetButton = new JButton();
+        resetButton.setBounds(100, 100, 100, 100);  //cambiare parametri
+        resetButton.addActionListener(this);
+        
+        boardPanel.add(columnButtonPanel, BorderLayout.NORTH);
+        boardPanel.add(boardCellsPanel,BorderLayout.CENTER);     
+    }
+    
+    
+    // TO DO
+    // Crea il pannello per la partita finita
+    public void createEndPanel()
+    {
+        endPanel = new JPanel();
+        add(endPanel);
+
+        endButton = new JButton();
+        endButton.setBounds(100, 100, 100, 100);
+        
+        endPanel.add(endButton);
+        
+        endButton.setBorderPainted(true);
+        endButton.addActionListener(this);
+    }
+      
+    
+    // TO DO
+    // Visualizza il pannello per la partita finita
+    public void displayEndPanel()
+    {
+        createEndPanel();
+        endPanel.setVisible(true);
+    }
+    
+
+    private void resetGame() 
+    {
+        connectFour = new ConnectFour(this);
+        boardPanel.remove(columnButtonPanel);
+        boardPanel.remove(boardCellsPanel);
+        displayGame();
+        setVisible(true);
+    }
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) 
+	{
+        if(e.getSource().equals(startGame))
+        {
+            displayBoard(e);
+            playGame = true;           
+        }
+
+        if (isStartGame)
+        {
+        	try {
+				match.executeTurn();
+			} catch (FullColumnException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        	
+            for (int i = 0; i < 6; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    if(e.getSource().equals(boardCellsPanel[i][j]) && !boardGame.isColumnFull(i))
+                    {
+                      	// assegna il token alla colonna
+                    	Board.insert(token, j);
+                    	boardCellsPanel[i][j].getColorModel();		// Metodo provvisorio per l'assegnazione del colore
+                    }
+                }
+            }
+        }
+
+        if(e.getSource().equals(homeButton))
+        {
+            // TO DO
+            resetGame();
+        }
+       
+        if(e.getSource().equals(resetButton))
+        {
+        	// TO DO
+            resetGame();
+        }
+    }		
+}
