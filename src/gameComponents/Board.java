@@ -51,8 +51,13 @@ public class Board
 	 * Note that there is a special case: the first insert into an empty column. 
 	 * We cannot descend the matrix in this case, because this would lead tempRow+1 to be bigger than the actual number of rows.
 	 * In that case, the first if is instantly verified, the token is inserted and the method returns.
-	 * @param token
-	 * @param column
+	 * 
+	 * Note also that it is not necessary to provide the row, because the game must simulate the reality, 
+	 * so the token will be positioned in the lower level row not occupied by other tokens, not being able to 
+	 * intersect it, nor being able to fly above an empty cell, because of the gravity force.
+	 * 
+	 * @param token is the token to be inserted in the gameBoard
+	 * @param column is the column in which the player wants to insert the token in
 	 * @throws FullColumnException 
 	 */
 	
@@ -93,17 +98,20 @@ public class Board
 	
 	
 	/**
-	 * Controlla se la colonna è piena.
-	 * @return true se la colonna è piena.
+	 * Method for determining if a given column is full.
+	 * To achieve this purpose, it sees the gameBoard in position row = 0, column = column:
+	 * if this position has no object inside (e.g. is null), the column is not full, because 
+	 * there is still space for at least one more object, so it returns false to the artificial 
+	 * question "is column full";
+	 * otherwise, if there is an object in that position, so if there is a non-null object,
+	 * returns true: the column is full.
+	 * @param column is the column to be checked
+	 * @return true if the column is full, false if the column has still got a space for another token.
 	 */
 	public boolean isColumnFull(int column)
 	{
-		for (int i = 0; i < ROWS; i++)
-		{
-			if(gameBoard[i][column] == null)
-			{
-				return false;
-			}
+		if(gameBoard[0][column] == null) {
+			return false;
 		}
 		return true;
 	}
@@ -236,5 +244,39 @@ public class Board
 			}
 		}
 		return false;
+	}
+	
+	/*From here it starts a series of useful methods to be used in other classes*/
+	
+	/**
+	 * Method that returns the token in position i, j of the matrix
+	 * @param i indicates the row variable
+	 * @param j indicates the column variable
+	 * @return the token in position i, j
+	 */
+	public Token getTokenInPosition(int i, int j) {
+		return gameBoard[i][j];
+	}
+	
+	/**
+	 * Method for getting the number of rows. 
+	 * Although the number of rows is indicated in the description and in the domain of
+	 * the project, this method is provided in order to make order and depend exclusively 
+	 * on this class to know the number of rows 
+	 * @return the number of rows of the board
+	 */
+	public static int getNumberOfRows() {
+		return ROWS;
+	}
+	
+	/**
+	 *  Method for getting the number of columns. 
+	 * Although the number of columns is indicated in the description and in the domain of
+	 * the project, this method is provided in order to make order and depend exclusively 
+	 * on this class to know the number of columns 
+	 * @return
+	 */
+	public static int getNumberOfColumns() {
+		return COLUMNS;
 	}
 }

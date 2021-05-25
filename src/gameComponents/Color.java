@@ -23,5 +23,29 @@ public class Color {
 		this.green = green;
 		this.blue = blue;
 	}
+	
+	/**
+	 * Basically a getter method for red component of the color
+	 * @return red color component, that is an int value
+	 */
+	public int getRed() {
+		return this.red;
+	}
+	
+	/**
+	 * Basically a getter method for green component of the color
+	 * @return green color component, that is an int value
+	 */
+	public int getGreen() {
+		return this.green;
+	}
+	
+	/**
+	 * Basically a getter method for blue component of the color
+	 * @return blue color component, that is an int value
+	 */
+	public int getBlue() {
+		return this.blue;
+	}
 
 }

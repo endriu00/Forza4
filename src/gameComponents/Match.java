@@ -3,6 +3,7 @@ package gameComponents;
 import java.util.Scanner;
 
 import customException.FullColumnException;
+import saveAndLoad.SaveMatch;
 
 /*Match class*/
 public class Match {
@@ -36,23 +37,33 @@ public class Match {
 	/**
 	 * Basic constructor for the Match class
 	 * Note that variable turn is set to 1. So the match will begin with turn labeled to 1.
-	 * @param gameboard is the gameboard of the match
+	 * In addition, it is created a new Board.
 	 * @param p1 is the first player (e.g. the player who will start the game, who has the first turn)
 	 * @param p2 is the second player
 	 */
-	public Match(Board gameboard, Player p1, Player p2) {
+	public Match(Player p1, Player p2) {
 		this.gameBoard = new Board();
 		firstPlayer = p1;
 		secondPlayer = p2;
 		turn = 1;
 	}
 	
+	/**
+	 * Basic constructor for the Match class
+	 * Note that variable turn is set to 1. So the match will begin with turn labeled to 1.
+	 * @param gameboard is the gameboard of the match
+	 * @param p1 is the first player (e.g. the player who will start the game, who has the first turn)
+	 * @param p2 is the second player
+	 */
+	public Match(Board gameboard, Player p1, Player p2) {
+		this.gameBoard = gameboard;
+		this.firstPlayer = p1;
+		this.secondPlayer = p2;
+		this.turn = 1;
+	}
+	
 	public int getTurn() {
 		return turn;
-	}
-
-	public void setTurn(int turn) {
-		this.turn = turn;
 	}
 	
 	public void grantPlayerMove(Player player) throws FullColumnException  {
@@ -71,6 +82,7 @@ public class Match {
 			inputCol = in.nextInt();
 			}
 			while (gameBoard.isColumnFull(inputCol));
+			gameBoard.insert(player.getToken(), inputCol);
 		}
 		else
 		{
@@ -88,8 +100,19 @@ public class Match {
 	{
 	    whoPlaysFirst(); 
 	    Board.printBoard();
+	    Scanner inSave = new Scanner(System.in);
 	    for ( ; turn <= 42; turn++)    
 	    {
+	    	System.out.println("Do you want to save the match? If yes, type save\n"
+	    			+ "Otherwise, type no\n");
+	    	
+	    	if(inSave.next().equals("save")) {
+	    		saveGameAndQuit();
+	    		inSave.close();
+	    		break;
+	    	}
+	    	
+	    	
 	    	if (!isEndGame(gameBoard))
 	    	{
 				if (firstPlayerTurn) 
@@ -126,4 +149,58 @@ public class Match {
 		}
 		return false;
 	}
+	
+	/**
+	 * Method used for save game and quit.
+	 * 1. Integrate with GUI
+	 * 2. Change method to ask player the name of the match to be saved (this is part of the integration)
+	 * 3. Provide res directory
+	 */
+	public void saveGameAndQuit() {
+		SaveMatch save = new SaveMatch("C:\\Users\\andre\\Desktop\\Partita1", this);
+		
+	}
+	
+	/*From here it starts a series of useful method intended to be used in other classes*/
+	
+	/**
+	 * Method that returns the first player of the match
+	 * @return the first player
+	 */
+	public Player getFirstPlayer() {
+		return this.firstPlayer;
+	}
+	
+	/**
+	 * Method that returns the second player of the match
+	 * @return the second player
+	 */
+	public Player getSecondPlayer() {
+		return this.secondPlayer;
+	}
+	
+	/**
+	 * Method that returns the gameboard of the match
+	 * @return the gameboard
+	 */
+	public Board getBoard() {
+		return this.gameBoard;
+	}
+	
+	public void setFirstPlayer(Player firstPlayer) {
+		this.firstPlayer = firstPlayer;
+	}
+	
+	public void setSecondPlayer(Player secondPlayer) {
+		this.secondPlayer = secondPlayer;
+	}
+	
+	public void setBoard(Board gameBoard) {
+		this.gameBoard = gameBoard;
+	}
+	
+	public void setTurn(int turn) {
+		this.turn = turn;
+	}
+}
 
