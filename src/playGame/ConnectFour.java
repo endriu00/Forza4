@@ -7,6 +7,9 @@ import customException.FullColumnException;
 import gameComponents.*;
 import saveAndLoad.LoadMatch;
 
+//Sistemare chi inizia problema con partita salvata
+//executeTurn() viene chiamato ogni volta che si ricomincia la partita con save and load
+//
 public class ConnectFour {
 	
 	public static void main(String[] args) 
@@ -29,7 +32,7 @@ public class ConnectFour {
 			//ConnectFour cf = new ConnectFour();
 			//cf.play(match);
 			ConnectFour cf = new ConnectFour();
-			cf.restartMatch("C:\\Users\\andre\\Desktop\\Partita1.txt");
+			cf.restartMatch("Partita1");
 			
 			
 	}

@@ -26,6 +26,7 @@ public class SaveMatch {
 	 * Internally, the constructor will gather every necessary characteristic of the match
 	 * (that will be used when the user would like to restart the match from where it has interrupted it)
 	 * and it will create the file whose name derives from the string inserted by the user in a .txt file. 
+	 * This file is stored in the res directory coming along with the repo and it is totally platform independent.
 	 * 
 	 * The constructor simply uses specific and different single-responsibility methods for writing what it needs to
 	 * load the match in a second moment.
@@ -34,8 +35,7 @@ public class SaveMatch {
 	 * @param match is the playing match
 	 */
 	public SaveMatch(String matchName, Match match) {
-		savedMatch = new File(matchName + ".txt");	//Provide a res directory in which store the file, maybe even a backup copy
-		
+		savedMatch = new File("res" + File.separator + matchName + ".txt");	
 		savePlayer(match.getFirstPlayer(), savedMatch, true, false);
 		savePlayer(match.getSecondPlayer(), savedMatch, false, true);
 		saveTurn(match, savedMatch, true);

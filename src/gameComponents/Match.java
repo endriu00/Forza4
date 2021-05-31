@@ -157,7 +157,7 @@ public class Match {
 	 * 3. Provide res directory
 	 */
 	public void saveGameAndQuit() {
-		SaveMatch save = new SaveMatch("C:\\Users\\andre\\Desktop\\Partita1", this);
+		SaveMatch save = new SaveMatch("Partita1", this);
 		
 	}
 	

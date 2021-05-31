@@ -55,7 +55,7 @@ public class LoadMatch {
 	 * @param fileName is the name of the file from which load the match.
 	 */
 	public LoadMatch(String fileName) {		
-		try (Scanner fileScanner = new Scanner(new File(fileName))){
+		try (Scanner fileScanner = new Scanner(new File("res" + File.separator + fileName + ".txt"))){
 			Player firstPlayer = loadPlayer(loadingFile, fileScanner, true);
 			Player secondPlayer = loadPlayer(loadingFile, fileScanner, false); 
 			int turn = loadTurn(loadingFile, fileScanner);
