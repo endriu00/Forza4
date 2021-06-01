@@ -1,6 +1,7 @@
 package gameComponents;
 
-/*import customException.FullColumnException;*/
+import customException.ColumnOutOfRange;
+import customException.FullColumnException;
 /**
  * Griglia 7x6, matrice di Token.
  */
@@ -61,29 +62,38 @@ public class Board
 	 * @throws FullColumnException 
 	 */
 	
-	public void insert(Token token, int column)
-	{ //throws FullColumnException {
+	public void insert(Token token, int column) throws FullColumnException {
 			
-				if(gameBoard[ROWS-1][column] == null) 	
-				{
-					gameBoard[ROWS-1][column] = token;
-					return;	
-				}	
-			
-//			if(isColumnFull(column)) {
-//				throw new FullColumnException();
-//			}
-			
-				int tempRow = 0;
-				if(!isColumnFull(column)) 
-				{
-					while(gameBoard[tempRow+1][column] == null) 	
-					{
-					tempRow++;
-					}
-				}
-				gameBoard[tempRow][column] = token;
-				} 
+		try {
+			if(column < 0 || column > 6) throw new ColumnOutOfRange();
+		}
+		catch(ColumnOutOfRange e) {
+			return;
+		}
+		
+		try {
+			if(isColumnFull(column)) {
+				throw new FullColumnException();
+			}
+		}
+		catch(FullColumnException e) {
+			return;
+		}
+
+		if(gameBoard[ROWS-1][column] == null) 	
+		{
+			gameBoard[ROWS-1][column] = token;
+			return;	
+		}	
+		
+		int tempRow = 0;
+		if(!isColumnFull(column)) {
+			while(gameBoard[tempRow+1][column] == null) {
+			tempRow++;
+			}
+		}
+		gameBoard[tempRow][column] = token;
+	} 
 	
 	/**
 	 * Controlla se la mossa è consentita, ossia se la colonna non è vuota e se la griglia non è piena.
@@ -211,12 +221,12 @@ public class Board
 	 */
 	public boolean isBottomRightDiagonalWin()
 	{
-		for (int i = 3; i < ROWS; i++)
+		for (int i = 0; i < ROWS - 3; i++)
 		{
 			for (int j = 3; j < COLUMNS; j++)
 			{
-				if (gameBoard[i][j] != null && (gameBoard[i][j].equals(gameBoard[i-1][j-1]) && (gameBoard[i][j].equals(gameBoard[i-2][j-2])
-						&& (gameBoard[i][j].equals(gameBoard[i-3][j-3])))))
+				if (gameBoard[i][j] != null && (gameBoard[i][j].equals(gameBoard[i+1][j-1]) && (gameBoard[i][j].equals(gameBoard[i+2][j-2])
+						&& (gameBoard[i][j].equals(gameBoard[i+3][j-3])))))
 				{
 					return true;
 				}

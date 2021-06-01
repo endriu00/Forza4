@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
+import customException.FullColumnException;
 import gameComponents.Match;
 import gameComponents.Player;
 import utilities.IntegrityMatrix;
@@ -53,8 +54,9 @@ public class LoadMatch {
 	 * If the file is not found, the exception caught is FileNotFoundException.
 	 * If the bound turn != numberOfToken + 1 is not verified, the exception is caught.
 	 * @param fileName is the name of the file from which load the match.
+	 * @throws FullColumnException 
 	 */
-	public LoadMatch(String fileName) {		
+	public LoadMatch(String fileName) throws FullColumnException {		
 		try (Scanner fileScanner = new Scanner(new File("res" + File.separator + fileName + ".txt"))){
 			Player firstPlayer = loadPlayer(loadingFile, fileScanner, true);
 			Player secondPlayer = loadPlayer(loadingFile, fileScanner, false); 
@@ -194,8 +196,9 @@ public class LoadMatch {
 	 * @param fileName is the file.
 	 * @param fileScanner is the scanner that reads the file.
 	 * @return the Board gameBoard
+	 * @throws FullColumnException 
 	 */
-	private Board loadBoard(File fileName, Scanner fileScanner) {	
+	private Board loadBoard(File fileName, Scanner fileScanner) throws FullColumnException {	
 		
 		Board gameBoard = new Board();
 		

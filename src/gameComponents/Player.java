@@ -20,17 +20,6 @@ public class Player {
 	}
 	
 	/**
-	 * Method that lets the player insert his token inside the board
-	 * @param column is the column the player wants to insert the token in
-	 * @param gameboard is the board in which the player will insert his token
-	 */
-	public void insertToken(int column, Board gameboard) {
-		gameboard.insert(token, column); 
-		
-		
-	}
-	
-	/**
 	 * Basic getter method for the name (of the player)
 	 * @return the name of the player
 	 */
