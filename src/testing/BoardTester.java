@@ -10,7 +10,7 @@ import gameComponents.Color;
  * This is fundamentally a unit testing.
  * In the class, it has been written, for each test, the purpose of the test, so a short explanation, 
  * an expected result, and the effective result of the test. Easy to understand, if the expected result
- * and the result itself are the same, the test has been successfull.
+ * and the result itself are the same, the test has been successful.
  * In order to view these tests, you are provided a main method that will show you the testing results 
  * in the standard output view. To not harden the view, it has been provided a catchy view.
  * 
@@ -46,7 +46,7 @@ public class BoardTester {
 
 		gameBoard = new Board();
 		System.out.println("Test for verifying the board can be full. In this case, it does not matter that every token is the same.\n"
-				+ " Another test has been made for verifying one can win with the correct rules!");
+				+ "Another test has been made for verifying one can win with the correct rules!");
 		System.out.println("isBoardFull method output must be true.\n"
 				+ "Expected: true.");
 		System.out.println("Testing...");
@@ -103,6 +103,37 @@ public class BoardTester {
 				+ "Expected: true.");
 		System.out.println("Testing...");
 		testIsDraw(gameBoard, testingToken, otherTestingToken);
+		System.out.println("Test finished.\n");
+		
+		System.out.println("---------------------------------------------------------------------\n");
+		
+		gameBoard = new Board();
+		System.out.println("Test for getting the token in position i, j, so testing getTokenInPosition(int i, int j) method.");
+		System.out.println("This method returns a token (read the address of a token).\n"
+				+ "Expected: gameComponents.Token@someNumbers.");
+		System.out.println("Testing...");
+		testGetTokenInPosition(gameBoard, testingToken);
+		System.out.println("Test finished.\n");
+		
+		System.out.println("---------------------------------------------------------------------\n");
+		
+		System.out.println("Test for getting the number of rows of the board.\n"
+				+ "Note that it is a static, final value because of its definition in the domain of the project.");
+		System.out.println("It is expected an int representing the number of rows.\n"
+				+ "Expected: 6");
+		System.out.println("Testing...");
+		testGetRows();
+		System.out.println("Test finished.\n");
+		
+		System.out.println("---------------------------------------------------------------------\n");
+
+
+		System.out.println("Test for getting the number of columns of the board.\n"
+				+ "Note that it is a static, final value because of its definition in the domain of the project.");
+		System.out.println("It is expected an int representing the number of columns.\n"
+				+ "Expected: 7");
+		System.out.println("Testing...");
+		testGetColumns();
 		System.out.println("Test finished.\n");
 		
 		System.out.println("---------------------------------------------------------------------\n");
@@ -318,6 +349,29 @@ public class BoardTester {
 		catch(FullColumnException e) {
 			
 		}
+	}
+	
+	public static void testGetTokenInPosition(Board board, Token token1) {
+		int posInRow = 5;
+		int posInCol = 5;
+		try {
+			board.insert(token1, posInCol);
+		}
+		catch(FullColumnException e) {
+			
+		}
+		
+		Token token = board.getTokenInPosition(posInRow, posInCol);
+		System.out.println("Actually is: " + token1);
+		
+	}
+	
+	public static void testGetRows() {
+		System.out.println("Actually is: " + Board.getNumberOfRows());
+	}
+	
+	public static void testGetColumns() {
+		System.out.println("Actually is: " + Board.getNumberOfColumns());
 	}
 
 }
