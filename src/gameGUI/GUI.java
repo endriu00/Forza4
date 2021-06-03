@@ -1,4 +1,4 @@
-package gameGUI;
+package GUI;
 
 import java.awt.*;
 import java.awt.Color;
@@ -13,7 +13,8 @@ import gameComponents.*;
 import playGame.*;
 
 public class GUI extends JFrame implements ActionListener 
-{     
+{
+     
     private JFrame frame;
     
     private Container gameContainer;	 // Container 
@@ -70,7 +71,7 @@ public class GUI extends JFrame implements ActionListener
 			}
 		});
 	}
-
+	
 
 	
 	/**
@@ -98,7 +99,7 @@ public class GUI extends JFrame implements ActionListener
 	 */
 	private void initializeStartGameFrame() 
 	{
-		frame = new JFrame();
+		frame = new JFrame("Connect Four");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -210,7 +211,7 @@ public class GUI extends JFrame implements ActionListener
 
         for (int j = 0; j < 7; j++) 
         {
-            columnButtons[j] = new JButton("" + j + "");
+            columnButtons[j] = new JButton("" + j  + "");
             columnButtons[j].addActionListener(this);
             columnsButtonPanel.add(columnButtons[j]);
         }
@@ -242,7 +243,10 @@ public class GUI extends JFrame implements ActionListener
      */
     public void actionPerformed(ActionEvent e) 
     {
+    	//connectFour.play(match);
     	
+    	match.executeTurn();
+		
         if (e.getSource() == resetButton) 
         {
         	reloadGame();
@@ -263,53 +267,59 @@ public class GUI extends JFrame implements ActionListener
         	connectFour.restartMatch(getName());
         }
         
+ 
+        
         //connectFour.play(match);
         
-        for (int i = 0; i < boardCellsPanel.length; i++) 
-        {
-        	for (int j = 0; j < boardCellsPanel[i].length; j++) 
-        	{
-        		if (e.getSource() == columnButtons[i]) 
-        		{	
-        			if (match.firstPlayerTurn)
-        			{
-        				Player currentPlayer = match.getFirstPlayer();
-        				Token token = currentPlayer.getToken();
-        				gameBoard.insert(token, i);
-        			}
-        			else
-        			{
-        				Player currentPlayer = match.getSecondPlayer();
-        				Token token = currentPlayer.getToken();
-        				gameBoard.insert(token, i);
-        			}
-            	
-        			
-        			//if(boardCellsPanel[i][j].getBackground(Color.WHITE)) 	
-        			//{
-        				boardCellsPanel[i][j].setBackground(token.getTokenColor());
-        				//return;
-        			//}	
-			
-        			
-                       
-                 //if (match.isEndGame()) 
-        		//{
-                  //    
-                  //}
-
-        			} 
-        		}
-       
-        	} 
-        	
+        if (match.firstPlayerTurn)
+		{
+			turnLabel.setText("Turn: " + match.getFirstPlayer().getName());
+			Player currentPlayer = match.getFirstPlayer();
+			Token token = currentPlayer.getToken();
+			for (int i = 0; i < boardCellsPanel.length; i++) 
+			 {     	
+		        		if (e.getSource().equals(columnButtons[i]) && !gameBoard.isColumnFull(i))
+		        		{	
+		        			int k = getClickedButton(e);
+		        			//gameBoard.insert(token, k);
+		        			boardCellsPanel[k][i].setBackground(token.getTokenColor());
+		        		}
+		        	
+		     }
+		}
+		else
+		{
+			turnLabel.setText("Turn: " + match.getSecondPlayer().getName());
+			Player currentPlayer = match.getSecondPlayer();
+			Token token = currentPlayer.getToken();
+			for (int i = 0; i < boardCellsPanel.length; i++) 
+			{
+		        		if (e.getSource().equals(columnButtons[i]) && !gameBoard.isColumnFull(i))
+		        		{	
+		        			int k = getClickedButton(e);
+		        			//gameBoard.insert(token, k);
+		        			boardCellsPanel[k][i].setBackground(token.getTokenColor());
+		        		}
+		        }
+		     }
         }
-     //}
+		
+    
+	/**
+    * Returns the index of the cliked button.
+    */
+    public static int getClickedButton(ActionEvent e)
+    {
+    	JButton button = (JButton)e.getSource();
+        int clickedColumn = Integer.parseInt(button.getActionCommand());
+        return clickedColumn;	
+    }
+    
         
-      public void reloadGame()
-      {
+    public void reloadGame()
+    {
     	frame.setVisible(false);
       	initializeStartGameFrame();
-      
-      }
-}
+     }
+ }
+
