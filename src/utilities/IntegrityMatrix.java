@@ -1,5 +1,8 @@
 package utilities;
 
+import customException.ColumnOutOfRange;
+import customException.RowOutOfRange;
+
 /**
  * class for checking the integrity of the Board contained in the saved file.
  */
@@ -83,6 +86,8 @@ public class IntegrityMatrix {
 	 * In order to achieve this task, given the row the element is trying to be inserted in, the method checks if the below rows (rows greater than the given row till the end of the checkMatrix)
 	 * are set to 0, so if there is a NO element in the rows below.
 	 * 
+	 * Checks also if the row and the column passed in input are within the bound of the matrix.
+	 * 
 	 * Note that if the first element of the column is missing, this method won't notice it, but this case is handled in the LoadMatch class because it is outside of this class concern.
 	 * @param row is the row of the element to be checked.
 	 * @param col is the column of the element to be checked.
@@ -90,6 +95,21 @@ public class IntegrityMatrix {
 	 * 		   false if the column is wrong, so if there is not an element between other two elements in a vertical assessment. 
 	 */
 	public boolean checkIfProperCreatedColumn(int row, int col) {
+		
+		//Handling out of bounds row and column numbers.
+		try {
+			if(col < 0 || col > 6) throw new ColumnOutOfRange();
+		}
+		catch(ColumnOutOfRange e) {
+			return false;
+		}
+		
+		try {
+			if(row < 0 || row > 5) throw new RowOutOfRange();
+		}
+		catch(RowOutOfRange e) {
+			return false;
+		}
 		
 		while(row < checkMatrix.length) {
 			if(checkMatrix[row][col] == 0) {
@@ -106,12 +126,31 @@ public class IntegrityMatrix {
 	 * (if exists in this checkMatrix, given the mapping between the Board and the checkMatrix).
 	 * If it exists, there is a problem, so it has to respond true (it is already inserted!), changing return answer of checkIntegrity method to false, otherwise it is a new element,
 	 * so it in inserted in the checkMatrix and passes this control, returning false.
+	 * 
+	 * Checks also if the row and the column passed in input are within the bound of the matrix.
+	 * 
 	 * @param row is the row of the element to be checked.
 	 * @param col is the column of the element to be checked.
 	 * @return true if the element is already in the checkMatrix, 
 	 * 		   false if it is a new element.
 	 */
 	public boolean checkIfAlreadyInserted(int row, int col) {
+		
+		//Handling out of bounds row and column numbers.
+		try {
+			if(col < 0 || col > 6) throw new ColumnOutOfRange();
+		}
+		catch(ColumnOutOfRange e) {
+			return true;
+		}
+		
+		try {
+			if(row < 0 || row > 5) throw new RowOutOfRange();
+		}
+		catch(RowOutOfRange e) {
+			return true;
+		}
+		
 		//If the value of the cell was zero, there was no element stored, otherwise there was the element
 		if(this.checkMatrix[row][col] == 0) {
 			this.checkMatrix[row][col] = 1;
@@ -122,10 +161,10 @@ public class IntegrityMatrix {
 	}
 	
 	/**
-	 * Utility method
-	 * @param i
-	 * @param j
-	 * @return
+	 * Utility getter method for getting the element in i, j position
+	 * @param i indicates the row of the matrix
+	 * @param j indicates the column of the matrix
+	 * @return the element in position i, j
 	 */
 	public int getElemRow(int i, int j) {
 		return checkMatrix[i][j];

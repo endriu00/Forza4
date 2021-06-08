@@ -1,0 +1,10 @@
+First player: Andrea, token color: 0 0 0
+Second player: Erica, token color: 20 220 20
+Turn: 7 
+Board: 
+Row: 5 Col: 0 0 0 0
+Row: 5 Col: 1 0 0 0
+Row: 5 Col: 2 0 0 0
+Row: 5 Col: 4 20 220 20
+Row: 5 Col: 5 20 220 20
+Row: 4 Col: 2 20 220 20

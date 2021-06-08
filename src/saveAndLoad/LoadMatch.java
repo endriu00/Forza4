@@ -222,14 +222,9 @@ public class LoadMatch {
 		while(fileScanner.hasNextLine()) {																								
 			fileScanner.findInLine("Row: ");                                                                                           //Searches for the statement "Row"                                
 			currentRow = fileScanner.nextInt();                                                                              		   //Takes the row number
-			if(currentRow < 0 || currentRow > 5) {                                                                                     //Checks whether the row is in the correct range defined as the Board measures                                            
-				//Same as below                                                                                                                                      
-			}                                                                                                                                                        
+	                                                                                                                                                       
 			fileScanner.findInLine("Col: ");                                                                                                                                                                                           
-			currentColumn = fileScanner.nextInt();                                                                                     //Takes the column number                                                                                                            
-			if(currentColumn < 0 || currentColumn > 6) {                                                                               //Checks whether the column is in the correct range defined as the Board measures //Forms the color                                                           
-				//throw an exception because someone tampered the file. Column must be in a range between 0 and 6                                                                    
-			}                                         
+			currentColumn = fileScanner.nextInt();                                                                                     //Takes the column number                                                                                                                                                 
 			
 			//Check the integrity of the position                                                                                                                                                                        
 			if(checkMatrix.checkIntegrity(currentRow, currentColumn)) {																   
@@ -238,7 +233,7 @@ public class LoadMatch {
 				redComp = fileScanner.nextInt();
 				greenComp = fileScanner.nextInt();
 				blueComp = fileScanner.nextInt();
-				token = new Token(new Color(redComp, greenComp, blueComp));
+				token = new Token(new Color(redComp, greenComp, blueComp));		//maybe this could lead to consider token of the same color as not the same token??
 			
 				//Insert the token in the gameBoard
 				gameBoard.insert(token, currentColumn);
