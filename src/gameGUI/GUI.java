@@ -32,6 +32,7 @@ public class GUI2 extends JFrame implements ActionListener
     private JLabel playerOneLabel;	 // Label for player one
     private JLabel playerTwoLabel;	// Label for player two
     private JLabel turnLabel;		// Label displaying the turn
+    private JLabel endLabel;
 
     private JButton startGameButton; // Start button
     private JButton startMatchButton; // Start match button
@@ -46,8 +47,6 @@ public class GUI2 extends JFrame implements ActionListener
     
     private static final int ROWS = 6;
 	private static final int COLUMNS = 7;
-	
-	private boolean playGame;
     
     private ConnectFour connectFour;	 
     private Match match;
@@ -89,7 +88,7 @@ public class GUI2 extends JFrame implements ActionListener
 	{	
 		super("Connect Four");
 		
-		initializeStartGameFrame();
+		displayStartGameFrame();
 		
 		connectFour = new ConnectFour();
 		gameBoard = new Board();
@@ -98,8 +97,6 @@ public class GUI2 extends JFrame implements ActionListener
 		secondPlayer = new Player(getName(), token);
 		match = new Match(gameBoard, firstPlayer, secondPlayer);
 		
-		playGame = false;
-		
 	}
 
 	
@@ -107,9 +104,9 @@ public class GUI2 extends JFrame implements ActionListener
 
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Display the start/load game frame.
 	 */
-	private void initializeStartGameFrame() 
+	private void displayStartGameFrame() 
 	{
 		frame = new JFrame("Connect Four");
 		frame.setBounds(100, 100, 450, 300);
@@ -145,8 +142,51 @@ public class GUI2 extends JFrame implements ActionListener
 		frame.getContentPane().add(startGameButton);
 		frame.getContentPane().add(loadButton);
 		frame.setVisible(true);
-	
 	}
+	
+	
+	
+	/**
+	 * Initialize the end game frame.
+	 */
+	private void displayEndGameFrame() 
+	{
+		frame = new JFrame("End game");
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		endLabel.setText("The match ended.");
+		frame.add(endLabel);
+		
+		startGameButton = new JButton("Start a new Game");
+		startGameButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				frame.setVisible(false);
+				//initializeBoardComponents();
+				initializeMatch();
+			}
+		});
+		
+		quitButton = new JButton("Quit");
+        quitButton.addActionListener(new ActionListener() 
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				frame.setVisible(false);
+				System.exit(0);
+			}
+		});
+        
+		startGameButton.setBounds(120, 80, 200, 50);
+		quitButton.setBounds(120, 140, 200, 50);
+		frame.getContentPane().add(startGameButton);
+		frame.getContentPane().add(quitButton);
+		frame.setVisible(true);	
+	}
+
     
     
     
@@ -215,6 +255,7 @@ public class GUI2 extends JFrame implements ActionListener
     }
     
     
+    
     /**
      * Initialize match players. 
      */
@@ -253,17 +294,6 @@ public class GUI2 extends JFrame implements ActionListener
   	  frame.getContentPane().add(panel);
   	  frame.setVisible(true);
   	  
-  	  playGame = true;
-  	  
-  	  match.executeTurn();
-  	  if(match.firstPlayerTurn)
-  	  {
-    	turnLabel.setText("It is " + match.getFirstPlayer().getName() + " turn.");
-  	  }
-  	  else
-  	  {
-    	turnLabel.setText("It is " + match.getSecondPlayer().getName() + " turn.");
-  	  }
     }
     
     
@@ -281,14 +311,6 @@ public class GUI2 extends JFrame implements ActionListener
         String playerOneText = String.format(playerOne.getName()); 
         String playerTwoText = String.format(playerTwo.getName()); 
 
-        if(match.firstPlayerTurn)
-        {
-        	turnLabel.setText("It is " + match.getFirstPlayer().getName() + " turn.");
-        }
-        else
-        {
-        	turnLabel.setText("It is " + match.getSecondPlayer().getName() + " turn.");
-        }
         playerOneLabel.setText(playerOneText);
         playerTwoLabel.setText(playerTwoText);
     }
@@ -309,7 +331,6 @@ public class GUI2 extends JFrame implements ActionListener
             columnButtons[j].addActionListener(this);
             columnsButtonPanel.add(columnButtons[j]);
         }
-
         boardPanel = new JPanel(new GridLayout(ROWS, COLUMNS, 20, 20));
         boardCellsPanel = new JPanel[ROWS][COLUMNS];
 
@@ -323,7 +344,6 @@ public class GUI2 extends JFrame implements ActionListener
                 boardPanel.add(panel);
             }
         }
-
         gameBoardPanel.add(columnsButtonPanel, BorderLayout.NORTH);
         gameBoardPanel.add(boardPanel,BorderLayout.CENTER);   
     }
@@ -345,14 +365,14 @@ public class GUI2 extends JFrame implements ActionListener
 	    //Scanner inSave = new Scanner(System.in);
     	int turn = match.getTurn();
     	
-	    for ( ; turn <= 42; turn++)
+	    for (turn = match.getTurn(); turn <= 42; turn++)
 	    {
 	    	if (!match.isEndGame(gameBoard))
 	    	{
 	    		if (match.firstPlayerTurn)
 	    		{
 	    			for (int j = 0; j < COLUMNS; j++) 
-	    			 {  
+	    			{  
 	    				turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
 	    				Player currentPlayer = match.getFirstPlayer();
 	    				Token token = currentPlayer.getToken();
@@ -381,24 +401,14 @@ public class GUI2 extends JFrame implements ActionListener
 	    		    		}
 	    		    		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
 	    		    		boardCellsPanel[tempRow][k].setBackground(Color.RED);
-	    		    		
-	    		    		if(match.getBoard().isDraw())
-	    		    		{
-	    		    			//System.out.print(" The match ended in a draw.");
-	    		    		}
-	    		    		else if (match.getBoard().isWin())   
-	    		    		{
-	    		    		    //System.out.print(" The match ended with a win.");
-	    		    	    }	
-	    		        }
-	    		        
-	    			 }
-	    			//match.setTurn(turn);  	
-	    			 }
-	    			else if (!match.firstPlayerTurn)
-	    			{
-	    				for (int j = 0; j < COLUMNS; j++) 
-	    				 {  
+	    		    	
+	    		        }     
+	    			 } 	
+	    		}
+	    		else
+	    		{
+	    			for (int j = 0; j < COLUMNS; j++) 
+	    			{  
 	    					turnLabel.setText("It is " + match.getSecondPlayer().getName() + " (second player) turn.");
 	    					Player currentPlayer = match.getSecondPlayer();
 	    					Token token = currentPlayer.getToken();
@@ -426,22 +436,17 @@ public class GUI2 extends JFrame implements ActionListener
 	    			    			}
 	    			    		}
 	    			    		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
-	    			    		boardCellsPanel[tempRow][k].setBackground(Color.BLUE);
-	    			    		
-	    			    		if(match.getBoard().isDraw() || match.getBoard().isWin())
-	    			    		{
-	    			    			//System.out.print(" The match ended in a draw.");
-	    			    			
-	    			    			//initializeEndGameFrame();
-	    			    		}
-	    			    		
+	    			    		boardCellsPanel[tempRow][k].setBackground(Color.BLUE);		    		
 	    			        }
 	    				 }	
-	    			  }
-	    		match.setTurn(turn); 
+	    			  } 
+	    		if(match.getBoard().isDraw() || match.getBoard().isWin())
+	    		{
+	    			displayEndGameFrame();
+	    		}
+	    		match.setTurn(turn);
 		        match.firstPlayerTurn = !match.firstPlayerTurn;
-		        //Board.printBoard();
-	    	}
+	    	}    	
 	    }
 		
         if (e.getSource() == resetButton) 
@@ -465,7 +470,7 @@ public class GUI2 extends JFrame implements ActionListener
         }
         
         
-        if (match.firstPlayerTurn)
+        /*if (match.firstPlayerTurn)
 		{
 			for (int j = 0; j < COLUMNS; j++) 
 			 {  
@@ -510,7 +515,7 @@ public class GUI2 extends JFrame implements ActionListener
 		        	
 		     }
 		}
-		else if (!match.firstPlayerTurn)
+		else
 		{
 			for (int j = 0; j < COLUMNS; j++) 
 			 {  
@@ -552,15 +557,14 @@ public class GUI2 extends JFrame implements ActionListener
 		    		
 		        }
 			 }	
-		  }
+		  }*/
 		
       }
-		
-    
+	
 
 
 
-    public static int getClickedButton(ActionEvent e)
+	public static int getClickedButton(ActionEvent e)
     {
     	JButton button = (JButton)e.getSource();
         int clickedColumn = Integer.parseInt(button.getActionCommand());
@@ -572,7 +576,7 @@ public class GUI2 extends JFrame implements ActionListener
       public void reloadGame()
       {
     	frame.setVisible(false);
-      	initializeStartGameFrame();
+      	displayStartGameFrame();
       
       }
 
