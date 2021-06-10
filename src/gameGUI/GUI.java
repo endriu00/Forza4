@@ -1,10 +1,15 @@
-package GUI;
+package gameGUI;
 
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.*;
+import java.lang.reflect.InvocationTargetException;
+
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.text.*;
 
 import javax.swing.event.*;
@@ -13,7 +18,7 @@ import customException.*;
 import gameComponents.*;
 import playGame.*;
 
-public class GUI2 extends JFrame implements ActionListener 
+public class GUI extends JFrame implements ActionListener 
 {
      
     private JFrame frame;
@@ -55,6 +60,10 @@ public class GUI2 extends JFrame implements ActionListener
     private Player firstPlayer;
     private Player secondPlayer;
     
+    public int actualCol = 0;
+    private SynchronousQueue<Integer> q;
+
+    
    
     
     /**
@@ -62,21 +71,15 @@ public class GUI2 extends JFrame implements ActionListener
 	 */
 	public static void main(String[] args) 
 	{
-		EventQueue.invokeLater(new Runnable() 
-		{
-			public void run() 
-			{
-				try 
-				{
-					GUI2 window = new GUI2();
-					window.frame.setVisible(true);
-				}
-				catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-		});
+		
+		GUI window = new GUI();
+		window.frame.setVisible(true);		
+		
+	
+					
+	
+		
+			
 	}
 	
 
@@ -84,7 +87,7 @@ public class GUI2 extends JFrame implements ActionListener
 	/**
 	 * Create the application.
 	 */
-	public GUI2() 
+	public GUI() 
 	{	
 		super("Connect Four");
 		
@@ -96,7 +99,7 @@ public class GUI2 extends JFrame implements ActionListener
 		firstPlayer = new Player(getName(), token);
 		secondPlayer = new Player(getName(), token);
 		match = new Match(gameBoard, firstPlayer, secondPlayer);
-		
+		executeMatch();
 	}
 
 	
@@ -132,7 +135,12 @@ public class GUI2 extends JFrame implements ActionListener
 				frame.setVisible(false);
 				initializeBoardComponents();
 				initializeMatch();
-				connectFour.restartMatch(getName());
+				try {
+					connectFour.restartMatch(getName());
+				} catch (FullColumnException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
 			}
 		});
@@ -340,6 +348,7 @@ public class GUI2 extends JFrame implements ActionListener
             {
                 JPanel panel = new JPanel();
                 panel.setBackground(Color.PINK);
+                
                 boardCellsPanel[i][j] = panel;
                 boardPanel.add(panel);
             }
@@ -349,105 +358,141 @@ public class GUI2 extends JFrame implements ActionListener
     }
 
 
+    public void executeMatch() {
+    	
+    	match.whoPlaysFirst(); 
+    	int turn = match.getTurn();
+
+    	for (turn = match.getTurn(); turn <= 42; turn++) {
+    		
+           	
+           	
+            //this prints 42 0s
+           	System.out.println(actualCol);
+           	
+			try {
+				q.poll(10000000, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+           	
+           	//should wait until user presses button
+    		if (!match.isEndGame(gameBoard)) {
+    			
+    			if(match.getFirstPlayerTurn()) {
+    			//	turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
+    		   		Player currentPlayer = match.getFirstPlayer();
+    		   		Token token = currentPlayer.getToken();
+    		   		
+    		   		//testing
+
+    	           	System.out.println(actualCol);
+    	           	
+    	           	//end testing
+    			}
+    		}
+    	}
+    }
 	 
 	
 	
 	/**
      * Performs actions based on clicked buttons.
      */
-    public void actionPerformed(ActionEvent e) 
-    {
+    public void actionPerformed(ActionEvent e) {
     	
-    	//connectFour.play(match);
-    	//match.executeTurn();
-    	match.whoPlaysFirst(); 
-	    //Board.printBoard();
-	    //Scanner inSave = new Scanner(System.in);
-    	int turn = match.getTurn();
-    	
-	    for (turn = match.getTurn(); turn <= 42; turn++)
-	    {
-	    	if (!match.isEndGame(gameBoard))
-	    	{
-	    		if (match.firstPlayerTurn)
-	    		{
-	    			for (int j = 0; j < COLUMNS; j++) 
-	    			{  
-	    				turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-	    				Player currentPlayer = match.getFirstPlayer();
-	    				Token token = currentPlayer.getToken();
-	    				//match.grantPlayerMove(currentPlayer);
-	    		        if (e.getSource().equals(columnButtons[j]) && !gameBoard.isColumnFull(j))
-	    		        {	
-	    		        	int k = getClickedButton(e);
-	    		        	//match.grantPlayerMove(currentPlayer);
-	    		        	
-	    		        	gameBoard.insert(token, k);
-	    		        			
-	    		        	if(boardCellsPanel[ROWS-1][k].getBackground().equals(Color.PINK)) 	
-	    		    		{
-	    		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-	    		        		boardCellsPanel[ROWS-1][k].setBackground(Color.RED);
-	    		    			return;	
-	    		    		}	
-	    		    			
-	    		    		int tempRow = 0;
-	    		    		if(!gameBoard.isColumnFull(k)) 
-	    		    		{
-	    		    			while(boardCellsPanel[tempRow+1][k].getBackground().equals(Color.PINK)) 	
-	    		    			{
-	    		    				tempRow++;
-	    		    			}
-	    		    		}
-	    		    		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
-	    		    		boardCellsPanel[tempRow][k].setBackground(Color.RED);
-	    		    	
-	    		        }     
-	    			 } 	
-	    		}
-	    		else
-	    		{
-	    			for (int j = 0; j < COLUMNS; j++) 
-	    			{  
-	    					turnLabel.setText("It is " + match.getSecondPlayer().getName() + " (second player) turn.");
-	    					Player currentPlayer = match.getSecondPlayer();
-	    					Token token = currentPlayer.getToken();
-	    					//match.grantPlayerMove(currentPlayer);
-	    			        if (e.getSource().equals(columnButtons[j]) && !gameBoard.isColumnFull(j))
-	    			        {	
-	    			        	int k = getClickedButton(e);
-	    			        	//match.grantPlayerMove(currentPlayer);
-	    			        	
-	    			        	gameBoard.insert(token, k);
-	    			        			
-	    			        	if(boardCellsPanel[ROWS-1][k].getBackground().equals(Color.PINK)) 	
-	    			    		{
-	    			        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-	    			    			boardCellsPanel[ROWS-1][k].setBackground(Color.BLUE);
-	    			    			return;	
-	    			    		}	
-	    			    			
-	    			    		int tempRow = 0;
-	    			    		if(!gameBoard.isColumnFull(k)) 
-	    			    		{
-	    			    			while(boardCellsPanel[tempRow+1][k].getBackground().equals(Color.PINK)) 	
-	    			    			{
-	    			    				tempRow++;
-	    			    			}
-	    			    		}
-	    			    		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
-	    			    		boardCellsPanel[tempRow][k].setBackground(Color.BLUE);		    		
-	    			        }
-	    				 }	
-	    			  } 
-	    		if(match.getBoard().isDraw() || match.getBoard().isWin())
-	    		{
-	    			displayEndGameFrame();
-	    		}
-	    		match.setTurn(turn);
-		        match.firstPlayerTurn = !match.firstPlayerTurn;
-	    	}    	
-	    }
+	   	for (int j = 0; j < COLUMNS; j++) {  
+	   		
+	   		if (e.getSource().equals(columnButtons[j]) && !gameBoard.isColumnFull(j)) {	
+	           	
+	           	
+	           	int k = getClickedButton(e);
+	           	
+	           	try {
+					q.offer(k, 100000, TimeUnit.SECONDS);
+				} catch (InterruptedException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+	           	this.actualCol = k;
+	           	System.out.println(actualCol);
+	           	try {
+					gameBoard.insert(token, k);
+					gameBoard.printBoard();
+				} catch (FullColumnException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+	           		
+
+	           	if(boardCellsPanel[ROWS-1][k].getBackground().equals(Color.PINK)) 	
+	       		{
+	           		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+	           		boardCellsPanel[ROWS-1][k].setBackground(Color.RED);
+	       			return;	
+	       		}	
+	       			
+	       		int tempRow = 0;
+	       		if(!gameBoard.isColumnFull(k)) 
+	       		{
+	       			while(boardCellsPanel[tempRow+1][k].getBackground().equals(Color.PINK)) 	
+	       			{
+	       				tempRow++;
+	       			}
+	       		}
+	       		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
+	       		boardCellsPanel[tempRow][k].setBackground(Color.RED);
+	       	
+	   		}     
+	   	} 	
+//	   	else {
+//		   for (int j = 0; j < COLUMNS; j++) {  
+//	   			turnLabel.setText("It is " + match.getSecondPlayer().getName() + " (second player) turn.");
+//	   			Player currentPlayer = match.getSecondPlayer();
+//	   			Token token = currentPlayer.getToken();
+//	   			//match.grantPlayerMove(currentPlayer);
+//	   	        if (e.getSource().equals(columnButtons[j]) && !gameBoard.isColumnFull(j)) {
+//	   	        	int k = getClickedButton(e);
+//	   	        	//match.grantPlayerMove(currentPlayer);
+//	   	        	
+//	   	        	try {
+//						gameBoard.insert(token, k);
+//					} catch (FullColumnException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//	   	        			
+//	   	        	if(boardCellsPanel[ROWS-1][k].getBackground().equals(Color.PINK)) 	
+//	   	    		{
+//	   	        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+//	   	    			boardCellsPanel[ROWS-1][k].setBackground(Color.BLUE);
+//	   	    			return;	
+//	   	    		}	
+//	   	    			
+//	   	    		int tempRow = 0;
+//	   	    		if(!gameBoard.isColumnFull(k)) 
+//	   	    		{
+//	   	    			while(boardCellsPanel[tempRow+1][k].getBackground().equals(Color.PINK)) 	
+//	   	    			{
+//	   	    				tempRow++;
+//	   	    			}
+//	   	    		}
+//	   	    		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
+//	   	    		boardCellsPanel[tempRow][k].setBackground(Color.BLUE);		    		
+//	   	       }
+//		   }	
+//	 }
+	    		
+//	    		if(match.getBoard().isDraw() || match.getBoard().isWin())
+//	    		{
+//	    			displayEndGameFrame();
+//	    		}
+//	    		match.setTurn(turn);
+//		        //match.firstPlayerTurn = !match.firstPlayerTurn;
+//	    	}    	
+//	    }
 		
         if (e.getSource() == resetButton) 
         {
@@ -466,7 +511,12 @@ public class GUI2 extends JFrame implements ActionListener
         
         else if (e.getSource() == loadButton) 
         {
-        	connectFour.restartMatch(getName());
+        	try {
+				connectFour.restartMatch(getName());
+			} catch (FullColumnException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
         }
         
         
@@ -581,3 +631,4 @@ public class GUI2 extends JFrame implements ActionListener
       }
 
 }
+

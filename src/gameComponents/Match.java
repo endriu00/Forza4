@@ -164,6 +164,14 @@ public class Match {
 	/*From here it starts a series of useful method intended to be used in other classes*/
 	
 	/**
+	 * Method for getting firstPlayerTurn 
+	 * @return firstPlayerTurn variable value
+	 */
+	public boolean getFirstPlayerTurn() {
+		return this.firstPlayerTurn;
+	}
+	
+	/**
 	 * Method that returns the first player of the match
 	 * @return the first player
 	 */
