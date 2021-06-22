@@ -3,16 +3,19 @@ package gameGUI;
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.*;
+import java.io.File;
+
 import javax.swing.*;
 import java.util.*;
 import javax.swing.text.*;
-
 
 import javax.swing.event.*;
 
 import customException.*;
 import gameComponents.*;
 import playGame.*;
+import saveAndLoad.LoadMatch;
+import saveAndLoad.SaveMatch;
 
 public class GUI2 extends JFrame implements ActionListener 
 {
@@ -29,6 +32,7 @@ public class GUI2 extends JFrame implements ActionListener
     private JPanel columnsButtonPanel;		 // Panel containing the column buttons
     private JPanel gameBoardPanel;		// Panel containing the game board
     private JPanel playerPanel;			// Panel containing players
+    private JPanel endPanel;			// Panel containing end label
     
     private JLabel playerOneLabel;	 // Label for player one
     private JLabel playerTwoLabel;	// Label for player two
@@ -52,9 +56,13 @@ public class GUI2 extends JFrame implements ActionListener
     private ConnectFour connectFour;	 
     private Match match;
     private Board gameBoard;
-    private Token token; 
+    private Token firstPlayerToken; 
+    private Token secondPlayerToken;
     private Player firstPlayer;
     private Player secondPlayer;
+    
+    private SaveMatch savedMatch;
+    private LoadMatch loadedMatch;
     
    
     
@@ -94,11 +102,11 @@ public class GUI2 extends JFrame implements ActionListener
 		
 		connectFour = new ConnectFour();
 		gameBoard = new Board();
-		token = new Token(getBackground());
-		firstPlayer = new Player(getName(), token);
-		secondPlayer = new Player(getName(), token);
-		match = new Match(gameBoard, firstPlayer, secondPlayer);
-		
+		firstPlayerToken = new Token(getBackground());
+		secondPlayerToken = new Token(getBackground());
+		firstPlayer = new Player(getName(), firstPlayerToken);
+		secondPlayer = new Player(getName(), secondPlayerToken);
+		match = new Match(gameBoard, firstPlayer, secondPlayer);		
 	}
 
 	
@@ -152,13 +160,27 @@ public class GUI2 extends JFrame implements ActionListener
 	 */
 	private void displayEndGameFrame() 
 	{
-		frame = new JFrame("End game");
+		frame = new JFrame("Game over");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		endLabel.setText("The match ended.");
-		frame.add(endLabel);
+		endPanel = new JPanel();
+	    endPanel.setLayout(new GridLayout(2, 1, 10, 10));
+		
+		//endLabel = new JLabel("The match ended.");
+		//endPanel.add(endLabel);
+		
+		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		{
+			endLabel = new JLabel("The match ended with a draw.");
+			endPanel.add(endLabel);
+		}
+		else if (match.getBoard().isWin())    // Se è finita con una vincita
+	    {
+			endLabel = new JLabel("The match ended with a win.");
+			endPanel.add(endLabel);
+	    }	
 		
 		startGameButton = new JButton("Start a new Game");
 		startGameButton.addActionListener(new ActionListener() 
@@ -166,8 +188,16 @@ public class GUI2 extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e) 
 			{
 				frame.setVisible(false);
-				//initializeBoardComponents();
+				
 				initializeMatch();
+				
+				connectFour = new ConnectFour();
+				gameBoard = new Board();
+				firstPlayerToken = new Token(getBackground());
+				secondPlayerToken = new Token(getBackground());
+				firstPlayer = new Player(getName(), firstPlayerToken);
+				secondPlayer = new Player(getName(), secondPlayerToken);
+				match = new Match(gameBoard, firstPlayer, secondPlayer);	
 			}
 		});
 		
@@ -176,14 +206,16 @@ public class GUI2 extends JFrame implements ActionListener
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				frame.setVisible(false);
+				System.exit(0);
 			}
 		});
         
 		startGameButton.setBounds(120, 80, 200, 50);
 		quitButton.setBounds(120, 140, 200, 50);
+		endPanel.setBounds(130, 40, 200, 50);
 		frame.getContentPane().add(startGameButton);
 		frame.getContentPane().add(quitButton);
+		frame.getContentPane().add(endPanel);
 		frame.setVisible(true);	
 	}
 
@@ -195,7 +227,7 @@ public class GUI2 extends JFrame implements ActionListener
      */
     public void initializeBoardComponents() 
     {	
-    	setBounds(300, 300, 600, 700);
+    	setBounds(300, 300, 700, 700);
         gameContainer = getContentPane();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -273,9 +305,8 @@ public class GUI2 extends JFrame implements ActionListener
 		  {
 				frame.setVisible(false);
 				initializeBoardComponents();
-				initializeMatchPlayers();
-				match.executeTurn();
-				//insertOnBoard();
+		
+				match.whoPlaysFirst();
 		  }
 	  });
 
@@ -292,37 +323,23 @@ public class GUI2 extends JFrame implements ActionListener
   	  String playerOneText = playerOneField.getText();
   	  String playerTwoText = playerTwoField.getText();
   	  
-  	  //firstPlayer.setName(playerOneText);
-  	  //secondPlayer.setName(playerTwoText);
+  	  firstPlayer.setName(playerOneText);
+  	  secondPlayer.setName(playerTwoText);
+  	  
+  	  firstPlayer = new Player(playerOneText, firstPlayerToken);
+  	  secondPlayer = new Player(playerTwoText, secondPlayerToken);
+  	  
+  	  match.setFirstPlayer(firstPlayer);
+	  match.setSecondPlayer(secondPlayer);
 
   	  startMatchButton.setBounds(120, 80, 200, 50);
   	  frame.getContentPane().add(startMatchButton);
   	  frame.add(startMatchButton, BorderLayout.SOUTH);
   	  frame.getContentPane().add(panel);
   	  frame.setVisible(true);
-  	  
-  	  //initializeBoardComponents();
-  	  
+  	 
     }
     
-    
-    
-    
-    
-    /**
-     * Initialize the contents of the match.
-     */
-    public void initializeMatchPlayers() 
-    {	
-    	Player playerOne = match.getFirstPlayer();
-        Player playerTwo = match.getSecondPlayer();
-
-        String playerOneText = String.format(playerOne.getName()); 
-        String playerTwoText = String.format(playerTwo.getName()); 
-
-        playerOneLabel.setText(playerOneText);
-        playerTwoLabel.setText(playerTwoText);
-    }
     
 
     
@@ -333,77 +350,103 @@ public class GUI2 extends JFrame implements ActionListener
     {
         columnsButtonPanel = new JPanel(new GridLayout(1, COLUMNS, 10, 10));
         columnButtons = new JButton[COLUMNS];
-
-        /*for (int j = 0; j < COLUMNS; j++) 
-        {
-            columnButtons[j] = new JButton(j + "");
-            columnButtons[j].addActionListener(this);
-            columnsButtonPanel.add(columnButtons[j]);
-        }*/
         
         columnButtons[0] = new JButton(0 + "");
         columnButtons[0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 0);
-					
+				{ 
 					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][0].setBackground(Color.RED);
+		        		gameBoard.insert(firstPlayerToken, 0);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
+		    		
 		    		if(!gameBoard.isColumnFull(0)) 
 		    		{
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][0].setBackground(Color.RED);
+		    				gameBoard.insert(firstPlayerToken, 0);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][0].setBackground(Color.RED);
-		    		}
+		    		gameBoard.insert(firstPlayerToken, 0);
 		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player one won. ");
+		    	    	displayEndGameFrame();
+		    	    }	
+		    		
+		    		}	
 				}
 				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 0);
-					
+				{	
 					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
 		    		{
+						secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+				
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][0].setBackground(Color.BLUE);
+		        		gameBoard.insert(secondPlayerToken, 0);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(0)) 
 		    		{
+		    			secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+				
+		    			if (!boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][0].setBackground(Color.BLUE);
+		    				gameBoard.insert(secondPlayerToken, 0);	
+		    			}
 		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][0].setBackground(Color.BLUE);
+		    		gameBoard.insert(secondPlayerToken, 0);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player two won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}
 				}
-				
-				if (match.getBoard().isDraw())    // Se è finita con un pareggio
-	    		{
-	    		    	System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    	    {
-	    	    	System.out.print(" The match ended with a win.");
-	    	    }	
 				
 				match.firstPlayerTurn = !match.firstPlayerTurn;
 				
@@ -415,65 +458,98 @@ public class GUI2 extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e) {
 				if (match.firstPlayerTurn)
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 1);
-					
 					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][1].setBackground(Color.RED);	
+		        		boardCellsPanel[ROWS-1][1].setBackground(Color.RED);
+		        		gameBoard.insert(firstPlayerToken, 1);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(1)) 
-		    		{
+		    		{	
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][1].setBackground(Color.RED);
+		    				gameBoard.insert(firstPlayerToken, 1);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][1].setBackground(Color.RED);
+		    		gameBoard.insert(firstPlayerToken, 1);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player one won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}
 		    			
 				}
 				else
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 1);
-					
 					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][1].setBackground(Color.BLUE);
+		        		gameBoard.insert(secondPlayerToken, 1);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		    			return;	
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(1)) 
 		    		{
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][1].setBackground(Color.BLUE);
+		    				gameBoard.insert(secondPlayerToken, 1);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][1].setBackground(Color.BLUE);
+		    		gameBoard.insert(secondPlayerToken, 1);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player two won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}
 		    		
 				}
-				
-				if (match.getBoard().isDraw())    // Se è finita con un pareggio
-	    		{
-	    		    	System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    	    {
-	    	    	System.out.print(" The match ended with a win.");
-	    	    }	
 				
 				match.firstPlayerTurn = !match.firstPlayerTurn;
 				
@@ -485,65 +561,97 @@ public class GUI2 extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e) {
 				if (match.firstPlayerTurn)
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 2);
-					
 					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+		
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][2].setBackground(Color.RED);
+		        		gameBoard.insert(firstPlayerToken, 2);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(2)) 
 		    		{
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+		
+		    			if (!boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][2].setBackground(Color.RED);
+		    				gameBoard.insert(firstPlayerToken, 2);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][2].setBackground(Color.RED);
+		    		gameBoard.insert(firstPlayerToken, 2);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player one won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}
 		    			
 				}
 				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 2);
-					
+				{		
 					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
 		    		{
+						secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+								
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][2].setBackground(Color.BLUE);
+		        		gameBoard.insert(secondPlayerToken, 2);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(2)) 
 		    		{
+		    			secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+								
+		    			if (!boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][2].setBackground(Color.BLUE);
+		    				gameBoard.insert(secondPlayerToken, 2);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][2].setBackground(Color.BLUE);
-		    		}
+		    		gameBoard.insert(secondPlayerToken, 2);
 		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player two won.");
+		    	    	displayEndGameFrame();
+		    	    }	
+		    		}
 				}
-				
-				if (match.getBoard().isDraw())    // Se è finita con un pareggio
-	    		{
-	    		    	System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    	    {
-	    	    	System.out.print(" The match ended with a win.");
-	    	    }	
 				
 				match.firstPlayerTurn = !match.firstPlayerTurn;
 				
@@ -555,64 +663,97 @@ public class GUI2 extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e) {
 				if (match.firstPlayerTurn)
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 3);
-					
 					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][3].setBackground(Color.RED);	
+		        		gameBoard.insert(firstPlayerToken, 3);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(3)) 
 		    		{
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][3].setBackground(Color.RED);
+		    				gameBoard.insert(firstPlayerToken, 3);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][3].setBackground(Color.RED);
+		    		gameBoard.insert(firstPlayerToken, 3);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player one won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}
 		    		
 				}
 				else
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 3);
-					
 					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
 		    		{
+						secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+		
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][3].setBackground(Color.BLUE);
+		        		gameBoard.insert(secondPlayerToken, 3);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(3)) 
 		    		{
+		    			secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+		
+		    			if (!boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][3].setBackground(Color.BLUE);
+		    				gameBoard.insert(secondPlayerToken, 3);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][3].setBackground(Color.BLUE);
+		    		gameBoard.insert(secondPlayerToken, 3);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player two won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}
 				}
-				
-				if (match.getBoard().isDraw())    // Se è finita con un pareggio
-	    		{
-	    		    	System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    	    {
-	    	    	System.out.print(" The match ended with a win.");
-	    	    }	
 				
 				match.firstPlayerTurn = !match.firstPlayerTurn;
 				
@@ -624,64 +765,97 @@ public class GUI2 extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e) {
 				if (match.firstPlayerTurn)
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 4);
-					
 					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+					
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][4].setBackground(Color.RED);
+		        		gameBoard.insert(firstPlayerToken, 4);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(4)) 
 		    		{
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+					
+		    			if (!boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][4].setBackground(Color.RED);
+		    				gameBoard.insert(firstPlayerToken, 4);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][4].setBackground(Color.RED);
+		    		gameBoard.insert(firstPlayerToken, 4);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player one won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}
 		    			
 				}
 				else
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 4);
-					
 					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
 		    		{
+						secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][4].setBackground(Color.BLUE);
+		        		gameBoard.insert(secondPlayerToken, 4);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(4)) 
 		    		{
+		    			secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][4].setBackground(Color.BLUE);
+		    				gameBoard.insert(secondPlayerToken, 4);	
+		    			} 
+		    			
 		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][4].setBackground(Color.BLUE);
+		    		gameBoard.insert(secondPlayerToken, 4);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player two won.");
+		    	    	displayEndGameFrame();
+		    	    }	
 		    		}	
 				}
-				
-				if (match.getBoard().isDraw())    // Se è finita con un pareggio
-	    		{
-	    		    	System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    	    {
-	    	    	System.out.print(" The match ended with a win.");
-	    	    }	
 				
 				match.firstPlayerTurn = !match.firstPlayerTurn;
 				
@@ -693,65 +867,92 @@ public class GUI2 extends JFrame implements ActionListener
 			public void actionPerformed(ActionEvent e) {
 				if (match.firstPlayerTurn)
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 5);
-					
 					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][5].setBackground(Color.RED);
+		        		gameBoard.insert(firstPlayerToken, 5);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(5)) 
 		    		{
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][5].setBackground(Color.RED);
+		    				gameBoard.insert(firstPlayerToken, 5);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
 		    		boardCellsPanel[tempRow][5].setBackground(Color.RED);
+		    		gameBoard.insert(firstPlayerToken, 5);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
 		    		}
-		    			
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player one won.");
+		    	    	displayEndGameFrame();
+		    	    }	
+		    		}		
 				}
 				else
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 5);
-					
 					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
 		    		{
+						secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (second player) turn.");
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][5].setBackground(Color.BLUE);
+		        		gameBoard.insert(secondPlayerToken, 5);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(5)) 
 		    		{
+		    			secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (second player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][5].setBackground(Color.BLUE);
+		    				gameBoard.insert(secondPlayerToken, 5);	
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
 		    		boardCellsPanel[tempRow][5].setBackground(Color.BLUE);
-		    		}
+		    		gameBoard.insert(secondPlayerToken, 5);
 		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player two won.");
+		    	    	displayEndGameFrame();
+		    	    }	
+		    		}		
 				}
-				
-				if (match.getBoard().isDraw())    // Se è finita con un pareggio
-	    		{
-	    		    	System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    	    {
-	    	    	System.out.print(" The match ended with a win.");
-	    	    }	
 				
 				match.firstPlayerTurn = !match.firstPlayerTurn;
 				
@@ -762,43 +963,60 @@ public class GUI2 extends JFrame implements ActionListener
         columnButtons[6].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 6);
-					
+				{		
 					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
 		    		{
+						firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][6].setBackground(Color.RED);
+		        		gameBoard.insert(firstPlayerToken, 6);	
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 		    		}	
 		    			
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(6)) 
-		    		{
+		    		{	
+		    			firstPlayer = match.getFirstPlayer();
+						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    			if (!boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][6].setBackground(Color.RED);
+		    				gameBoard.insert(firstPlayerToken, 6);	
+		    			}
 		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
-		    		boardCellsPanel[tempRow][6].setBackground(Color.RED);
-		    		}
 		    			
+		    		boardCellsPanel[tempRow][6].setBackground(Color.RED);
+		    		gameBoard.insert(firstPlayerToken, 6);
+		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player one won.");
+		    	    	displayEndGameFrame();
+		    	    }	
+		    		}		
 				}
 				else
 				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 0);
+					secondPlayer = match.getSecondPlayer();
+					turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
 					
 					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
 		    		{
 		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
 		        		boardCellsPanel[ROWS-1][6].setBackground(Color.BLUE);
+		        		gameBoard.insert(secondPlayerToken, 6);
+		        		match.firstPlayerTurn = !match.firstPlayerTurn;
 		        		return;
 	
 		    		}	
@@ -806,23 +1024,32 @@ public class GUI2 extends JFrame implements ActionListener
 		    		int tempRow = 0;
 		    		if(!gameBoard.isColumnFull(6)) 
 		    		{
+		    			if (!boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK))
+		    			{
+		    				boardCellsPanel[tempRow][6].setBackground(Color.BLUE);
+		    				gameBoard.insert(secondPlayerToken, 6);
+		    			}
+		    			
 		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
 		    			{
 		    				tempRow++;
 		    			}
+		    			
 		    		boardCellsPanel[tempRow][6].setBackground(Color.BLUE);
-		    		}
+		    		gameBoard.insert(secondPlayerToken, 6);
 		    		
+		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    		{
+		    		    System.out.print(" The match ended in a draw.");
+		    		    displayEndGameFrame();
+		    		}
+		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	    {
+		    	    	System.out.print(" Player two won.");
+		    	    	displayEndGameFrame();
+		    	    }	
+		    		}	
 				}
-				
-				if (match.getBoard().isDraw())    // Se è finita con un pareggio
-	    		{
-	    		    	System.out.print(" The match ended in a draw.");
-	    		}
-	    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    	    {
-	    	    	System.out.print(" The match ended with a win.");
-	    	    }	
 				
 				match.firstPlayerTurn = !match.firstPlayerTurn;
 				
@@ -859,425 +1086,6 @@ public class GUI2 extends JFrame implements ActionListener
     }
 
 
-	/*public void insertOnBoard()
-	{
-		columnsButtonPanel = new JPanel(new GridLayout(1, COLUMNS, 10, 10));
-		
-		JButton columnButton0 = new JButton();
-		columnButton0.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 0);
-					
-					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][0].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 0);
-					
-					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][0].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton columnButton1 = new JButton("1");
-		columnButton1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 1);
-					
-					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][1].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(1)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 1);
-					
-					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][1].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(1)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton columnButton2 = new JButton("2");
-		columnButton2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 2);
-					
-					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][2].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 2);
-					
-					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][2].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(2)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton columnButton3 = new JButton("3");
-		columnButton3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 3);
-					
-					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][3].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(3)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 3);
-					
-					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][3].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(3)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton columnButton4 = new JButton("4");
-		columnButton4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 4);
-					
-					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][4].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(4)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 4);
-					
-					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][4].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(4)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton columnButton5 = new JButton("5");
-		columnButton5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 5);
-					
-					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][5].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(5)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 5);
-					
-					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][5].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton columnButton6 = new JButton("6");
-		columnButton6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 6);
-					
-					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][6].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(6)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 6);
-					
-					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][6].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(6)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		columnsButtonPanel.add(columnButton0);
-		columnsButtonPanel.add(columnButton1);
-		columnsButtonPanel.add(columnButton2);
-		columnsButtonPanel.add(columnButton3);
-		columnsButtonPanel.add(columnButton4);
-		columnsButtonPanel.add(columnButton5);
-		columnsButtonPanel.add(columnButton6);
-		
-		boardPanel = new JPanel(new GridLayout(ROWS, COLUMNS, 20, 20));
-        boardCellsPanel = new JPanel[ROWS][COLUMNS];
-
-        for (int i = 0; i < ROWS; i++) 
-        {
-            for (int j = 0; j < COLUMNS; j++) 
-            {
-                JPanel panel = new JPanel();
-                panel.setBackground(Color.PINK);
-                boardCellsPanel[i][j] = panel;
-                boardPanel.add(panel);
-            }
-        }
-        gameBoardPanel.add(columnsButtonPanel, BorderLayout.NORTH);
-        gameBoardPanel.add(boardPanel,BorderLayout.CENTER); 
-	}*/
 	
 	
 	/**
@@ -1387,7 +1195,9 @@ public class GUI2 extends JFrame implements ActionListener
         
         else if (e.getSource() == saveButton) 
         {
+        	//savedMatch = new File();	
             match.saveGameAndQuit();
+            
         }
         
         else if (e.getSource() == loadButton) 
@@ -1396,490 +1206,7 @@ public class GUI2 extends JFrame implements ActionListener
         }
     }  
         
-        /*JButton buttonCol0 = new JButton("0");
-		buttonCol0.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 0);
-					
-					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][0].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 0);
-					
-					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][0].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton buttonCol1 = new JButton("1");
-		buttonCol1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 1);
-					
-					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][1].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(1)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 1);
-					
-					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][1].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(1)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton buttonCol2 = new JButton("2");
-		buttonCol2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 2);
-					
-					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][2].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 2);
-					
-					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][2].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(2)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton buttonCol3 = new JButton("3");
-		buttonCol3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 3);
-					
-					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][3].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(3)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 3);
-					
-					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][3].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(3)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton buttonCol4 = new JButton("4");
-		buttonCol4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 4);
-					
-					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][4].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(4)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 4);
-					
-					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][4].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(4)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton buttonCol5 = new JButton("5");
-		buttonCol5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 5);
-					
-					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][5].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(5)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 5);
-					
-					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][5].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-		
-		
-		JButton buttonCol6 = new JButton("6");
-		buttonCol6.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (match.firstPlayerTurn)
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-					Player currentPlayer = match.getFirstPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 6);
-					
-					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][6].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(6)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				else
-				{
-					turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (second player) turn.");
-					Player currentPlayer = match.getSecondPlayer();
-					Token token = currentPlayer.getToken();
-					
-					gameBoard.insert(token, 6);
-					
-					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][6].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(6)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-				}
-				
-			}
-		});
-    } 
-        /*if(match.firstPlayerTurn)
-		{
-			for (int j = 0; j < COLUMNS; j++) 
-			{  
-				if (e.getSource().equals(columnButtons[j]) && !gameBoard.isColumnFull(j))
-		        {	
-				turnLabel.setText("It is " + match.getFirstPlayer().getName() + " (first player) turn.");
-				Player currentPlayer = match.getFirstPlayer();
-				Token token = currentPlayer.getToken();
-				//match.grantPlayerMove(currentPlayer);
-		        	
-		        System.out.print(e.getID());
-		        	int k = getClickedButton(e);
-		        	match.executeTurn();
-		        	
-		        	System.out.print(e.getID());
-		        	
-		        	
-		        	gameBoard.insert(token, k);
-		        			
-		        	if(boardCellsPanel[ROWS-1][k].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][k].setBackground(Color.RED);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(k)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][k].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-		    		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
-		    		boardCellsPanel[tempRow][k].setBackground(Color.RED);
-		    		
-		    		if(match.getBoard().isDraw() || match.getBoard().isWin())
-		    		{
-		    			displayEndGameFrame();
-		    		}
-		        }
-		        	
-		     }
-		}
-		else
-		{
-			for (int j = 0; j < COLUMNS; j++) 
-			 {  
-				turnLabel.setText("It is " + match.getSecondPlayer().getName() + " (second player) turn.");
-				Player currentPlayer = match.getSecondPlayer();
-				Token token = currentPlayer.getToken();
-				//match.grantPlayerMove(currentPlayer);
-		        if (e.getSource().equals(columnButtons[j]) && !gameBoard.isColumnFull(j))
-		        {	
-		        	int k = getClickedButton(e);
-		        	match.executeTurn();
-		        	//match.grantPlayerMove(currentPlayer);
-		        	gameBoard.insert(token, k);
-		        			
-		        	if(boardCellsPanel[ROWS-1][k].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		    			boardCellsPanel[ROWS-1][k].setBackground(Color.BLUE);
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(k)) 
-		    		{
-		    			while(boardCellsPanel[tempRow+1][k].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		}
-		    		//boardCellsPanel[tempRow][k].setBackground(token.getTokenColor());
-		    		boardCellsPanel[tempRow][k].setBackground(Color.BLUE);
-		    		
-		    		if(match.getBoard().isDraw() || match.getBoard().isWin())
-		    		{
-		    			displayEndGameFrame();
-		    		}
-		    		
-		        }
-			 }	
-		  }
-		
-      }*/
-	
-
-
-
+       
 	public static int getClickedButton(ActionEvent e)
     {
     	JButton button = (JButton)e.getSource();
@@ -1894,5 +1221,6 @@ public class GUI2 extends JFrame implements ActionListener
     	frame.setVisible(false);
       	displayStartGameFrame(); 
       }
+     
 
 }
