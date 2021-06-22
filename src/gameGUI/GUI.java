@@ -354,708 +354,744 @@ public class GUI2 extends JFrame implements ActionListener
         columnButtons[0] = new JButton(0 + "");
         columnButtons[0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				boolean isFirstRow = false;
 				if (match.firstPlayerTurn)
 				{ 
 					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						firstPlayer = match.getFirstPlayer();
 						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 						
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][0].setBackground(Color.RED);
-		        		gameBoard.insert(firstPlayerToken, 0);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][0].setBackground(Color.RED);
+		    			}	
 		    		
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(0)) 
+		    				{
+		    					firstPlayer = match.getFirstPlayer();
+							turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 						
-		    			if (!boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][0].setBackground(Color.RED);
-		    				gameBoard.insert(firstPlayerToken, 0);	
-		    			}
+		    					if (!boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][0].setBackground(Color.RED);
+		    						gameBoard.insert(firstPlayerToken, 0);	
+		    					}
 		    			
-		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
+		    					while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
 		    			
-		    		boardCellsPanel[tempRow][0].setBackground(Color.RED);
-		    		gameBoard.insert(firstPlayerToken, 0);
-		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player one won. ");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		
-		    		}	
+		    					boardCellsPanel[tempRow][0].setBackground(Color.RED);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(firstPlayerToken, 0);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player one won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
+				
 				else
 				{	
 					if(boardCellsPanel[ROWS-1][0].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						secondPlayer = match.getSecondPlayer();
 						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-				
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][0].setBackground(Color.BLUE);
-		        		gameBoard.insert(secondPlayerToken, 0);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(0)) 
-		    		{
-		    			secondPlayer = match.getSecondPlayer();
-						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-				
-		    			if (!boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][0].setBackground(Color.BLUE);
-		    				gameBoard.insert(secondPlayerToken, 0);	
-		    			}
-		    			while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][0].setBackground(Color.BLUE);
-		    		gameBoard.insert(secondPlayerToken, 0);
+						
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][0].setBackground(Color.BLUE);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player two won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(0)) 
+		    				{
+							secondPlayer = match.getSecondPlayer();
+							turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][0].setBackground(Color.BLUE);
+		    						gameBoard.insert(secondPlayerToken, 0);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][0].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][0].setBackground(Color.BLUE);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(secondPlayerToken, 0);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player two won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
-				
-				match.firstPlayerTurn = !match.firstPlayerTurn;
-				
-			}
 		});
         
         columnButtons[1] = new JButton(1 + "");
         columnButtons[1].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				boolean isFirstRow = false;
 				if (match.firstPlayerTurn)
-				{
+				{ 
 					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						firstPlayer = match.getFirstPlayer();
 						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 						
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][1].setBackground(Color.RED);
-		        		gameBoard.insert(firstPlayerToken, 1);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(1)) 
-		    		{	
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-						
-		    			if (!boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][1].setBackground(Color.RED);
-		    				gameBoard.insert(firstPlayerToken, 1);	
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][1].setBackground(Color.RED);
-		    		gameBoard.insert(firstPlayerToken, 1);
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][1].setBackground(Color.RED);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player one won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(1)) 
+		    				{
+		    					firstPlayer = match.getFirstPlayer();
+							turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][1].setBackground(Color.RED);
+		    						gameBoard.insert(firstPlayerToken, 1);	
+		    					}
 		    			
+		    					while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][1].setBackground(Color.RED);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(firstPlayerToken, 1);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player one won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
+				
 				else
-				{
+				{	
 					if(boardCellsPanel[ROWS-1][1].getBackground().equals(Color.PINK)) 	
-		    		{
-						firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-						
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][1].setBackground(Color.BLUE);
-		        		gameBoard.insert(secondPlayerToken, 1);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		    			return;	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(1)) 
-		    		{
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-						
-		    			if (!boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK))
 		    			{
-		    				boardCellsPanel[tempRow][1].setBackground(Color.BLUE);
-		    				gameBoard.insert(secondPlayerToken, 1);	
-		    			}
+						secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][1].setBackground(Color.BLUE);
+		    			}	
+		    		
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(1)) 
+		    				{
+							secondPlayer = match.getSecondPlayer();
+							turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][1].setBackground(Color.BLUE);
+		    						gameBoard.insert(secondPlayerToken, 1);	
+		    					}
 		    			
-		    			while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
+		    					while(boardCellsPanel[tempRow+1][1].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][1].setBackground(Color.BLUE);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(secondPlayerToken, 1);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
 		    			{
-		    				tempRow++;
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
 		    			}
-		    			
-		    		boardCellsPanel[tempRow][1].setBackground(Color.BLUE);
-		    		gameBoard.insert(secondPlayerToken, 1);
-		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player two won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
-		    		
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player two won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
-				
-				match.firstPlayerTurn = !match.firstPlayerTurn;
-				
-			}
 		});
         
         columnButtons[2] = new JButton(2 + "");
         columnButtons[2].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				boolean isFirstRow = false;
 				if (match.firstPlayerTurn)
-				{
+				{ 
 					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						firstPlayer = match.getFirstPlayer();
 						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-		
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][2].setBackground(Color.RED);
-		        		gameBoard.insert(firstPlayerToken, 2);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(2)) 
-		    		{
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-		
-		    			if (!boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][2].setBackground(Color.RED);
-		    				gameBoard.insert(firstPlayerToken, 2);	
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][2].setBackground(Color.RED);
-		    		gameBoard.insert(firstPlayerToken, 2);
+						
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][2].setBackground(Color.RED);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player one won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
+					if(!isFirstRow){
+						int tempRow = 2;
+		    		
+		    				if(!gameBoard.isColumnFull(2)) 
+		    				{
+		    					firstPlayer = match.getFirstPlayer();
+							turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][2].setBackground(Color.RED);
+		    						gameBoard.insert(firstPlayerToken, 2);	
+		    					}
 		    			
+		    					while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][2].setBackground(Color.RED);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(firstPlayerToken, 2);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player one won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
+				
 				else
-				{		
+				{	
 					if(boardCellsPanel[ROWS-1][2].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						secondPlayer = match.getSecondPlayer();
 						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-								
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][2].setBackground(Color.BLUE);
-		        		gameBoard.insert(secondPlayerToken, 2);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(2)) 
-		    		{
-		    			secondPlayer = match.getSecondPlayer();
-						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-								
-		    			if (!boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][2].setBackground(Color.BLUE);
-		    				gameBoard.insert(secondPlayerToken, 2);	
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][2].setBackground(Color.BLUE);
-		    		gameBoard.insert(secondPlayerToken, 2);
+						
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][2].setBackground(Color.BLUE);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player two won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(2)) 
+		    				{
+							secondPlayer = match.getSecondPlayer();
+							turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][2].setBackground(Color.BLUE);
+		    						gameBoard.insert(secondPlayerToken, 2);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][2].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][2].setBackground(Color.BLUE);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(secondPlayerToken, 2);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player two won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
-				
-				match.firstPlayerTurn = !match.firstPlayerTurn;
-				
-			}
 		});
         
         columnButtons[3] = new JButton(3 + "");
         columnButtons[3].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				boolean isFirstRow = false;
 				if (match.firstPlayerTurn)
-				{
+				{ 
 					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						firstPlayer = match.getFirstPlayer();
 						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 						
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][3].setBackground(Color.RED);	
-		        		gameBoard.insert(firstPlayerToken, 3);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(3)) 
-		    		{
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][3].setBackground(Color.RED);
+		    			}	
+		    		
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(3)) 
+		    				{
+		    					firstPlayer = match.getFirstPlayer();
+							turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 						
-		    			if (!boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][3].setBackground(Color.RED);
-		    				gameBoard.insert(firstPlayerToken, 3);	
-		    			}
+		    					if (!boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][3].setBackground(Color.RED);
+		    						gameBoard.insert(firstPlayerToken, 3);	
+		    					}
 		    			
-		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
+		    					while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
 		    			
-		    		boardCellsPanel[tempRow][3].setBackground(Color.RED);
-		    		gameBoard.insert(firstPlayerToken, 3);
-		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player one won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
-		    		
+		    					boardCellsPanel[tempRow][3].setBackground(Color.RED);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(firstPlayerToken, 3);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player one won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
+				
 				else
-				{
+				{	
 					if(boardCellsPanel[ROWS-1][3].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						secondPlayer = match.getSecondPlayer();
 						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-		
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][3].setBackground(Color.BLUE);
-		        		gameBoard.insert(secondPlayerToken, 3);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(3)) 
-		    		{
-		    			secondPlayer = match.getSecondPlayer();
-						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-		
-		    			if (!boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][3].setBackground(Color.BLUE);
-		    				gameBoard.insert(secondPlayerToken, 3);	
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][3].setBackground(Color.BLUE);
-		    		gameBoard.insert(secondPlayerToken, 3);
+						
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][3].setBackground(Color.BLUE);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player two won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(3)) 
+		    				{
+							secondPlayer = match.getSecondPlayer();
+							turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][3].setBackground(Color.BLUE);
+		    						gameBoard.insert(secondPlayerToken, 3);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][3].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][3].setBackground(Color.BLUE);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(secondPlayerToken, 3);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player two won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
-				
-				match.firstPlayerTurn = !match.firstPlayerTurn;
-				
-			}
 		});
         
         columnButtons[4] = new JButton(4 + "");
         columnButtons[4].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				boolean isFirstRow = false;
 				if (match.firstPlayerTurn)
-				{
+				{ 
 					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						firstPlayer = match.getFirstPlayer();
 						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-					
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][4].setBackground(Color.RED);
-		        		gameBoard.insert(firstPlayerToken, 4);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(4)) 
-		    		{
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-					
-		    			if (!boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][4].setBackground(Color.RED);
-		    				gameBoard.insert(firstPlayerToken, 4);	
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][4].setBackground(Color.RED);
-		    		gameBoard.insert(firstPlayerToken, 4);
+						
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][4].setBackground(Color.RED);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player one won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(4)) 
+		    				{
+		    					firstPlayer = match.getFirstPlayer();
+							turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][4].setBackground(Color.RED);
+		    						gameBoard.insert(firstPlayerToken, 4);	
+		    					}
 		    			
+		    					while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][4].setBackground(Color.RED);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(firstPlayerToken, 4);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player one won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
+				
 				else
-				{
+				{	
 					if(boardCellsPanel[ROWS-1][4].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						secondPlayer = match.getSecondPlayer();
 						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
 						
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][4].setBackground(Color.BLUE);
-		        		gameBoard.insert(secondPlayerToken, 4);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(4)) 
-		    		{
-		    			secondPlayer = match.getSecondPlayer();
-						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-						
-		    			if (!boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][4].setBackground(Color.BLUE);
-		    				gameBoard.insert(secondPlayerToken, 4);	
-		    			} 
-		    			
-		    			while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][4].setBackground(Color.BLUE);
-		    		gameBoard.insert(secondPlayerToken, 4);
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][4].setBackground(Color.BLUE);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player two won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}	
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(4)) 
+		    				{
+							secondPlayer = match.getSecondPlayer();
+							turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][4].setBackground(Color.BLUE);
+		    						gameBoard.insert(secondPlayerToken, 4);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][4].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][4].setBackground(Color.BLUE);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(secondPlayerToken, 4);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player two won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
-				
-				match.firstPlayerTurn = !match.firstPlayerTurn;
-				
-			}
 		});
         
         columnButtons[5] = new JButton(5 + "");
         columnButtons[5].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				boolean isFirstRow = false;
 				if (match.firstPlayerTurn)
-				{
+				{ 
 					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						firstPlayer = match.getFirstPlayer();
 						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][5].setBackground(Color.RED);
-		        		gameBoard.insert(firstPlayerToken, 5);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(5)) 
-		    		{
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 						
-		    			if (!boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][5].setBackground(Color.RED);
-		    				gameBoard.insert(firstPlayerToken, 5);	
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		boardCellsPanel[tempRow][5].setBackground(Color.RED);
-		    		gameBoard.insert(firstPlayerToken, 5);
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][5].setBackground(Color.RED);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player one won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}		
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(5)) 
+		    				{
+		    					firstPlayer = match.getFirstPlayer();
+							turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][5].setBackground(Color.RED);
+		    						gameBoard.insert(firstPlayerToken, 5);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][5].setBackground(Color.RED);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(firstPlayerToken, 5);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player one won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
+				
 				else
-				{
+				{	
 					if(boardCellsPanel[ROWS-1][5].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						secondPlayer = match.getSecondPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (second player) turn.");
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][5].setBackground(Color.BLUE);
-		        		gameBoard.insert(secondPlayerToken, 5);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(5)) 
-		    		{
-		    			secondPlayer = match.getSecondPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (second player) turn.");
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
 						
-		    			if (!boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][5].setBackground(Color.BLUE);
-		    				gameBoard.insert(secondPlayerToken, 5);	
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    		boardCellsPanel[tempRow][5].setBackground(Color.BLUE);
-		    		gameBoard.insert(secondPlayerToken, 5);
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][5].setBackground(Color.BLUE);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player two won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}		
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(5)) 
+		    				{
+							secondPlayer = match.getSecondPlayer();
+							turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][5].setBackground(Color.BLUE);
+		    						gameBoard.insert(secondPlayerToken, 5);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][5].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][5].setBackground(Color.BLUE);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(secondPlayerToken, 5);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player two won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
-				
-				match.firstPlayerTurn = !match.firstPlayerTurn;
-				
-			}
 		});
         
         columnButtons[6] = new JButton(6 + "");
         columnButtons[6].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				boolean isFirstRow = false;
 				if (match.firstPlayerTurn)
-				{		
+				{ 
 					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
-		    		{
+		    			{
 						firstPlayer = match.getFirstPlayer();
 						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][6].setBackground(Color.RED);
-		        		gameBoard.insert(firstPlayerToken, 6);	
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(6)) 
-		    		{	
-		    			firstPlayer = match.getFirstPlayer();
-						turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
 						
-		    			if (!boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK))
-		    			{
-		    				boardCellsPanel[tempRow][6].setBackground(Color.RED);
-		    				gameBoard.insert(firstPlayerToken, 6);	
-		    			}
-		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][6].setBackground(Color.RED);
-		    		gameBoard.insert(firstPlayerToken, 6);
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][6].setBackground(Color.RED);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player one won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}		
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(6)) 
+		    				{
+		    					firstPlayer = match.getFirstPlayer();
+							turnLabel.setText("It is " + match.getFirstPlayer() + " (first player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][6].setBackground(Color.RED);
+		    						gameBoard.insert(firstPlayerToken, 6);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][6].setBackground(Color.RED);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(firstPlayerToken, 6);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player one won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
+				
 				else
-				{
-					secondPlayer = match.getSecondPlayer();
-					turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
-					
+				{	
 					if(boardCellsPanel[ROWS-1][6].getBackground().equals(Color.PINK)) 	
-		    		{
-		        		//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
-		        		boardCellsPanel[ROWS-1][6].setBackground(Color.BLUE);
-		        		gameBoard.insert(secondPlayerToken, 6);
-		        		match.firstPlayerTurn = !match.firstPlayerTurn;
-		        		return;
-	
-		    		}	
-		    			
-		    		int tempRow = 0;
-		    		if(!gameBoard.isColumnFull(6)) 
-		    		{
-		    			if (!boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK))
 		    			{
-		    				boardCellsPanel[tempRow][6].setBackground(Color.BLUE);
-		    				gameBoard.insert(secondPlayerToken, 6);
-		    			}
-		    			
-		    			while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
-		    			{
-		    				tempRow++;
-		    			}
-		    			
-		    		boardCellsPanel[tempRow][6].setBackground(Color.BLUE);
-		    		gameBoard.insert(secondPlayerToken, 6);
+						secondPlayer = match.getSecondPlayer();
+						turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+						isFirstRow = true;
+		        			//boardCellsPanel[ROWS-1][k].setBackground(token.getTokenColor());
+		        			boardCellsPanel[ROWS-1][6].setBackground(Color.BLUE);
+		    			}	
 		    		
-		    		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		    		{
-		    		    System.out.print(" The match ended in a draw.");
-		    		    displayEndGameFrame();
-		    		}
-		    		else if (match.getBoard().isWin())    // Se è finita con una vincita
-		    	    {
-		    	    	System.out.print(" Player two won.");
-		    	    	displayEndGameFrame();
-		    	    }	
-		    		}	
+					if(!isFirstRow){
+						int tempRow = 0;
+		    		
+		    				if(!gameBoard.isColumnFull(6)) 
+		    				{
+							secondPlayer = match.getSecondPlayer();
+							turnLabel.setText("It is " + match.getSecondPlayer() + " (second player) turn.");
+						
+		    					if (!boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK))
+		    					{
+		    						boardCellsPanel[tempRow][6].setBackground(Color.BLUE);
+		    						gameBoard.insert(secondPlayerToken, 6);	
+		    					}
+		    			
+		    					while(boardCellsPanel[tempRow+1][6].getBackground().equals(Color.PINK)) 	
+		    					{
+		    						tempRow++;
+		    					}
+		    			
+		    					boardCellsPanel[tempRow][6].setBackground(Color.BLUE);		    		
+						}
+		    			}
+				
+		       			gameBoard.insert(secondPlayerToken, 6);	
+
+		    			if (match.getBoard().isDraw())    // Se è finita con un pareggio
+		    			{
+		    		    		System.out.print(" The match ended in a draw.");
+		    		  		displayEndGameFrame();
+		    			}
+		    			else if (match.getBoard().isWin())    // Se è finita con una vincita
+		    	   		{
+		    	    			System.out.print(" Player two won. ");
+		    	    			displayEndGameFrame();
+		    	   		}
+					match.firstPlayerTurn = !match.firstPlayerTurn;
 				}
-				
-				match.firstPlayerTurn = !match.firstPlayerTurn;
-				
-			}
 		});
- 
         
         match.firstPlayerTurn = !match.firstPlayerTurn;
         
