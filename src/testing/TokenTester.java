@@ -1,6 +1,6 @@
 package testing;
 
-import gameComponents.Color;
+import java.awt.Color;
 import gameComponents.Token;
 
 /**

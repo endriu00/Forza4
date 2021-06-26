@@ -1,8 +1,14 @@
 package customException;
 
 public class FullColumnException extends Throwable{
+	
+	private String errorString;
 
 	public FullColumnException() {
-		System.out.println("The column is full! Please try inserting the token in another allowed, not-full column!");
+		errorString = "The column is full! Please try inserting the token in another allowed, not-full column!";
+	}
+	
+	public String getError() {
+		return errorString;
 	}
 }

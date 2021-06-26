@@ -150,6 +150,10 @@ public class Match {
 		return false;
 	}
 	
+	public void insertInBoard(Token token, int column) throws FullColumnException {
+		this.gameBoard.insert(token, column);
+	}
+	
 	/**
 	 * Method used for save game and quit.
 	 * 1. Integrate with GUI
@@ -193,6 +197,10 @@ public class Match {
 	 */
 	public Board getBoard() {
 		return this.gameBoard;
+	}
+	
+	public void setFirstPlayerTurn(boolean firstPlayerTurn) {
+		this.firstPlayerTurn = firstPlayerTurn;
 	}
 	
 	public void setFirstPlayer(Player firstPlayer) {

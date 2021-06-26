@@ -1,9 +1,10 @@
 package testing;
 
 import customException.FullColumnException;
+
+import java.awt.Color;
 import gameComponents.Board;
 import gameComponents.Token;
-import gameComponents.Color;
 
 /**
  * Class for testing methods and behavior of the class Board, as this class name suggests.
@@ -151,12 +152,16 @@ public class BoardTester {
 		
 	}
 	
-	public static void testFullColumn(Board board) throws FullColumnException {
+	public static void testFullColumn(Board board) {
 		Token token = new Token(new Color(0, 0, 0));
 		
 		int column = 2;
 		for(int i = 0; i < 7; i++) {
-			board.insert(token, column);
+			try {
+				board.insert(token, column);
+			} catch (FullColumnException e) {
+				System.out.println(e.getError());
+			}
 			board.printBoard();
 
 		}

@@ -2,7 +2,7 @@ package testing;
 
 import gameComponents.Player;
 import gameComponents.Token;
-import gameComponents.Color;
+import java.awt.Color;
 import customException.FullColumnException;
 import gameComponents.Board;
 import gameComponents.Match;

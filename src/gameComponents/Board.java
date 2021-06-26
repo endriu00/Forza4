@@ -71,14 +71,12 @@ public class Board
 			return;
 		}
 		
-		try {
-			if(isColumnFull(column)) {
-				throw new FullColumnException();
-			}
+		
+		if(isColumnFull(column)) {
+			throw new FullColumnException();
 		}
-		catch(FullColumnException e) {
-			return;
-		}
+		
+		
 
 		if(gameBoard[ROWS-1][column] == null) 	
 		{

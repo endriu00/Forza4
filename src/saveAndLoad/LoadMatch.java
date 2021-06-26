@@ -1,6 +1,8 @@
 package saveAndLoad;
 
 import gameComponents.*;
+
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -220,11 +222,11 @@ public class LoadMatch {
 		
 		//Reads where are the tokens in the gameBoard from the provided file, fileName 
 		while(fileScanner.hasNextLine()) {																								
-			fileScanner.findInLine("Row: ");                                                                                           //Searches for the statement "Row"                                
-			currentRow = fileScanner.nextInt();                                                                              		   //Takes the row number
+			fileScanner.findInLine("Row: ");        //Searches for the statement "Row"                                
+			currentRow = fileScanner.nextInt();     //Takes the row number
 	                                                                                                                                                       
 			fileScanner.findInLine("Col: ");                                                                                                                                                                                           
-			currentColumn = fileScanner.nextInt();                                                                                     //Takes the column number                                                                                                                                                 
+			currentColumn = fileScanner.nextInt();  //Takes the column number                                                                                                                                                 
 			
 			//Check the integrity of the position                                                                                                                                                                        
 			if(checkMatrix.checkIntegrity(currentRow, currentColumn)) {																   
