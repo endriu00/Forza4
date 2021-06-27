@@ -1,0 +1,11 @@
+First player: ddd, token color: 0 250 0
+Second player: sss, token color: 255 0 0
+Turn: 8 
+Board: 
+Row: 5 Col: 2 255 0 0
+Row: 5 Col: 5 0 250 0
+Row: 4 Col: 2 0 250 0
+Row: 4 Col: 5 255 0 0
+Row: 3 Col: 2 255 0 0
+Row: 3 Col: 5 0 250 0
+Row: 2 Col: 5 255 0 0

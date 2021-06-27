@@ -38,7 +38,7 @@ public class Match {
 	 * Basic constructor for the Match class
 	 * Note that variable turn is set to 1. So the match will begin with turn labeled to 1.
 	 * In addition, it is created a new Board.
-	 * @param p1 is the first player (e.g. the player who will start the game, who has the first turn)
+	 * @param p1 is the first player 
 	 * @param p2 is the second player
 	 */
 	public Match(Player p1, Player p2) {
@@ -52,7 +52,7 @@ public class Match {
 	 * Basic constructor for the Match class
 	 * Note that variable turn is set to 1. So the match will begin with turn labeled to 1.
 	 * @param gameboard is the gameboard of the match
-	 * @param p1 is the first player (e.g. the player who will start the game, who has the first turn)
+	 * @param p1 is the first player 
 	 * @param p2 is the second player
 	 */
 	public Match(Board gameboard, Player p1, Player p2) {
@@ -65,75 +65,15 @@ public class Match {
 	public int getTurn() {
 		return turn;
 	}
-	
-	public void grantPlayerMove(Player player) throws FullColumnException  {
-		//int col = GUI Class asks player where does he want to insert the token or lets the user choose with mouse - this one better
-		//player.insertToken(, gameboard);
-		int inputCol;
-		Scanner in = new Scanner(System.in);
-		System.out.println("Player " + player.getName() + ", please insert the column in which you want to insert your token!\n"
-				+ "Columns are numbered from 0 to 6.");
-		inputCol = in.nextInt();
-		if (gameBoard.isColumnFull(inputCol))
-		{
-			do
-			{
-			System.out.println("The column is full! Please try inserting the token in another allowed, not-full column!");
-			inputCol = in.nextInt();
-			}
-			while (gameBoard.isColumnFull(inputCol));
-			gameBoard.insert(player.getToken(), inputCol);
-		}
-		else
-		{
-		gameBoard.insert(player.getToken(), inputCol);	
-		}
-	}
-	
-	
-	
-	/**
-	 * Metodo che fa eseguire il turno.
-	 * @throws FullColumnException 
-	 */
-	public void executeTurn() throws FullColumnException
-	{
-	    whoPlaysFirst(); 
-	    Board.printBoard();
-	    Scanner inSave = new Scanner(System.in);
-	    for ( ; turn <= 42; turn++)    
-	    {
-	    	System.out.println("Do you want to save the match? If yes, type save\n"
-	    			+ "Otherwise, type no\n");
-	    	
-	    	if(inSave.next().equals("save")) {
-	    		saveGameAndQuit();
-	    		inSave.close();
-	    		break;
-	    	}
-	    	
-	    	
-	    	if (!isEndGame(gameBoard))
-	    	{
-				if (firstPlayerTurn) 
-		        {
-		        	grantPlayerMove(firstPlayer);
-		        } else {
-		            grantPlayerMove(secondPlayer);
-		        }
-		        firstPlayerTurn = !firstPlayerTurn;
-		        Board.printBoard();
-	    	}
-	    }	    	    
-	}
-	
+			
 	/**
 	 * Metodo che stabilisce chi tra i due giocatori esegue il turno.
 	 * @return firstPlayerTurn true se ha il turno, false altrimenti.
 	 */
 	public boolean whoPlaysFirst()
 	{
-		return firstPlayerTurn = Math.random() <= .5;
+		firstPlayerTurn = Math.random() <= .5;
+		return firstPlayerTurn;
 	}
 	
 	/**

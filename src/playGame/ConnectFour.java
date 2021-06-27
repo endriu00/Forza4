@@ -61,12 +61,7 @@ public class ConnectFour {
 	}
 	
 	public void play(Match match) {
-		try {
-			match.executeTurn();
-		} catch (FullColumnException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 		match.getBoard().printBoard();
 	

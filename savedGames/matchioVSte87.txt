@@ -1,0 +1,16 @@
+First player: io, token color: 0 250 0
+Second player: te, token color: 255 0 0
+Turn: 13 
+Board: 
+Row: 5 Col: 3 255 0 0
+Row: 5 Col: 4 0 250 0
+Row: 5 Col: 5 0 250 0
+Row: 4 Col: 3 0 250 0
+Row: 4 Col: 4 255 0 0
+Row: 4 Col: 5 255 0 0
+Row: 3 Col: 3 255 0 0
+Row: 3 Col: 4 0 250 0
+Row: 3 Col: 5 0 250 0
+Row: 2 Col: 3 0 250 0
+Row: 2 Col: 5 255 0 0
+Row: 1 Col: 3 255 0 0

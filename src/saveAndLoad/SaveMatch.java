@@ -35,7 +35,7 @@ public class SaveMatch {
 	 * @param match is the playing match
 	 */
 	public SaveMatch(String matchName, Match match) {
-		savedMatch = new File("res" + File.separator + matchName + ".txt");	
+		savedMatch = new File("savedGames" + File.separator + matchName + ".txt");	
 		savePlayer(match.getFirstPlayer(), savedMatch, true, false);
 		savePlayer(match.getSecondPlayer(), savedMatch, false, true);
 		saveTurn(match, savedMatch, true);
