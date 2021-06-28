@@ -24,4 +24,12 @@ public class Token {
 		return tokenColor;
 	}
 	
+	/**
+	 * Basic setter method for tokenColor variable
+	 * @param color is the color to be set
+	 */
+	public void setTokenColor(Color color) {
+		tokenColor = color;
+	}
+	
 }

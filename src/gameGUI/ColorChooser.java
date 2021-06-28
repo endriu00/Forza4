@@ -119,14 +119,18 @@ public class ColorChooser extends JPanel implements ChangeListener {
 
         //Create and set up the content pane.
         JComponent newContentPane = new ColorChooser();
-        newContentPane.setOpaque(true); //content panes must be opaque
+        newContentPane.setOpaque(true); 
         frame.setContentPane(newContentPane);
         
         //Button ok lets user definitely confirm the color chosen 
         JButton okButton = new JButton("OK");
         okButton.setPreferredSize(new Dimension(10, 60));
-        ActionListener listener = new ClickListener(frame);
-        okButton.addActionListener(listener);
+        okButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		frame.dispose();
+        	}
+        });
+       
         frame.add(okButton, BorderLayout.PAGE_END);
 
         //Display the window.
@@ -173,4 +177,5 @@ public class ColorChooser extends JPanel implements ChangeListener {
 		
 		ColorChooser.createAndShowGUI();
 	}	
+    
 }

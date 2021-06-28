@@ -64,7 +64,6 @@ public class GUI extends JFrame implements ActionListener
     private JTextField playerOneField;		// Field for player one's name
     private JTextField playerTwoField;		// Field for player two's name
         
-    private ConnectFour connectFour;	 
     private Match match;
     private Token firstPlayerToken; 
     private Token secondPlayerToken;
@@ -84,21 +83,20 @@ public class GUI extends JFrame implements ActionListener
     private static final Color PALETTE_COLOR_3 = new Color(91, 176, 186);
     private static final Color PALETTE_COLOR_4 = new Color(255, 200, 230);
 
-    private Font gamingFont;
+    private Font gamingFont;	//Custom font
     
+    //Constants for custom font size
     private static final float SMALLER_SIZE = 13.f;
     private static final float MEDIUM_SIZE = 24.f;
     private static final float LARGER_SIZE = 34.f;
     private static final float SMALLEST_SIZE = 11.0f;
     
+    //Border variable that deletes grey components border
     private Border emptyBorder = BorderFactory.createEmptyBorder();
 
+    //Loading file resources
     private File loadingFile;
     private LoadInterface loadListener;
-    
-    public void registerEventListener(LoadInterface load) {
-		loadListener = load;
-	}
  
     /**
 	 * Launch the application.
@@ -142,6 +140,7 @@ public class GUI extends JFrame implements ActionListener
 
 	public void initializeComponents() {
 		//add functionality, let user  choose color
+		
 		firstPlayerToken = new Token(new Color(0, 250, 0));
 		secondPlayerToken = new Token(new Color(255, 0, 0));
 		firstPlayer = new Player("", firstPlayerToken);
@@ -165,10 +164,7 @@ public class GUI extends JFrame implements ActionListener
 		
 		mainPanel = new JPanel();
 		mainPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		
-		
-		
+		GridBagConstraints constraints = new GridBagConstraints();	
 		
 		startGameButton = new JButton("Start Game");
 		startGameButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
@@ -242,9 +238,9 @@ public class GUI extends JFrame implements ActionListener
 	  	startMatchButton.addActionListener(new ActionListener() {
 	  		public void actionPerformed(ActionEvent e) {
 	  			mainPanel.setVisible(false);
-			panel.setVisible(false);
-			match.whoPlaysFirst();
-			initializeBoardComponents();
+	  			panel.setVisible(false);
+	  			match.whoPlaysFirst();
+	  			initializeBoardComponents(biggestFrame);
 	  		}
 	  	});
 	  	
@@ -352,8 +348,9 @@ public class GUI extends JFrame implements ActionListener
     /**
      * Initialize the contents of the game board.
      */
-    public void initializeBoardComponents() 
+    public void initializeBoardComponents(JFrame frame) 
     {	
+    	frame.setVisible(true);
     	gameContainer = new JPanel(new GridBagLayout());
    	  	GridBagConstraints constraints = new GridBagConstraints();
 
@@ -433,19 +430,13 @@ public class GUI extends JFrame implements ActionListener
         saveButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         saveButton.setBackground(PALETTE_COLOR_1);
         saveButton.addActionListener(this);
-        
-        loadButton = new JButton("Load");
-        loadButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
-        loadButton.setBackground(PALETTE_COLOR_1);
-        loadButton.addActionListener(this);
-        
+          
         bottomButtonPanel.remove(startGameButton);
         bottomButtonPanel.remove(quitButton);
         
         bottomButtonPanel.add(resetButton);
         bottomButtonPanel.add(quitButton);
         bottomButtonPanel.add(saveButton);
-        bottomButtonPanel.add(loadButton);
 
         //InformativePanel section. It contains the information of the match.
         informativePanel = new JPanel();
@@ -476,7 +467,7 @@ public class GUI extends JFrame implements ActionListener
 		turnPanel.setBackground(PALETTE_COLOR_3);
 		topPanel.setBackground(PALETTE_COLOR_3);
 
-        biggestFrame.add(gameContainer);
+        frame.add(gameContainer);
 
     }
     
@@ -691,14 +682,10 @@ public class GUI extends JFrame implements ActionListener
      * 
      * @param column is the column the changer has to change, or where the action has taken place in the UI.
      */
-    public void changer(int column) {
-    	    	
+    public void changer(int column) {    	    	
     	boolean isFirstRow = false;
 		if (match.getFirstPlayerTurn()) { 
 			
-			//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
-			//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-			turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn.");
 			if(boardCellsPanel[Board.getNumberOfRows()-1][column].getBackground().equals(Color.pink)) {
 				isFirstRow = true;
 				changeColorInBoard(match.getFirstPlayer().getToken(), Board.getNumberOfRows()-1, column);
@@ -712,6 +699,9 @@ public class GUI extends JFrame implements ActionListener
 	    				//boardCellsPanel[tempRow][column].setBackground(match.getFirstPlayer().getToken().getTokenColor());
 	    				try {
 	    					match.insertInBoard(firstPlayerToken, column);
+	    					//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
+	    					//accordingly, but it is necessary to specify whose turn is next when triggering the event.
+	    					turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn.");
 	    					match.setTurn(match.getTurn()+1);
 	    		       		checkResults(match.getFirstPlayer().getName());
 	    					match.setFirstPlayerTurn(!match.getFirstPlayerTurn());
@@ -728,6 +718,9 @@ public class GUI extends JFrame implements ActionListener
     		}   		
        		try {
 				match.insertInBoard(firstPlayerToken, column);
+				//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
+				//accordingly, but it is necessary to specify whose turn is next when triggering the event.
+				turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn.");
 				match.setTurn(match.getTurn()+1);
 			} catch (FullColumnException e) {
 				fullColumnHandler(e);			
@@ -739,9 +732,6 @@ public class GUI extends JFrame implements ActionListener
 		}
 		
 		else {	
-			//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
-			//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-			turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn.");
 			if(boardCellsPanel[Board.getNumberOfRows()-1][column].getBackground().equals(Color.pink)) {				
 				isFirstRow = true;
 				changeColorInBoard(match.getSecondPlayer().getToken(), Board.getNumberOfRows()-1, column);
@@ -754,6 +744,9 @@ public class GUI extends JFrame implements ActionListener
 	    				changeColorInBoard(match.getSecondPlayer().getToken(), tempRow, column);
 						try {
 							match.insertInBoard(secondPlayerToken, column);
+							//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
+							//accordingly, but it is necessary to specify whose turn is next when triggering the event.
+							turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn.");
 							match.setTurn(match.getTurn()+1);
 							checkResults(match.getSecondPlayer().getName());
 							match.setFirstPlayerTurn(!match.getFirstPlayerTurn());
@@ -772,6 +765,9 @@ public class GUI extends JFrame implements ActionListener
 		
        		try {
 				match.insertInBoard(secondPlayerToken, column);
+				//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
+				//accordingly, but it is necessary to specify whose turn is next when triggering the event.
+				turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn.");
 				match.setTurn(match.getTurn()+1);
 				
 			} catch (FullColumnException e) {
@@ -815,7 +811,7 @@ public class GUI extends JFrame implements ActionListener
      * @param e is the exception FullColumnException
      */
     public void fullColumnHandler(FullColumnException e) {
-    	JFrame errorFrame = new JFrame("Column is FULL");
+    	JFrame errorFrame = new JFrame("Column is full");
 		JButton errorButton = new JButton("I will choose another column");
 		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		errorButton.setBackground(PALETTE_COLOR_2);
@@ -826,6 +822,44 @@ public class GUI extends JFrame implements ActionListener
 			}
 		});
 		errorFrame.setSize(750, 150);
+		JLabel errorLabel = new JLabel(e.getError());
+		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		biggestFrame.setEnabled(false);
+
+		errorFrame.setBackground(PALETTE_COLOR_1);
+		errorFrame.add(errorButton, BorderLayout.SOUTH);
+		errorFrame.add(errorLabel, BorderLayout.CENTER);
+		errorFrame.setVisible(true);
+    }
+    
+    /**
+     * Handles the situation in which a user selects a file that is corrupted
+     * (a file is said to be corrupted when the board is in an unsafe state. View IntegrityMatrix documentation).
+     * In order to catch his attention, it has been chosen to display this modal view as a brand new JFrame.
+     * Over that, the button text has been set to a message displaying a summary of what the error says:
+     * this choice is in line with Human-Computer interaction dogmas, because user usually does not read 
+     * what it is written in a pop-up, so his attention locus (that is set to the button in the moment he's 
+     * clicking it) sees what the button label says.
+     * In order to focus his attention completely on the pop-up, clicking the main frame is disabled 
+     * until he clicks the button in this view.
+     * 
+     * @param e is the exception CorruptedFileException
+     */
+    public void corruptedFileHandler(CorruptedFileException e) {
+    	JFrame errorFrame = new JFrame("File is corrupted");
+		JButton errorButton = new JButton("I will choose another file");
+		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		errorButton.setBackground(PALETTE_COLOR_2);
+		errorButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				biggestFrame.setEnabled(true);
+				match = null;
+				biggestFrame.dispose();
+				displayStartGameFrame(); 
+				errorFrame.dispose();
+			}
+		});
+		errorFrame.setSize(WIDTH/2, 150);
 		JLabel errorLabel = new JLabel(e.getError());
 		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		biggestFrame.setEnabled(false);
@@ -874,13 +908,9 @@ public class GUI extends JFrame implements ActionListener
         {
         	try {
 				loadGame();
-			} catch (FullColumnException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			} catch (FullColumnException ex) {
+			} catch (IOException ex) {
+			} 
         }
     }       
        
@@ -890,19 +920,55 @@ public class GUI extends JFrame implements ActionListener
         int clickedColumn = Integer.parseInt(button.getActionCommand());
         return clickedColumn;	
     }
-    
-	//For synchronous task
-	public void doTask() {
-		if(loadListener != null) {
-			try {
-				match = loadListener.loadMatch(loadingFile.getName());
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+	
+	
+	/**
+	 * Paints the board with the correct color, basing on the state of the board.
+	 * This method is fundamentally the method used when loading a match,
+	 * because board coloring is triggered by clicking the column buttons 
+	 * of the board, not reproducible when loading a file.
+	 * 
+	 * @param gameBoard is the gameBoard of the match.
+	 */
+	public void paintBoardWithColors(Board gameBoard) {
+		for(int r = Board.getNumberOfRows() - 1; r >= 0; r--) {
+			for(int c = 0; c < Board.getNumberOfColumns(); c++) {
+				if(gameBoard.getTokenInPosition(r, c) != null) {
+					changeColorInBoard(gameBoard.getTokenInPosition(r,  c), r, c);
+				}
 			}
 		}
 	}
 	
-	public File selectSavedFileInterface() {
+	/**
+	 * Necessary in order to adhere to the Observer Pattern
+	 * @param load is the interface observing
+	 */
+	public void registerEventListener(LoadInterface load) {
+		loadListener = load;
+	}
+    
+	//For synchronous loading task
+	public void doTask() throws FileNotFoundException, CorruptedFileException, FullColumnException {
+		if(loadListener != null) {
+			match = loadListener.loadMatch(loadingFile.getName());
+		}
+	}
+	
+	/**
+	 * Displays the JFileChooser frame, reconfiguring it, customizing what user can do in this view
+	 * When the user chooses a file, this file is stored in the variable loadingFile.
+	 * Next, the Observer Pattern is applied: 
+	 * 		- it is called a new LoadMatch instance as an interface
+	 * 		- the GUI registers itself to this instance
+	 * 		- synchronous task of loading the selected file begins
+	 * 		- WHEN it ends, the match is finally initialized to the correct match stored in the given file
+	 * Now it is possible to play a stored match.
+	 * @throws FullColumnException 
+	 * @throws CorruptedFileException 
+	 * @throws FileNotFoundException 
+	 */
+	public void selectSavedFileInterface() throws FileNotFoundException, CorruptedFileException, FullColumnException {
 		loadingFile = null;
 		JFileChooser chooser = new JFileChooser("savedGames" + File.separator);
 		
@@ -915,34 +981,58 @@ public class GUI extends JFrame implements ActionListener
 		chooser.setAcceptAllFileFilterUsed(false);
 		
 		int status = chooser.showOpenDialog(biggestFrame);
-
 		
 		if(status == JFileChooser.APPROVE_OPTION) {
 			loadingFile = chooser.getSelectedFile();
-			System.out.println(loadingFile);		
 			
 			LoadInterface loader = new LoadMatch();
 			this.registerEventListener(loader);
 			this.doTask();
-			System.out.println(match.getFirstPlayer().getName() + " " + match.getSecondPlayer().getName() + " " + match.getFirstPlayer().getToken().getTokenColor());
 			
 		}
 
-		return loadingFile;
 	}
 	
+	/**
+	 * Method for loading a match stored in a .txt file.
+	 * @throws FullColumnException
+	 * @throws IOException
+	 */
 	public void loadGame() throws FullColumnException, IOException {
-		loadingFile = selectSavedFileInterface();
+		try {
+			selectSavedFileInterface();
+		} catch (CorruptedFileException e) {
+			corruptedFileHandler(e);
+			return;
+		}
+		biggestFrame.dispose();
+		JFrame loadingFrame = new JFrame("Loaded match");
+		loadingFrame.setMinimumSize(new Dimension(WIDTH/2, HEIGHT - 20));
+		loadingFrame.setResizable(false);
+		loadingFrame = biggestFrame;
+		mainPanel.setVisible(false);
+		loadingFrame.setVisible(false);
+		
+		//Reinitialize components of the match
+		firstPlayerToken = match.getFirstPlayer().getToken();
+		secondPlayerToken = match.getSecondPlayer().getToken();
+		initializeBoardComponents(biggestFrame);
+		paintBoardWithColors(match.getBoard());		
 	}
 	
 	
-       
+    /**
+     * Method for resetting the match that is being played.
+     */
 	public void reloadGame() {
 		biggestFrame.dispose();
 		isEnded = false;	
       	displayStartGameFrame(); 
     }
 	
+	/**
+	 * Method for saving the match that is being played.
+	 */
 	public void saveGame() {
 			
 		JPanel panel = new JPanel(new GridBagLayout());
@@ -985,6 +1075,7 @@ public class GUI extends JFrame implements ActionListener
 				}
 				SaveMatch saver = new SaveMatch(fileName, match);
 				
+				//Introduce a little delay (0.4 seconds) to let user see there is a change in the interface
 				try {
 					TimeUnit.MILLISECONDS.sleep(400);
 				} catch (InterruptedException e1) {
@@ -1091,8 +1182,10 @@ public class GUI extends JFrame implements ActionListener
 	 * shown in the text field where the user can insert his name. 
 	 * 
 	 * Note that the bigger part of the methods implementation
-	 * is empty: the only necessary thing is implement
-	 * the method executing an action when listening to mouse click.
+	 * is empty: the only necessary thing is to implement
+	 * the method executing an action when listening to mouse click
+	 * or a mouse pressed event, because it could be possible for a user
+	 * to select part of the text and then skip the Mouse Clicked trigger.
 	 */
     class DeleteTextOneMouseListener implements MouseListener {
     	@Override
@@ -1105,6 +1198,10 @@ public class GUI extends JFrame implements ActionListener
 
   		@Override
   		public void mousePressed(MouseEvent e) {
+  			if(playerOneFieldCounter < 1) {
+    			playerOneField.setText("");
+    			playerOneFieldCounter++;
+    		}
   		}
 
   		@Override
@@ -1126,7 +1223,9 @@ public class GUI extends JFrame implements ActionListener
 	 * 
 	 * Note that the bigger part of the methods implementation
 	 * is empty: the only necessary thing is implement
-	 * the method executing an action when listening to mouse click.
+	 * the method executing an action when listening to mouse click
+	 * or a mouse pressed event, because it could be possible for a user
+	 * to select part of the text and then skip the Mouse Clicked trigger.
 	 */
     class DeleteTextTwoMouseListener implements MouseListener {
     	@Override
@@ -1139,6 +1238,10 @@ public class GUI extends JFrame implements ActionListener
 
   		@Override
   		public void mousePressed(MouseEvent e) {
+  			if(playerTwoFieldCounter < 1) {
+    			playerTwoField.setText("");
+    			playerTwoFieldCounter++;
+    		}
   		}
 
   		@Override
