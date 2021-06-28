@@ -32,6 +32,7 @@ public class GUI extends JFrame implements ActionListener
 	private JFrame biggestFrame;
 	private JPanel boardFrame;
     private JPanel mainPanel;
+    private JPanel colorsTopPanel;
     
     private Container gameContainer;	 // Container 
 
@@ -82,6 +83,45 @@ public class GUI extends JFrame implements ActionListener
     private static final Color PALETTE_COLOR_2 = new Color(193, 91, 120);
     private static final Color PALETTE_COLOR_3 = new Color(91, 176, 186);
     private static final Color PALETTE_COLOR_4 = new Color(255, 200, 230);
+    
+    private static final Color TOKEN_COLOR_1 = new Color(20, 20, 20);
+    private static final Color TOKEN_COLOR_2 = new Color(205, 245, 247);
+    private static final Color TOKEN_COLOR_3 = new Color(193, 91, 120);
+    private static final Color TOKEN_COLOR_4 = new Color(91, 176, 186);
+    private static final Color TOKEN_COLOR_5 = new Color(255, 200, 230);
+    private static final Color TOKEN_COLOR_6 = new Color(255, 0, 0);
+    private static final Color TOKEN_COLOR_7 = new Color(0, 255, 0);
+    private static final Color TOKEN_COLOR_8 = new Color(0, 0, 255);
+    private static final Color TOKEN_COLOR_9 = new Color(0, 255, 71);
+    private static final Color TOKEN_COLOR_10 = new Color(0, 73, 98);
+    private static final Color TOKEN_COLOR_11 = new Color(0, 172, 0);
+    private static final Color TOKEN_COLOR_12 = new Color(155, 172, 247);
+    private static final Color TOKEN_COLOR_13 = new Color(213, 255, 165);
+    private static final Color TOKEN_COLOR_14 = new Color(213, 104, 165);
+    private static final Color TOKEN_COLOR_15 = new Color(255, 0, 255);
+    private static final Color TOKEN_COLOR_16 = new Color(193, 255, 152);
+    private static final Color TOKEN_COLOR_17 = new Color(220, 220, 20);
+    private static final Color TOKEN_COLOR_18 = new Color(225, 215, 17);
+    private static final Color TOKEN_COLOR_19 = new Color(193, 241, 12);
+    private static final Color TOKEN_COLOR_20 = new Color(111, 116, 116);
+    private static final Color TOKEN_COLOR_21 = new Color(255, 110, 240);
+    private static final Color TOKEN_COLOR_22 = new Color(255, 44, 11);
+    private static final Color TOKEN_COLOR_23 = new Color(0, 255, 255);
+    private static final Color TOKEN_COLOR_24 = new Color(0, 144, 255);
+    private static final Color TOKEN_COLOR_25 = new Color(40, 225, 71);
+    private static final Color TOKEN_COLOR_26 = new Color(40, 73, 198);
+    private static final Color TOKEN_COLOR_27 = new Color(42, 172, 44);
+    private static final Color TOKEN_COLOR_28 = new Color(15, 72, 247);
+    private static final Color TOKEN_COLOR_29 = new Color(11, 255, 165);
+    private static final Color TOKEN_COLOR_30 = new Color(23, 104, 165);
+    private static final Color TOKEN_COLOR_31 = new Color(255, 111, 255);
+    private static final Color TOKEN_COLOR_32 = new Color(13, 25, 152);
+    private static final Color TOKEN_COLOR_33 = new Color(243, 155, 125);
+    private static final Color TOKEN_COLOR_34 = new Color(213, 104, 15);
+    private static final Color TOKEN_COLOR_35 = new Color(205, 110, 179);
+    private static final Color TOKEN_COLOR_36 = new Color(103, 215, 122);
+
+
 
     private Font gamingFont;	//Custom font
     
@@ -131,6 +171,7 @@ public class GUI extends JFrame implements ActionListener
 	public GUI() 
 	{	
 		super("Connect Four");
+
 		addFont();
 		isEnded = false;
 		displayStartGameFrame();
@@ -229,7 +270,7 @@ public class GUI extends JFrame implements ActionListener
     private void initializeMatch() {
     	
     	mainPanel = new JPanel(new GridBagLayout());
-	  	JPanel panel = new JPanel(new GridBagLayout());
+	  	playerPanel = new JPanel(new GridBagLayout());
 	  	GridBagConstraints constraints = new GridBagConstraints();
 		
 	  	startMatchButton = new JButton("Start");
@@ -238,7 +279,7 @@ public class GUI extends JFrame implements ActionListener
 	  	startMatchButton.addActionListener(new ActionListener() {
 	  		public void actionPerformed(ActionEvent e) {
 	  			mainPanel.setVisible(false);
-	  			panel.setVisible(false);
+	  			playerPanel.setVisible(false);
 	  			match.whoPlaysFirst();
 	  			initializeBoardComponents(biggestFrame);
 	  		}
@@ -262,41 +303,88 @@ public class GUI extends JFrame implements ActionListener
 	  	constraints.ipady = 40;
 		constraints.gridx = 3;
 		constraints.gridy = 0;
-	
+		//constraints.insets = new Insets(40, 0, 0, 0);
 		JLabel playerOneLabel = new JLabel("Player one:");
 		playerOneLabel.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
-	  	panel.add(playerOneLabel, constraints);
+		playerPanel.add(playerOneLabel, constraints);
 	  	
 	  	//Player one text preferences in GUI representation
 	  	constraints.ipady = 40;
-		constraints.ipadx = 200;
-		constraints.gridx = 3;
+		constraints.ipadx = 480;
+		constraints.gridx = 1;
 		constraints.gridy = 1;
+		
+		constraints.gridwidth = 3;
 		playerOneField.setFont(gamingFont.deriveFont(SMALLER_SIZE));
-	  	panel.add(playerOneField, constraints);
+		playerPanel.add(playerOneField, constraints);
+		
+		//Player one can choose color with this button
+		JButton firstPlayerColor = new JButton("Choose a color");
+	  	firstPlayerColor.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+	  	firstPlayerColor.setBackground(PALETTE_COLOR_3);
+	  	firstPlayerColor.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+	  	firstPlayerColor.addActionListener(new ActionListener() {
+	  		public void actionPerformed(ActionEvent e) {
+
+	  			playerPanel.setVisible(false);
+	  	        mainPanel.setVisible(false);
+	  			
+	  			createColorChooserGrid(match.getFirstPlayer());
+	  		}
+	  	});
+	  	constraints.ipady = 0;
+	  	constraints.ipadx = 0;
+	  	constraints.gridx = 3;
+	  	constraints.gridy = 2;
+	  	constraints.insets = new Insets(20, 0, 20, 0);
+	  	playerPanel.add(firstPlayerColor, constraints);
 	  	
 	  	//Player two label preferences in GUI representation
 	  	constraints.ipadx = 20;
-	  	constraints.ipady = 40;
+	  	constraints.ipady = 0;
 		constraints.gridx = 3;
-		constraints.gridy = 2;
+		constraints.gridy = 3;
 		JLabel playerTwoLabel = new JLabel("Player two:");
 		playerTwoLabel.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
-	  	panel.add(playerTwoLabel, constraints);
+		playerPanel.add(playerTwoLabel, constraints);
 	  	
 	  	//Player two text preferences in GUI representation
 	  	constraints.ipady = 40;
-		constraints.ipadx = 180;
-		constraints.gridx = 3;
-		constraints.gridy = 3;
+		constraints.ipadx = 480;
+		constraints.gridx = 1;
+		constraints.gridy = 4;
+		constraints.insets = new Insets(-3, 0, 0, 0);
 		playerTwoField.setFont(gamingFont.deriveFont(SMALLER_SIZE));
-	  	panel.add(playerTwoField, constraints);
+		playerPanel.add(playerTwoField, constraints);
+		
+		//Player two can choose color with this button
+		JButton secondPlayerColor = new JButton("Choose a color");
+		secondPlayerColor.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		secondPlayerColor.setBackground(PALETTE_COLOR_3);
+		secondPlayerColor.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+		secondPlayerColor.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+
+			playerPanel.setVisible(false);
+	        mainPanel.setVisible(false);
+			
+			createColorChooserGrid(match.getSecondPlayer());
+		}
+		});
+		constraints.ipady = 0;
+		constraints.ipadx = 0;
+		constraints.gridx = 3;
+		constraints.gridy = 5;
+		constraints.insets = new Insets(20, 0, 0, 0);
+		playerPanel.add(secondPlayerColor, constraints);
 	  	
+		//Start match button section continues
 	  	constraints.ipady = 40;
 	  	constraints.ipadx = 180;
 	  	constraints.gridx = 3;
-	  	constraints.gridy = 4;
-	  	constraints.insets = new Insets(0, 0, 110, 0);
+	  	constraints.gridy = 6;
+	  	constraints.anchor = GridBagConstraints.PAGE_END;
+	  	constraints.insets = new Insets(0, 0, 60, 0);
 	  	startMatchButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 	  	mainPanel.add(startMatchButton, constraints);
 	  	
@@ -333,20 +421,441 @@ public class GUI extends JFrame implements ActionListener
 	  	  	  }
 	  	  }
 	  	});
-  	  	
+
 	  	match.setFirstPlayer(firstPlayer);
 		match.setSecondPlayer(secondPlayer);
 		
-		panel.setBackground(PALETTE_COLOR_1);
+		playerPanel.setBackground(PALETTE_COLOR_1);
 	  	mainPanel.setBackground(PALETTE_COLOR_1);
 	
-	  	biggestFrame.add(panel, BorderLayout.CENTER);
+	  	biggestFrame.add(playerPanel, BorderLayout.CENTER);
 	  	biggestFrame.add(mainPanel, BorderLayout.SOUTH);
   	 
     }
     
     /**
-     * Initialize the contents of the game board.
+     * Sets player's token to the color of the chosen button
+     * In order to shorten the code, this method is also concerned with setting visibility
+     * of elements in the biggestFrame JFrame (biggestFrame is the main frame of the application).
+     * 
+     * @param colorButton is the button pressed by the user
+     * @param player is the player who has pressed it
+     */
+    public void setColorCorrespondingToButton(JButton colorButton, Player player) {
+    	player.setToken(new Token(colorButton.getBackground()));
+		colorsTopPanel.setVisible(false);
+		mainPanel.setVisible(true);
+		playerPanel.setVisible(true);
+    }
+    
+    /**
+     * Creates the color chooser interface.
+     * This view wants to be a reference to game interfaces when choosing a player.
+     * It is created a matrix of buttons, each one filled with a different color 
+     * (taken from a pool of constants in the field section).
+     * Player clicking on a button selects it.
+     * Once selected, the player will have his token colored like the clicked button.
+     * 
+     * @param player is the player invoking this interface
+     */
+    public void createColorChooserGrid(Player player) {
+    	
+    	colorsTopPanel = new JPanel(new GridBagLayout());
+    	GridBagConstraints constraints = new GridBagConstraints();
+    	
+    	JPanel labelPanel = new JPanel();	
+    	JLabel colorLabel = new JLabel("Choose a color!");
+    	colorLabel.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
+    	labelPanel.add(colorLabel);
+    	
+    	constraints.ipadx = 0;
+    	constraints.ipady = 0;
+  	  	constraints.gridx = 0;
+  	  	constraints.gridy = 0;
+  	  	constraints.weightx = 0.5;
+  	    constraints.insets = new Insets(30,10,10,10); 
+  	  	constraints.fill = GridBagConstraints.HORIZONTAL;
+    	colorsTopPanel.add(labelPanel, constraints);
+    	    	
+    	JPanel colorPanel = new JPanel(new GridLayout(6, 6, 10, 10));
+    	
+    	constraints.ipadx = 20;
+    	constraints.ipady = 400;
+  	  	constraints.gridx = 0;
+  	  	constraints.gridy = 1;
+  	  	constraints.weighty = 1;
+  	    constraints.insets = new Insets(10,10,10,10); 
+  	  	constraints.fill = GridBagConstraints.HORIZONTAL;
+    	colorsTopPanel.add(colorPanel, constraints);
+        JButton[][] colors = new JButton[6][6];
+        
+        colors[0][0] = new JButton();
+        
+        colors[0][0].setBackground(TOKEN_COLOR_1);
+        colors[0][0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[0][0], player);
+        	}
+        });
+        colorPanel.add(colors[0][0]);
+
+        colors[0][1] = new JButton();
+
+        colors[0][1].setBackground(TOKEN_COLOR_2);
+        colors[0][1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[0][1], player);
+        	}
+        });
+        colorPanel.add(colors[0][1]);
+
+        colors[0][2] = new JButton();
+
+        colors[0][2].setBackground(TOKEN_COLOR_3);
+        colors[0][2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[0][2], player);
+        	}
+        });
+        colorPanel.add(colors[0][2]);
+        
+        colors[0][3] = new JButton();
+        
+        colors[0][3].setBackground(TOKEN_COLOR_4);
+        colors[0][3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[0][3], player);
+        	}
+        });
+        colorPanel.add(colors[0][3]);
+        
+        colors[0][4] = new JButton();
+        
+        colors[0][4].setBackground(TOKEN_COLOR_5);
+        colors[0][4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[0][4], player);
+        	}
+        });
+        colorPanel.add(colors[0][4]);
+        
+        colors[0][5] = new JButton();
+        
+        colors[0][5].setBackground(TOKEN_COLOR_6);
+        colors[0][5].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[0][5], player);
+        	}
+        });
+        colorPanel.add(colors[0][5]);
+        
+        colors[1][0] = new JButton();
+        
+        colors[1][0].setBackground(TOKEN_COLOR_7);
+        colors[1][0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[1][0], player);
+        	}
+        });
+        colorPanel.add(colors[1][0]);
+
+        colors[1][1] = new JButton();
+
+        colors[1][1].setBackground(TOKEN_COLOR_8);
+        colors[1][1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[1][1], player);
+        	}
+        });
+        colorPanel.add(colors[1][1]);
+
+        colors[1][2] = new JButton();
+
+        colors[1][2].setBackground(TOKEN_COLOR_9);
+        colors[1][2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[1][2], player);
+        	}
+        });
+        colorPanel.add(colors[1][2]);
+        
+        colors[1][3] = new JButton();
+
+        colors[1][3].setBackground(TOKEN_COLOR_10);
+        colors[1][3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[1][3], player);
+        	}
+        });
+        colorPanel.add(colors[1][3]);
+        
+        colors[1][4] = new JButton();
+        
+        colors[1][4].setBackground(TOKEN_COLOR_11);
+        colors[1][4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[1][4], player);
+        	}
+        });
+        colorPanel.add(colors[1][4]);
+        
+        colors[1][5] = new JButton();
+        
+        colors[1][5].setBackground(TOKEN_COLOR_12);
+        colors[1][5].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[1][5], player);
+        	}
+        });
+        colorPanel.add(colors[1][5]);
+        
+        colors[2][0] = new JButton();
+
+        colors[2][0].setBackground(TOKEN_COLOR_13);
+        colors[2][0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[2][0], player);
+        	}
+        });
+        colorPanel.add(colors[2][0]);
+        
+        colors[2][1] = new JButton();
+
+        colors[2][1].setBackground(TOKEN_COLOR_14);
+        colors[2][1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[2][1], player);
+        	}
+        });
+        colorPanel.add(colors[2][1]);
+
+        colors[2][2] = new JButton();
+
+        colors[2][2].setBackground(TOKEN_COLOR_15);
+        colors[2][2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[2][2], player);
+        	}
+        });
+        colorPanel.add(colors[2][2]);
+        
+        colors[2][3] = new JButton();
+
+        colors[2][3].setBackground(TOKEN_COLOR_16);
+        colors[2][3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[2][3], player);
+        	}
+        });
+        colorPanel.add(colors[2][3]);
+
+        colors[2][4] = new JButton();
+        
+        colors[2][4].setBackground(TOKEN_COLOR_17);
+        colors[2][4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[2][4], player);
+        	}
+        });
+        colorPanel.add(colors[2][4]);
+        
+        colors[2][5] = new JButton();
+        
+        colors[2][5].setBackground(TOKEN_COLOR_18);
+        colors[2][5].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[2][5], player);
+        	}
+        });
+        colorPanel.add(colors[2][5]);        
+        
+        colors[3][0] = new JButton();
+
+        colors[3][0].setBackground(TOKEN_COLOR_19);
+        colors[3][0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[3][0], player);
+        	}
+        });
+        colorPanel.add(colors[3][0]);
+        
+        colors[3][1] = new JButton();
+
+        colors[3][1].setBackground(TOKEN_COLOR_20);
+        colors[3][1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[3][1], player);
+        	}
+        });
+        colorPanel.add(colors[3][1]);
+        
+        colors[3][2] = new JButton();
+
+        colors[3][2].setBackground(TOKEN_COLOR_21);
+        colors[3][2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[3][2], player);
+        	}
+        });
+        colorPanel.add(colors[3][2]);
+        
+        colors[3][3] = new JButton();
+
+        colors[3][3].setBackground(TOKEN_COLOR_22);
+        colors[3][3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[3][3], player);
+        	}
+        });
+        colorPanel.add(colors[3][3]);
+        
+        colors[3][4] = new JButton();
+        
+        colors[3][4].setBackground(TOKEN_COLOR_23);
+        colors[3][4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[3][4], player);
+        	}
+        });
+        colorPanel.add(colors[3][4]);
+        
+        colors[3][5] = new JButton();
+        
+        colors[3][5].setBackground(TOKEN_COLOR_24);
+        colors[3][5].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[3][5], player);
+        	}
+        });
+        colorPanel.add(colors[3][5]);
+        
+        colors[4][0] = new JButton();
+        
+        colors[4][0].setBackground(TOKEN_COLOR_25);
+        colors[4][0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[4][0], player);
+        	}
+        });
+        colorPanel.add(colors[4][0]);
+        
+        colors[4][1] = new JButton();
+
+        colors[4][1].setBackground(TOKEN_COLOR_26);
+        colors[4][1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[4][1], player);
+        	}
+        });
+        colorPanel.add(colors[4][1]);
+        
+        colors[4][2] = new JButton();
+
+        colors[4][2].setBackground(TOKEN_COLOR_27);
+        colors[4][2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[4][2], player);
+        	}
+        });
+        colorPanel.add(colors[4][2]);
+        
+        colors[4][3] = new JButton();
+
+        colors[4][3].setBackground(TOKEN_COLOR_28);
+        colors[4][3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[4][3], player);
+        	}
+        });
+        colorPanel.add(colors[4][3]);
+        
+        colors[4][4] = new JButton();
+        
+        colors[4][4].setBackground(TOKEN_COLOR_29);
+        colors[4][4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[4][4], player);
+        	}
+        });
+        colorPanel.add(colors[4][4]);
+        
+        colors[4][5] = new JButton();
+        
+        colors[4][5].setBackground(TOKEN_COLOR_30);
+        colors[4][5].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[4][5], player);
+        	}
+        });
+        colorPanel.add(colors[4][5]);
+        
+        colors[5][0] = new JButton();
+        
+        colors[5][0].setBackground(TOKEN_COLOR_31);
+        colors[5][0].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[5][0], player);
+        	}
+        });
+        colorPanel.add(colors[5][0]);
+        
+        colors[5][1] = new JButton();
+
+        colors[5][1].setBackground(TOKEN_COLOR_32);
+        colors[5][1].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[5][1], player);
+        	}
+        });
+        colorPanel.add(colors[5][1]);
+        
+        colors[5][2] = new JButton();
+
+        colors[5][2].setBackground(TOKEN_COLOR_33);
+        colors[5][2].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[5][2], player);
+        	}
+        });
+        colorPanel.add(colors[5][2]);
+        
+        colors[5][3] = new JButton();
+
+        colors[5][3].setBackground(TOKEN_COLOR_34);
+        colors[5][3].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[5][3], player);
+        	}
+        });
+        colorPanel.add(colors[5][3]);
+        
+        colors[5][4] = new JButton();
+        
+        colors[5][4].setBackground(TOKEN_COLOR_35);
+        colors[5][4].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[5][4], player);
+        	}
+        });
+        colorPanel.add(colors[5][4]);
+        
+        colors[5][5] = new JButton();
+        
+        colors[5][5].setBackground(TOKEN_COLOR_36);
+        colors[5][5].addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		setColorCorrespondingToButton(colors[5][5], player);
+        	}
+        });
+        colorPanel.add(colors[5][5]);
+       
+        colorsTopPanel.setBackground(PALETTE_COLOR_1);
+        biggestFrame.add(colorsTopPanel);
+        colorsTopPanel.setVisible(true);   
+    }
+    
+    /**
+     * Initialize the content of the game board.
      */
     public void initializeBoardComponents(JFrame frame) 
     {	
@@ -563,7 +1072,6 @@ public class GUI extends JFrame implements ActionListener
         gameBoardPanel.add(boardPanel,BorderLayout.CENTER);   
     }
 
-
     /**
      * Method that creates the board view and paints every panel (where the token will be placed in) in a pink color.
      */
@@ -643,9 +1151,7 @@ public class GUI extends JFrame implements ActionListener
         endGamePanel.setVisible(true);
 		
 	}
-    
-    
-    
+  
     /**
      * Adds the font used in the whole game.
      * The font used is a custom font, downloaded here: https://www.dafont.com/retro-gaming.font#null
@@ -987,10 +1493,8 @@ public class GUI extends JFrame implements ActionListener
 			
 			LoadInterface loader = new LoadMatch();
 			this.registerEventListener(loader);
-			this.doTask();
-			
+			this.doTask();	
 		}
-
 	}
 	
 	/**
@@ -1018,8 +1522,7 @@ public class GUI extends JFrame implements ActionListener
 		secondPlayerToken = match.getSecondPlayer().getToken();
 		initializeBoardComponents(biggestFrame);
 		paintBoardWithColors(match.getBoard());		
-	}
-	
+	}	
 	
     /**
      * Method for resetting the match that is being played.
@@ -1256,5 +1759,4 @@ public class GUI extends JFrame implements ActionListener
   		public void mouseExited(MouseEvent e) {
   		}
     }
-
 }
