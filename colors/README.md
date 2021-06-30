@@ -1,1 +1,0 @@
-This directory contains the color of the token selected by the players.

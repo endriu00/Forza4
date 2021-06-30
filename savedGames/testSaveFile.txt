@@ -1,5 +1,5 @@
 First player: Andrea, token color: 0 0 0
-Second player: Erica, token color: 20 220 20
+Second player: Chiara, token color: 20 220 20
 Turn: 7 
 Board: 
 Row: 5 Col: 0 0 0 0

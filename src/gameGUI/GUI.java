@@ -5,54 +5,49 @@ import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import javax.swing.text.*;
-
-import javax.swing.event.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import customException.*;
 import gameComponents.*;
-import playGame.*;
+import saveAndLoad.LoadInterface;
 import saveAndLoad.LoadMatch;
 import saveAndLoad.SaveMatch;
-import utilities.LoadInterface;
 
-public class GUI extends JFrame implements ActionListener 
-{
+/**
+ * This class represents the GUI (Graphical User Interface), from which a user can control and play the game. 
+ */
+public class GUI extends JFrame implements ActionListener {
 	     
-	private JFrame biggestFrame;
-	private JPanel boardFrame;
-    private JPanel mainPanel;
-    private JPanel colorsTopPanel;
+	private JFrame biggestFrame;	//Frame containing the UI
+    private JPanel mainPanel;		//mainPanel
+    private JPanel colorsTopPanel;	//Panel containing the colors
     
     private Container gameContainer;	 // Container 
 
     private JPanel topPanel;		// Panel containing players and turn
     private JPanel boardPanel;		// Panel containing the board cells
     private JPanel[][] boardCellsPanel;	 // Panel (array) representing the game board
-    private JPanel turnPanel;		// Panel containing the turn ** Panel containing turn info and games played */
+    private JPanel turnPanel;		// Panel containing the turn info 
     private JPanel bottomButtonPanel;		 // Panel containing reset, quit and save buttons 
     private JPanel columnsButtonPanel;		 // Panel containing the column buttons
     private JPanel gameBoardPanel;		// Panel containing the game board
     private JPanel playerPanel;			// Panel containing players
-    private JPanel endPanel;			// Panel containing end label
-    private JPanel informativePanel;
-    private JPanel downPanel;
+    private JPanel endGamePanel;			// Panel containing end label
+    private JPanel informativePanel;	//Panel containing information about the match
+    private JPanel downPanel;			//Panel containing bottomButtonPanel and informativePanel
     
     private JLabel playerOneLabel;	 // Label for player one
     private JLabel playerTwoLabel;	// Label for player two
     private JLabel turnLabel;		// Label displaying the turn
-    private JLabel informativeLabel;
-    private JLabel welcomeLabel;
+    private JLabel informativeLabel;	//Label containing information about the match
+    private JLabel welcomeLabel;	//Label welcoming user
 
     private JButton startGameButton; // Start button
     private JButton startMatchButton; // Start match button
@@ -61,6 +56,8 @@ public class GUI extends JFrame implements ActionListener
     private JButton saveButton;		// Save button
     private JButton loadButton;		// Load button
     private JButton[] columnButtons;	 // Buttons for each column
+    private JButton[][] colors = new JButton[6][6];	//Button matrix for color chooser functionality
+
 
     private JTextField playerOneField;		// Field for player one's name
     private JTextField playerTwoField;		// Field for player two's name
@@ -71,117 +68,111 @@ public class GUI extends JFrame implements ActionListener
     private Player firstPlayer;
     private Player secondPlayer;
     
-    private boolean isEnded;
-    private int playerOneFieldCounter;
-    private int playerTwoFieldCounter;
+    private boolean isEnded;			//If match is ended, isEnded is set to true, false otherwise
+    private int playerOneFieldCounter;	//Counter for letting disappear text on JTextField playerOneField
+    private int playerTwoFieldCounter;  //Counter for letting disapper text on JTextField playerTwoField
     
-    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private final int WIDTH = (int) screenSize.getWidth();
-    private final int HEIGHT = (int) screenSize.getHeight();
+    /**
+     * A custom font, namely gamingFont because it reminds old pixel graphics games.
+     */
+    private Font gamingFont;
     
-    private static final Color PALETTE_COLOR_1 = new Color(235, 245, 247);
-    private static final Color PALETTE_COLOR_2 = new Color(193, 91, 120);
-    private static final Color PALETTE_COLOR_3 = new Color(91, 176, 186);
-    private static final Color PALETTE_COLOR_4 = new Color(255, 200, 230);
-    
-    private static final Color TOKEN_COLOR_1 = new Color(20, 20, 20);
-    private static final Color TOKEN_COLOR_2 = new Color(205, 245, 247);
-    private static final Color TOKEN_COLOR_3 = new Color(193, 91, 120);
-    private static final Color TOKEN_COLOR_4 = new Color(91, 176, 186);
-    private static final Color TOKEN_COLOR_5 = new Color(255, 200, 230);
-    private static final Color TOKEN_COLOR_6 = new Color(255, 0, 0);
-    private static final Color TOKEN_COLOR_7 = new Color(0, 255, 0);
-    private static final Color TOKEN_COLOR_8 = new Color(0, 0, 255);
-    private static final Color TOKEN_COLOR_9 = new Color(0, 255, 71);
-    private static final Color TOKEN_COLOR_10 = new Color(0, 73, 98);
-    private static final Color TOKEN_COLOR_11 = new Color(0, 172, 0);
-    private static final Color TOKEN_COLOR_12 = new Color(155, 172, 247);
-    private static final Color TOKEN_COLOR_13 = new Color(213, 255, 165);
-    private static final Color TOKEN_COLOR_14 = new Color(213, 104, 165);
-    private static final Color TOKEN_COLOR_15 = new Color(255, 0, 255);
-    private static final Color TOKEN_COLOR_16 = new Color(193, 255, 152);
-    private static final Color TOKEN_COLOR_17 = new Color(220, 220, 20);
-    private static final Color TOKEN_COLOR_18 = new Color(225, 215, 17);
-    private static final Color TOKEN_COLOR_19 = new Color(193, 241, 12);
-    private static final Color TOKEN_COLOR_20 = new Color(111, 116, 116);
-    private static final Color TOKEN_COLOR_21 = new Color(255, 110, 240);
-    private static final Color TOKEN_COLOR_22 = new Color(255, 44, 11);
-    private static final Color TOKEN_COLOR_23 = new Color(0, 255, 255);
-    private static final Color TOKEN_COLOR_24 = new Color(0, 144, 255);
-    private static final Color TOKEN_COLOR_25 = new Color(40, 225, 71);
-    private static final Color TOKEN_COLOR_26 = new Color(40, 73, 198);
-    private static final Color TOKEN_COLOR_27 = new Color(42, 172, 44);
-    private static final Color TOKEN_COLOR_28 = new Color(15, 72, 247);
-    private static final Color TOKEN_COLOR_29 = new Color(11, 255, 165);
-    private static final Color TOKEN_COLOR_30 = new Color(23, 104, 165);
-    private static final Color TOKEN_COLOR_31 = new Color(255, 111, 255);
-    private static final Color TOKEN_COLOR_32 = new Color(13, 25, 152);
-    private static final Color TOKEN_COLOR_33 = new Color(243, 155, 125);
-    private static final Color TOKEN_COLOR_34 = new Color(213, 104, 15);
-    private static final Color TOKEN_COLOR_35 = new Color(205, 110, 179);
-    private static final Color TOKEN_COLOR_36 = new Color(103, 215, 122);
-
-
-
-    private Font gamingFont;	//Custom font
-    
-    //Constants for custom font size
+    /**
+     * Constants for custom font size.
+     * Every component of the UI will have a size that is one of these values.
+     */
     private static final float SMALLER_SIZE = 13.f;
     private static final float MEDIUM_SIZE = 24.f;
     private static final float LARGER_SIZE = 34.f;
     private static final float SMALLEST_SIZE = 11.0f;
     
-    //Border variable that deletes grey components border
+    /**
+     * Border variable that deletes components border
+     */
     private Border emptyBorder = BorderFactory.createEmptyBorder();
 
-    //Loading file resources
+    /**
+     * Loading file resources.
+     * Interface is used to apply Observer design pattern.
+     */
     private File loadingFile;
     private LoadInterface loadListener;
- 
+    
     /**
-	 * Launch the application.
+     * Variable used as a mutex in the color grid shared resource 
+     */
+    private Player mutexPlayer;
+    
+    /**
+     * Gets the dimension of the screen on which the application is displayed
+     */
+    private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private final int WIDTH = (int) screenSize.getWidth();
+    private final int HEIGHT = (int) screenSize.getHeight();
+    
+    /**
+     * Palette colors used in the interface colors.
+     */
+    private static final Color PALETTE_COLOR_1 = new Color(235, 245, 247);
+    private static final Color PALETTE_COLOR_2 = new Color(193, 91, 120);
+    private static final Color PALETTE_COLOR_3 = new Color(91, 176, 186);
+    private static final Color PALETTE_COLOR_4 = new Color(255, 200, 230);
+    
+    /**
+     * Colors a player can select for his token
+     */
+    private static final Color TOKEN_COLOR_1 = new Color(20, 20, 20);
+    private static final Color TOKEN_COLOR_2 = new Color(205, 245, 247);
+    private static final Color TOKEN_COLOR_3 = new Color(193, 91, 120);
+    private static final Color TOKEN_COLOR_4 = new Color(91, 176, 186);
+    private static final Color TOKEN_COLOR_5 = new Color(255, 200, 230);
+    private static final Color TOKEN_COLOR_6 = new Color(175, 43, 118);
+    private static final Color TOKEN_COLOR_7 = new Color(255, 0, 255);
+    private static final Color TOKEN_COLOR_8 = new Color(90, 90, 90);
+    private static final Color TOKEN_COLOR_9 = new Color(120, 120, 120);
+    private static final Color TOKEN_COLOR_10 = new Color(150, 150, 150);
+    private static final Color TOKEN_COLOR_11 = new Color(180, 180, 180);
+    private static final Color TOKEN_COLOR_12 = new Color(210, 210, 210);
+    private static final Color TOKEN_COLOR_13 = new Color(0, 205, 155);
+    private static final Color TOKEN_COLOR_14 = new Color(110, 0, 0);
+    private static final Color TOKEN_COLOR_15 = new Color(140, 0, 0);
+    private static final Color TOKEN_COLOR_16 = new Color(170, 0, 0);
+    private static final Color TOKEN_COLOR_17 = new Color(220, 0, 0);
+    private static final Color TOKEN_COLOR_18 = new Color(255, 0, 0);
+    private static final Color TOKEN_COLOR_19 = new Color(0, 255, 71);
+    private static final Color TOKEN_COLOR_20 = new Color(0, 110, 0);
+    private static final Color TOKEN_COLOR_21 = new Color(0, 140, 0);
+    private static final Color TOKEN_COLOR_22 = new Color(0, 170, 0);
+    private static final Color TOKEN_COLOR_23 = new Color(0, 220, 0);
+    private static final Color TOKEN_COLOR_24 = new Color(0, 255, 0);
+    private static final Color TOKEN_COLOR_25 = new Color(212, 220, 80);
+    private static final Color TOKEN_COLOR_26 = new Color(0, 0, 110);
+    private static final Color TOKEN_COLOR_27 = new Color(0, 0, 140);
+    private static final Color TOKEN_COLOR_28 = new Color(0, 0, 170);
+    private static final Color TOKEN_COLOR_29 = new Color(0, 0, 220);
+    private static final Color TOKEN_COLOR_30 = new Color(0, 0, 255);
+    private static final Color TOKEN_COLOR_31 = new Color(170, 190, 30);
+    private static final Color TOKEN_COLOR_32 = new Color(80, 150, 70);
+    private static final Color TOKEN_COLOR_33 = new Color(110, 110, 100);
+    private static final Color TOKEN_COLOR_34 = new Color(110, 30, 106);
+    private static final Color TOKEN_COLOR_35 = new Color(205, 110, 170);
+    private static final Color TOKEN_COLOR_36 = new Color(103, 215, 122);  
+     
+	/**
+	 * Creates the GUI
 	 */
-	public static void main(String[] args) 
-	{
-		
-		EventQueue.invokeLater(new Runnable() 
-		{
-			public void run() 
-			{
-				try 
-				{
-					
-					GUI window = new GUI();
-					window.biggestFrame.setVisible(true);
-				}
-				catch (Exception e) 
-				{
-					e.printStackTrace();
-				}
-			}
-			
-		});
+	public GUI() {	
+		super("Connect Four");
+		addFont();
+		displayStartGameFrame();
 	}
-	
-
 	
 	/**
-	 * Create the application.
+	 * Initialize the actors of the game.
 	 */
-	public GUI() 
-	{	
-		super("Connect Four");
-
-		addFont();
-		isEnded = false;
-		displayStartGameFrame();
-			
-	}
-	
-
 	public void initializeComponents() {
-		//add functionality, let user  choose color
-		
+		isEnded = false;
+
 		firstPlayerToken = new Token(new Color(0, 250, 0));
 		secondPlayerToken = new Token(new Color(255, 0, 0));
 		firstPlayer = new Player("", firstPlayerToken);
@@ -191,6 +182,7 @@ public class GUI extends JFrame implements ActionListener
 		playerOneFieldCounter = 0;
 		playerTwoFieldCounter = 0;		
 	}
+	
 	/**
 	 * Display the start/load game frame.
 	 */
@@ -211,6 +203,7 @@ public class GUI extends JFrame implements ActionListener
 		startGameButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		startGameButton.setBackground(PALETTE_COLOR_4);
 		startGameButton.setBorder(emptyBorder);
+	  	startGameButton.addMouseListener(new EnableHoverOnButton(startGameButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		startGameButton.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -224,6 +217,7 @@ public class GUI extends JFrame implements ActionListener
 		loadButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		loadButton.setBackground(PALETTE_COLOR_4);
 		loadButton.setBorder(emptyBorder);
+	  	loadButton.addMouseListener(new EnableHoverOnButton(loadButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
         loadButton.addActionListener(this);
                
         welcomeLabel = new JLabel("Welcome to ConnectFour!");
@@ -268,14 +262,18 @@ public class GUI extends JFrame implements ActionListener
      * Initialize match players. 
      */
     private void initializeMatch() {
-    	
+    	    	
     	mainPanel = new JPanel(new GridBagLayout());
 	  	playerPanel = new JPanel(new GridBagLayout());
 	  	GridBagConstraints constraints = new GridBagConstraints();
+	  	
+		createColorChooserGrid();
+
 		
 	  	startMatchButton = new JButton("Start");
 	  	startMatchButton.setBackground(PALETTE_COLOR_4);
 	  	startMatchButton.setBorder(emptyBorder);
+	  	startMatchButton.addMouseListener(new EnableHoverOnButton(startMatchButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 	  	startMatchButton.addActionListener(new ActionListener() {
 	  		public void actionPerformed(ActionEvent e) {
 	  			mainPanel.setVisible(false);
@@ -289,12 +287,14 @@ public class GUI extends JFrame implements ActionListener
 	  	playerOneField = new JTextField("Insert the name of the first player here!");
 	  	//in this JTextField it has been added a mouse listener that deletes its content 
 	  	//when user clicks the field, letting him insert his name.
+	  	playerOneField.setForeground(PALETTE_COLOR_2);
 	  	playerOneField.addMouseListener(new DeleteTextOneMouseListener());
 	
 	  	//Useful for user
 	  	playerTwoField = new JTextField("Insert the name of the second player here!");
 	  	//in this JTextField it has been added a mouse listener that deletes its content 
 	  	//when user clicks the field, letting him insert his name.
+	  	playerTwoField.setForeground(PALETTE_COLOR_2);
 	  	playerTwoField.addMouseListener(new DeleteTextTwoMouseListener());
 	  	
 	  	//Player one label preferences in GUI representation
@@ -323,15 +323,18 @@ public class GUI extends JFrame implements ActionListener
 	  	firstPlayerColor.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 	  	firstPlayerColor.setBackground(PALETTE_COLOR_3);
 	  	firstPlayerColor.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+		firstPlayerColor.addMouseListener(new EnableHoverOnButton(firstPlayerColor, PALETTE_COLOR_2, PALETTE_COLOR_3));
 	  	firstPlayerColor.addActionListener(new ActionListener() {
 	  		public void actionPerformed(ActionEvent e) {
-
+	  			firstPlayerColor.setEnabled(false);
 	  			playerPanel.setVisible(false);
 	  	        mainPanel.setVisible(false);
-	  			
-	  			createColorChooserGrid(match.getFirstPlayer());
+	  	        colorsTopPanel.setVisible(true);
+	  	        biggestFrame.add(colorsTopPanel);
+	  	        showColorGrid(match.getFirstPlayer());
 	  		}
 	  	});
+	  	
 	  	constraints.ipady = 0;
 	  	constraints.ipadx = 0;
 	  	constraints.gridx = 3;
@@ -362,13 +365,16 @@ public class GUI extends JFrame implements ActionListener
 		secondPlayerColor.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		secondPlayerColor.setBackground(PALETTE_COLOR_3);
 		secondPlayerColor.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+		secondPlayerColor.addMouseListener(new EnableHoverOnButton(secondPlayerColor, PALETTE_COLOR_2, PALETTE_COLOR_3));
+
 		secondPlayerColor.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-
+			secondPlayerColor.setEnabled(false);
 			playerPanel.setVisible(false);
 	        mainPanel.setVisible(false);
-			
-			createColorChooserGrid(match.getSecondPlayer());
+	        colorsTopPanel.setVisible(true);
+  	        biggestFrame.add(colorsTopPanel);
+			showColorGrid(match.getSecondPlayer());
 		}
 		});
 		constraints.ipady = 0;
@@ -434,19 +440,42 @@ public class GUI extends JFrame implements ActionListener
     }
     
     /**
+     * Show the interface from which a player can choose a color for his token.
+     * 
+     * Note that, for accessing the color grid (that is properly a shared resource), an additional variable is used as a mutex, mutexPlayer.
+     * 
+     * @param p is the player calling the interface.
+     * 
+     * @author andre
+     */
+    public void showColorGrid(Player p) {
+    	mutexPlayer = p;
+        colorsTopPanel.setVisible(true);   
+        
+    	
+    }
+    
+    /**
      * Sets player's token to the color of the chosen button
      * In order to shorten the code, this method is also concerned with setting visibility
      * of elements in the biggestFrame JFrame (biggestFrame is the main frame of the application).
      * 
      * @param colorButton is the button pressed by the user
      * @param player is the player who has pressed it
+     * 
+     * @author andre
      */
     public void setColorCorrespondingToButton(JButton colorButton, Player player) {
     	player.setToken(new Token(colorButton.getBackground()));
+    	colorButton.setEnabled(false);
+    	colorButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
+    	colorButton.add(new JLabel(" P1")).setFont(gamingFont.deriveFont(LARGER_SIZE));
 		colorsTopPanel.setVisible(false);
 		mainPanel.setVisible(true);
 		playerPanel.setVisible(true);
     }
+    
+    
     
     /**
      * Creates the color chooser interface.
@@ -457,16 +486,22 @@ public class GUI extends JFrame implements ActionListener
      * Once selected, the player will have his token colored like the clicked button.
      * 
      * @param player is the player invoking this interface
+     * 
+     * @author andre
      */
-    public void createColorChooserGrid(Player player) {
+    public void createColorChooserGrid() {
     	
     	colorsTopPanel = new JPanel(new GridBagLayout());
     	GridBagConstraints constraints = new GridBagConstraints();
     	
-    	JPanel labelPanel = new JPanel();	
-    	JLabel colorLabel = new JLabel("Choose a color!");
+    	JPanel labelPanel = new JPanel(new GridBagLayout());	
+    	labelPanel.setBackground(PALETTE_COLOR_3);
+    	
+    	JLabel colorLabel = new JLabel("Click on a color to choose it!");
     	colorLabel.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
-    	labelPanel.add(colorLabel);
+    	constraints.gridx = 3;
+    	constraints.ipady = 34;
+    	labelPanel.add(colorLabel, constraints);
     	
     	constraints.ipadx = 0;
     	constraints.ipady = 0;
@@ -478,7 +513,7 @@ public class GUI extends JFrame implements ActionListener
     	colorsTopPanel.add(labelPanel, constraints);
     	    	
     	JPanel colorPanel = new JPanel(new GridLayout(6, 6, 10, 10));
-    	
+    	    	
     	constraints.ipadx = 20;
     	constraints.ipady = 400;
   	  	constraints.gridx = 0;
@@ -487,14 +522,13 @@ public class GUI extends JFrame implements ActionListener
   	    constraints.insets = new Insets(10,10,10,10); 
   	  	constraints.fill = GridBagConstraints.HORIZONTAL;
     	colorsTopPanel.add(colorPanel, constraints);
-        JButton[][] colors = new JButton[6][6];
         
         colors[0][0] = new JButton();
         
         colors[0][0].setBackground(TOKEN_COLOR_1);
         colors[0][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[0][0], player);
+        		setColorCorrespondingToButton(colors[0][0], mutexPlayer);
         	}
         });
         colorPanel.add(colors[0][0]);
@@ -504,7 +538,7 @@ public class GUI extends JFrame implements ActionListener
         colors[0][1].setBackground(TOKEN_COLOR_2);
         colors[0][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[0][1], player);
+        		setColorCorrespondingToButton(colors[0][1], mutexPlayer);
         	}
         });
         colorPanel.add(colors[0][1]);
@@ -514,7 +548,7 @@ public class GUI extends JFrame implements ActionListener
         colors[0][2].setBackground(TOKEN_COLOR_3);
         colors[0][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[0][2], player);
+        		setColorCorrespondingToButton(colors[0][2], mutexPlayer);
         	}
         });
         colorPanel.add(colors[0][2]);
@@ -524,7 +558,7 @@ public class GUI extends JFrame implements ActionListener
         colors[0][3].setBackground(TOKEN_COLOR_4);
         colors[0][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[0][3], player);
+        		setColorCorrespondingToButton(colors[0][3], mutexPlayer);
         	}
         });
         colorPanel.add(colors[0][3]);
@@ -534,7 +568,7 @@ public class GUI extends JFrame implements ActionListener
         colors[0][4].setBackground(TOKEN_COLOR_5);
         colors[0][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[0][4], player);
+        		setColorCorrespondingToButton(colors[0][4], mutexPlayer);
         	}
         });
         colorPanel.add(colors[0][4]);
@@ -544,7 +578,7 @@ public class GUI extends JFrame implements ActionListener
         colors[0][5].setBackground(TOKEN_COLOR_6);
         colors[0][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[0][5], player);
+        		setColorCorrespondingToButton(colors[0][5], mutexPlayer);
         	}
         });
         colorPanel.add(colors[0][5]);
@@ -554,7 +588,7 @@ public class GUI extends JFrame implements ActionListener
         colors[1][0].setBackground(TOKEN_COLOR_7);
         colors[1][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[1][0], player);
+        		setColorCorrespondingToButton(colors[1][0], mutexPlayer);
         	}
         });
         colorPanel.add(colors[1][0]);
@@ -564,7 +598,7 @@ public class GUI extends JFrame implements ActionListener
         colors[1][1].setBackground(TOKEN_COLOR_8);
         colors[1][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[1][1], player);
+        		setColorCorrespondingToButton(colors[1][1], mutexPlayer);
         	}
         });
         colorPanel.add(colors[1][1]);
@@ -574,7 +608,7 @@ public class GUI extends JFrame implements ActionListener
         colors[1][2].setBackground(TOKEN_COLOR_9);
         colors[1][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[1][2], player);
+        		setColorCorrespondingToButton(colors[1][2], mutexPlayer);
         	}
         });
         colorPanel.add(colors[1][2]);
@@ -584,7 +618,7 @@ public class GUI extends JFrame implements ActionListener
         colors[1][3].setBackground(TOKEN_COLOR_10);
         colors[1][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[1][3], player);
+        		setColorCorrespondingToButton(colors[1][3], mutexPlayer);
         	}
         });
         colorPanel.add(colors[1][3]);
@@ -594,7 +628,7 @@ public class GUI extends JFrame implements ActionListener
         colors[1][4].setBackground(TOKEN_COLOR_11);
         colors[1][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[1][4], player);
+        		setColorCorrespondingToButton(colors[1][4], mutexPlayer);
         	}
         });
         colorPanel.add(colors[1][4]);
@@ -604,7 +638,7 @@ public class GUI extends JFrame implements ActionListener
         colors[1][5].setBackground(TOKEN_COLOR_12);
         colors[1][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[1][5], player);
+        		setColorCorrespondingToButton(colors[1][5], mutexPlayer);
         	}
         });
         colorPanel.add(colors[1][5]);
@@ -614,7 +648,7 @@ public class GUI extends JFrame implements ActionListener
         colors[2][0].setBackground(TOKEN_COLOR_13);
         colors[2][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[2][0], player);
+        		setColorCorrespondingToButton(colors[2][0], mutexPlayer);
         	}
         });
         colorPanel.add(colors[2][0]);
@@ -624,7 +658,7 @@ public class GUI extends JFrame implements ActionListener
         colors[2][1].setBackground(TOKEN_COLOR_14);
         colors[2][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[2][1], player);
+        		setColorCorrespondingToButton(colors[2][1], mutexPlayer);
         	}
         });
         colorPanel.add(colors[2][1]);
@@ -634,7 +668,7 @@ public class GUI extends JFrame implements ActionListener
         colors[2][2].setBackground(TOKEN_COLOR_15);
         colors[2][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[2][2], player);
+        		setColorCorrespondingToButton(colors[2][2], mutexPlayer);
         	}
         });
         colorPanel.add(colors[2][2]);
@@ -644,7 +678,7 @@ public class GUI extends JFrame implements ActionListener
         colors[2][3].setBackground(TOKEN_COLOR_16);
         colors[2][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[2][3], player);
+        		setColorCorrespondingToButton(colors[2][3], mutexPlayer);
         	}
         });
         colorPanel.add(colors[2][3]);
@@ -654,7 +688,7 @@ public class GUI extends JFrame implements ActionListener
         colors[2][4].setBackground(TOKEN_COLOR_17);
         colors[2][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[2][4], player);
+        		setColorCorrespondingToButton(colors[2][4], mutexPlayer);
         	}
         });
         colorPanel.add(colors[2][4]);
@@ -664,7 +698,7 @@ public class GUI extends JFrame implements ActionListener
         colors[2][5].setBackground(TOKEN_COLOR_18);
         colors[2][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[2][5], player);
+        		setColorCorrespondingToButton(colors[2][5], mutexPlayer);
         	}
         });
         colorPanel.add(colors[2][5]);        
@@ -674,7 +708,7 @@ public class GUI extends JFrame implements ActionListener
         colors[3][0].setBackground(TOKEN_COLOR_19);
         colors[3][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[3][0], player);
+        		setColorCorrespondingToButton(colors[3][0], mutexPlayer);
         	}
         });
         colorPanel.add(colors[3][0]);
@@ -684,7 +718,7 @@ public class GUI extends JFrame implements ActionListener
         colors[3][1].setBackground(TOKEN_COLOR_20);
         colors[3][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[3][1], player);
+        		setColorCorrespondingToButton(colors[3][1], mutexPlayer);
         	}
         });
         colorPanel.add(colors[3][1]);
@@ -694,7 +728,7 @@ public class GUI extends JFrame implements ActionListener
         colors[3][2].setBackground(TOKEN_COLOR_21);
         colors[3][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[3][2], player);
+        		setColorCorrespondingToButton(colors[3][2], mutexPlayer);
         	}
         });
         colorPanel.add(colors[3][2]);
@@ -704,7 +738,7 @@ public class GUI extends JFrame implements ActionListener
         colors[3][3].setBackground(TOKEN_COLOR_22);
         colors[3][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[3][3], player);
+        		setColorCorrespondingToButton(colors[3][3], mutexPlayer);
         	}
         });
         colorPanel.add(colors[3][3]);
@@ -714,7 +748,7 @@ public class GUI extends JFrame implements ActionListener
         colors[3][4].setBackground(TOKEN_COLOR_23);
         colors[3][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[3][4], player);
+        		setColorCorrespondingToButton(colors[3][4], mutexPlayer);
         	}
         });
         colorPanel.add(colors[3][4]);
@@ -724,7 +758,7 @@ public class GUI extends JFrame implements ActionListener
         colors[3][5].setBackground(TOKEN_COLOR_24);
         colors[3][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[3][5], player);
+        		setColorCorrespondingToButton(colors[3][5], mutexPlayer);
         	}
         });
         colorPanel.add(colors[3][5]);
@@ -734,7 +768,7 @@ public class GUI extends JFrame implements ActionListener
         colors[4][0].setBackground(TOKEN_COLOR_25);
         colors[4][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[4][0], player);
+        		setColorCorrespondingToButton(colors[4][0], mutexPlayer);
         	}
         });
         colorPanel.add(colors[4][0]);
@@ -744,7 +778,7 @@ public class GUI extends JFrame implements ActionListener
         colors[4][1].setBackground(TOKEN_COLOR_26);
         colors[4][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[4][1], player);
+        		setColorCorrespondingToButton(colors[4][1], mutexPlayer);
         	}
         });
         colorPanel.add(colors[4][1]);
@@ -754,7 +788,7 @@ public class GUI extends JFrame implements ActionListener
         colors[4][2].setBackground(TOKEN_COLOR_27);
         colors[4][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[4][2], player);
+        		setColorCorrespondingToButton(colors[4][2], mutexPlayer);
         	}
         });
         colorPanel.add(colors[4][2]);
@@ -764,7 +798,7 @@ public class GUI extends JFrame implements ActionListener
         colors[4][3].setBackground(TOKEN_COLOR_28);
         colors[4][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[4][3], player);
+        		setColorCorrespondingToButton(colors[4][3], mutexPlayer);
         	}
         });
         colorPanel.add(colors[4][3]);
@@ -774,7 +808,7 @@ public class GUI extends JFrame implements ActionListener
         colors[4][4].setBackground(TOKEN_COLOR_29);
         colors[4][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[4][4], player);
+        		setColorCorrespondingToButton(colors[4][4], mutexPlayer);
         	}
         });
         colorPanel.add(colors[4][4]);
@@ -784,7 +818,7 @@ public class GUI extends JFrame implements ActionListener
         colors[4][5].setBackground(TOKEN_COLOR_30);
         colors[4][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[4][5], player);
+        		setColorCorrespondingToButton(colors[4][5], mutexPlayer);
         	}
         });
         colorPanel.add(colors[4][5]);
@@ -794,7 +828,7 @@ public class GUI extends JFrame implements ActionListener
         colors[5][0].setBackground(TOKEN_COLOR_31);
         colors[5][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[5][0], player);
+        		setColorCorrespondingToButton(colors[5][0], mutexPlayer);
         	}
         });
         colorPanel.add(colors[5][0]);
@@ -804,7 +838,7 @@ public class GUI extends JFrame implements ActionListener
         colors[5][1].setBackground(TOKEN_COLOR_32);
         colors[5][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[5][1], player);
+        		setColorCorrespondingToButton(colors[5][1], mutexPlayer);
         	}
         });
         colorPanel.add(colors[5][1]);
@@ -814,7 +848,7 @@ public class GUI extends JFrame implements ActionListener
         colors[5][2].setBackground(TOKEN_COLOR_33);
         colors[5][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[5][2], player);
+        		setColorCorrespondingToButton(colors[5][2], mutexPlayer);
         	}
         });
         colorPanel.add(colors[5][2]);
@@ -824,7 +858,7 @@ public class GUI extends JFrame implements ActionListener
         colors[5][3].setBackground(TOKEN_COLOR_34);
         colors[5][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[5][3], player);
+        		setColorCorrespondingToButton(colors[5][3], mutexPlayer);
         	}
         });
         colorPanel.add(colors[5][3]);
@@ -834,7 +868,7 @@ public class GUI extends JFrame implements ActionListener
         colors[5][4].setBackground(TOKEN_COLOR_35);
         colors[5][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[5][4], player);
+        		setColorCorrespondingToButton(colors[5][4], mutexPlayer);
         	}
         });
         colorPanel.add(colors[5][4]);
@@ -844,18 +878,18 @@ public class GUI extends JFrame implements ActionListener
         colors[5][5].setBackground(TOKEN_COLOR_36);
         colors[5][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setColorCorrespondingToButton(colors[5][5], player);
+        		setColorCorrespondingToButton(colors[5][5], mutexPlayer);
         	}
         });
         colorPanel.add(colors[5][5]);
        
         colorsTopPanel.setBackground(PALETTE_COLOR_1);
-        biggestFrame.add(colorsTopPanel);
-        colorsTopPanel.setVisible(true);   
     }
     
     /**
      * Initialize the content of the game board.
+     * 
+     * @param frame is the frame in which initialize the components
      */
     public void initializeBoardComponents(JFrame frame) 
     {	
@@ -887,8 +921,8 @@ public class GUI extends JFrame implements ActionListener
         turnPanel.setLayout(new GridLayout(2, 1, 10, 10));
 
         turnLabel = new JLabel();
-        if(match.getFirstPlayerTurn()) turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn");
-        else turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn");
+        if(match.getIsFirstPlayerPlaying()) turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn. Turn " + match.getTurn());
+        else turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn. Turn " + match.getTurn());
         turnLabel.setHorizontalAlignment(JLabel.RIGHT);
         turnLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         turnPanel.add(turnLabel);
@@ -928,16 +962,22 @@ public class GUI extends JFrame implements ActionListener
         quitButton = new JButton("Quit");
         quitButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         quitButton.setBackground(PALETTE_COLOR_1);
+        quitButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
+		quitButton.addMouseListener(new EnableHoverOnButton(quitButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
         quitButton.addActionListener(this);
         
         resetButton = new JButton("Reset");
         resetButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         resetButton.setBackground(PALETTE_COLOR_1);
+        resetButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
+		resetButton.addMouseListener(new EnableHoverOnButton(resetButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
         resetButton.addActionListener(this);
         
         saveButton = new JButton("Save");
         saveButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         saveButton.setBackground(PALETTE_COLOR_1);
+        saveButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
+		saveButton.addMouseListener(new EnableHoverOnButton(saveButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
         saveButton.addActionListener(this);
           
         bottomButtonPanel.remove(startGameButton);
@@ -965,6 +1005,7 @@ public class GUI extends JFrame implements ActionListener
   	  	constraints.gridy = 8;
   	  	constraints.anchor = GridBagConstraints.PAGE_END;
   	  	constraints.fill = GridBagConstraints.HORIZONTAL;
+  	  	constraints.insets = new Insets(10, 10, 10, 10);
 
         gameContainer.add(downPanel, constraints);
         
@@ -985,13 +1026,15 @@ public class GUI extends JFrame implements ActionListener
      */
     public void createBoard() 
     {
-        columnsButtonPanel = new JPanel(new GridLayout(1, Board.getNumberOfColumns(), 10, 20));
+        columnsButtonPanel = new JPanel(new GridLayout(1, Board.getNumberOfColumns(), 20, 20));
         columnButtons = new JButton[Board.getNumberOfColumns()];
         columnsButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         
         columnButtons[0] = new JButton(1 + "");
         columnButtons[0].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[0].setBackground(PALETTE_COLOR_3);
+        columnButtons[0].setBorder(BorderFactory.createEmptyBorder(5, -1, 5, -1));
+        columnButtons[0].addMouseListener(new EnableHoverOnButton(columnButtons[0], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[0].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!isEnded) {
@@ -1002,6 +1045,8 @@ public class GUI extends JFrame implements ActionListener
         columnButtons[1] = new JButton(2 + "");
         columnButtons[1].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[1].setBackground(PALETTE_COLOR_3);
+        columnButtons[1].setBorder(emptyBorder);
+        columnButtons[1].addMouseListener(new EnableHoverOnButton(columnButtons[1], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[1].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {	
 				if(!isEnded) {		
@@ -1012,6 +1057,8 @@ public class GUI extends JFrame implements ActionListener
         columnButtons[2] = new JButton(3 + "");
         columnButtons[2].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[2].setBackground(PALETTE_COLOR_3);
+        columnButtons[2].setBorder(emptyBorder);
+        columnButtons[2].addMouseListener(new EnableHoverOnButton(columnButtons[2], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[2].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!isEnded) {
@@ -1022,6 +1069,8 @@ public class GUI extends JFrame implements ActionListener
         columnButtons[3] = new JButton(4 + "");
         columnButtons[3].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[3].setBackground(PALETTE_COLOR_3);
+        columnButtons[3].setBorder(emptyBorder);
+        columnButtons[3].addMouseListener(new EnableHoverOnButton(columnButtons[3], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[3].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!isEnded) {
@@ -1032,6 +1081,8 @@ public class GUI extends JFrame implements ActionListener
         columnButtons[4] = new JButton(5 + "");
         columnButtons[4].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[4].setBackground(PALETTE_COLOR_3);
+        columnButtons[4].setBorder(emptyBorder);
+        columnButtons[4].addMouseListener(new EnableHoverOnButton(columnButtons[4], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[4].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!isEnded) {
@@ -1042,6 +1093,8 @@ public class GUI extends JFrame implements ActionListener
         columnButtons[5] = new JButton(6 + "");
         columnButtons[5].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[5].setBackground(PALETTE_COLOR_3);
+        columnButtons[5].setBorder(emptyBorder);
+        columnButtons[5].addMouseListener(new EnableHoverOnButton(columnButtons[5], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[5].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!isEnded) {
@@ -1052,6 +1105,8 @@ public class GUI extends JFrame implements ActionListener
         columnButtons[6] = new JButton(7 + "");
         columnButtons[6].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[6].setBackground(PALETTE_COLOR_3);
+        columnButtons[6].setBorder(emptyBorder);
+        columnButtons[6].addMouseListener(new EnableHoverOnButton(columnButtons[6], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[6].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(!isEnded) {			
@@ -1093,23 +1148,29 @@ public class GUI extends JFrame implements ActionListener
 	
 	/**
 	 * Initialize the end game mainPanel.
+	 * 
+	 * @param winnerName is the name of the winner, if there was a winner at all. In case of draw, an empty string is passed.
 	 */
 	private void displayEndGameFrame(String winnerName) 
 	{
-		JPanel endGamePanel = new JPanel(new GridLayout(2, 2, 10, 10));
+		endGamePanel = new JPanel(new GridLayout(2, 2, 10, 10));
 		JPanel endGamePanelButtons = new JPanel();
-		if (match.getBoard().isDraw())    // Se è finita con un pareggio
-		{
-			informativeLabel.setText("The match ended with a draw. Thanks for playing!");
+		//If the match ended in a draw
+		if (match.getBoard().isDraw()) {
+			informativeLabel.setText("The match ended in a draw. Thanks for playing!");
+			informativeLabel.setForeground(PALETTE_COLOR_1);
 		}
-		else if (match.getBoard().isWin())    // Se è finita con una vincita
-	    {
+		//If someone won the match
+		else if (match.getBoard().isWin()) {
 			informativeLabel.setText(winnerName + " " + "won! Thanks for playing!");
+			informativeLabel.setForeground(PALETTE_COLOR_1);
 	    }	
 
   		startGameButton = new JButton("Start a new Game");
   		startGameButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
   		startGameButton.setBackground(PALETTE_COLOR_1);
+  		startGameButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
+  		startGameButton.addMouseListener(new EnableHoverOnButton(startGameButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
   		startGameButton.addActionListener(new ActionListener() 
  		{
 			public void actionPerformed(ActionEvent e) 
@@ -1137,12 +1198,13 @@ public class GUI extends JFrame implements ActionListener
         endGamePanel.add(endGamePanelButtons);
         
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.ipadx = 20;
-      	constraints.ipady = 40;
-    	constraints.gridx = 0;
-    	constraints.gridy = 8;
-    	constraints.anchor = GridBagConstraints.PAGE_END;
-    	constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.ipadx = 0;
+    	constraints.ipady = 0;
+  	  	constraints.gridx = 0;
+  	  	constraints.gridy = 7;
+  	  	constraints.anchor = GridBagConstraints.PAGE_END;
+  	  	constraints.fill = GridBagConstraints.HORIZONTAL;
+  	  	constraints.insets = new Insets(10, 10, 10, 10);
     	
     	gameContainer.remove(downPanel);
         gameContainer.add(endGamePanel, constraints);
@@ -1164,6 +1226,8 @@ public class GUI extends JFrame implements ActionListener
      * 
      * Last but not least, the font is registered in the GraphicsEnvironment.
      * The font can be used calling component.setFont(gamingFont);
+     * 
+     * @author andre
      */
     public void addFont(){
     	gamingFont = null;
@@ -1187,10 +1251,12 @@ public class GUI extends JFrame implements ActionListener
      * just to make some examples.
      * 
      * @param column is the column the changer has to change, or where the action has taken place in the UI.
+     * 
+     * @author andre
      */
     public void changer(int column) {    	    	
     	boolean isFirstRow = false;
-		if (match.getFirstPlayerTurn()) { 
+		if (match.getIsFirstPlayerPlaying()) { 
 			
 			if(boardCellsPanel[Board.getNumberOfRows()-1][column].getBackground().equals(Color.pink)) {
 				isFirstRow = true;
@@ -1204,13 +1270,13 @@ public class GUI extends JFrame implements ActionListener
 	    				changeColorInBoard(match.getFirstPlayer().getToken(), tempRow, column);
 	    				//boardCellsPanel[tempRow][column].setBackground(match.getFirstPlayer().getToken().getTokenColor());
 	    				try {
-	    					match.insertInBoard(firstPlayerToken, column);
+	    					match.insertInBoard(match.getFirstPlayer().getToken(), column);
 	    					//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 	    					//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-	    					turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn.");
+	    					turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn. Turn " + match.getTurn());
 	    					match.setTurn(match.getTurn()+1);
 	    		       		checkResults(match.getFirstPlayer().getName());
-	    					match.setFirstPlayerTurn(!match.getFirstPlayerTurn());
+	    					match.setFirstPlayerPlaying(!match.getIsFirstPlayerPlaying());
 							return;
 						} catch (FullColumnException e1) {
 							turnLabel.setText(e1.getError());
@@ -1223,18 +1289,17 @@ public class GUI extends JFrame implements ActionListener
 	    		}
     		}   		
        		try {
-				match.insertInBoard(firstPlayerToken, column);
+				match.insertInBoard(match.getFirstPlayer().getToken(), column);
 				//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 				//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-				turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn.");
+				turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn. Turn " + match.getTurn());
 				match.setTurn(match.getTurn()+1);
 			} catch (FullColumnException e) {
 				fullColumnHandler(e);			
 				return;
 			}
     		checkResults(match.getFirstPlayer().getName());
-
-			match.setFirstPlayerTurn(!match.getFirstPlayerTurn());
+			match.setFirstPlayerPlaying(!match.getIsFirstPlayerPlaying());
 		}
 		
 		else {	
@@ -1249,13 +1314,13 @@ public class GUI extends JFrame implements ActionListener
 					if (!boardCellsPanel[tempRow+1][column].getBackground().equals(Color.pink)) {
 	    				changeColorInBoard(match.getSecondPlayer().getToken(), tempRow, column);
 						try {
-							match.insertInBoard(secondPlayerToken, column);
+							match.insertInBoard(match.getSecondPlayer().getToken(), column);
 							//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 							//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-							turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn.");
+							turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn. Turn " + match.getTurn());
 							match.setTurn(match.getTurn()+1);
 							checkResults(match.getSecondPlayer().getName());
-							match.setFirstPlayerTurn(!match.getFirstPlayerTurn());
+							match.setFirstPlayerPlaying(!match.getIsFirstPlayerPlaying());
 							return;
 						} catch (FullColumnException e1) {
 							turnLabel.setText(e1.getError());
@@ -1270,10 +1335,10 @@ public class GUI extends JFrame implements ActionListener
     		}
 		
        		try {
-				match.insertInBoard(secondPlayerToken, column);
+				match.insertInBoard(match.getSecondPlayer().getToken(), column);
 				//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 				//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-				turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn.");
+				turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn. Turn " + match.getTurn());
 				match.setTurn(match.getTurn()+1);
 				
 			} catch (FullColumnException e) {
@@ -1281,14 +1346,15 @@ public class GUI extends JFrame implements ActionListener
 				return;		
 			}
        		checkResults(match.getSecondPlayer().getName());
-
-			match.setFirstPlayerTurn(!match.getFirstPlayerTurn());
+			match.setFirstPlayerPlaying(!match.getIsFirstPlayerPlaying());
 		}	
     }
     
     /**
      * Method for checking if a match has ended in a win or in a draw.
      * @param winnerName is the name of the winning player. If it is a draw, winnerName is an empty string
+     * 
+     * @author andre
      */
     public void checkResults(String winnerName) {
     	if (match.getBoard().isDraw()) {
@@ -1301,95 +1367,10 @@ public class GUI extends JFrame implements ActionListener
 	   	}
     }
     
-    /**
-     * Handles the situation of a player clicking again and again at a button corresponding to a full column.
-     * It is a modal view, because UI enters in a modal state in which he cannot do anything but pressing 
-     * the button.
-     * In order to catch his attention, it has been chosen to display this modal view as a brand new JFrame.
-     * Over that, the button text has been set to a message displaying a summary of what the error says:
-     * this choice is in line with Human-Computer interaction dogmas, because user usually does not read 
-     * what it is written in a pop-up, so his attention locus (that is set to the button in the moment he's 
-     * clicking it) sees what the button label says.
-     * In order to focus his attention completely on the pop-up, clicking the main frame is disabled 
-     * until he clicks the button in this view.
-     * This prevents from generating n new JFrame, where n is the number of clicks on the full column button.
-     * 
-     * @param e is the exception FullColumnException
-     */
-    public void fullColumnHandler(FullColumnException e) {
-    	JFrame errorFrame = new JFrame("Column is full");
-		JButton errorButton = new JButton("I will choose another column");
-		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
-		errorButton.setBackground(PALETTE_COLOR_2);
-		errorButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				biggestFrame.setEnabled(true);
-				errorFrame.dispose();
-			}
-		});
-		errorFrame.setSize(750, 150);
-		JLabel errorLabel = new JLabel(e.getError());
-		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
-		biggestFrame.setEnabled(false);
-
-		errorFrame.setBackground(PALETTE_COLOR_1);
-		errorFrame.add(errorButton, BorderLayout.SOUTH);
-		errorFrame.add(errorLabel, BorderLayout.CENTER);
-		errorFrame.setVisible(true);
-    }
-    
-    /**
-     * Handles the situation in which a user selects a file that is corrupted
-     * (a file is said to be corrupted when the board is in an unsafe state. View IntegrityMatrix documentation).
-     * In order to catch his attention, it has been chosen to display this modal view as a brand new JFrame.
-     * Over that, the button text has been set to a message displaying a summary of what the error says:
-     * this choice is in line with Human-Computer interaction dogmas, because user usually does not read 
-     * what it is written in a pop-up, so his attention locus (that is set to the button in the moment he's 
-     * clicking it) sees what the button label says.
-     * In order to focus his attention completely on the pop-up, clicking the main frame is disabled 
-     * until he clicks the button in this view.
-     * 
-     * @param e is the exception CorruptedFileException
-     */
-    public void corruptedFileHandler(CorruptedFileException e) {
-    	JFrame errorFrame = new JFrame("File is corrupted");
-		JButton errorButton = new JButton("I will choose another file");
-		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
-		errorButton.setBackground(PALETTE_COLOR_2);
-		errorButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				biggestFrame.setEnabled(true);
-				match = null;
-				biggestFrame.dispose();
-				displayStartGameFrame(); 
-				errorFrame.dispose();
-			}
-		});
-		errorFrame.setSize(WIDTH/2, 150);
-		JLabel errorLabel = new JLabel(e.getError());
-		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
-		biggestFrame.setEnabled(false);
-
-		errorFrame.setBackground(PALETTE_COLOR_1);
-		errorFrame.add(errorButton, BorderLayout.SOUTH);
-		errorFrame.add(errorLabel, BorderLayout.CENTER);
-		errorFrame.setVisible(true);
-    }
- 
-    /**
-     * Changes the color of the board according to the color of the token passed as input.
-     * Position of the board is specified as row, column.
-     * 
-     * @param token is the token with its color
-     * @param row is the row of the board
-     * @param col is the column of the board
-     */
-    public void changeColorInBoard(Token token, int row, int col) {
-    	boardCellsPanel[row][col].setBackground(token.getTokenColor());
-    }
-	
 	/**
      * Performs actions based on clicked buttons.
+     * 
+     * @param e is the event triggered by clicking the button
      */
     public void actionPerformed(ActionEvent e) 
     {	
@@ -1412,21 +1393,35 @@ public class GUI extends JFrame implements ActionListener
         
         else if (e.getSource() == loadButton) 
         {
-        	try {
-				loadGame();
-			} catch (FullColumnException ex) {
-			} catch (IOException ex) {
-			} 
+			loadGame();     	
         }
     }       
        
+    /**
+     * Gets the clicked button.
+     * @param e is the event
+     * @return an integer representing the clicked column
+     */
 	public static int getClickedButton(ActionEvent e)
     {
     	JButton button = (JButton)e.getSource();
         int clickedColumn = Integer.parseInt(button.getActionCommand());
         return clickedColumn;	
+    }	
+	 
+    /**
+     * Changes the color of the board according to the color of the token passed as input.
+     * Position of the board is specified as row, column.
+     * 
+     * @param token is the token with its color
+     * @param row is the row of the board
+     * @param col is the column of the board
+     * 
+     * @author andre
+     */
+    public void changeColorInBoard(Token token, int row, int col) {
+    	boardCellsPanel[row][col].setBackground(token.getTokenColor());
     }
-	
 	
 	/**
 	 * Paints the board with the correct color, basing on the state of the board.
@@ -1435,6 +1430,8 @@ public class GUI extends JFrame implements ActionListener
 	 * of the board, not reproducible when loading a file.
 	 * 
 	 * @param gameBoard is the gameBoard of the match.
+	 * 
+	 * @author andre
 	 */
 	public void paintBoardWithColors(Board gameBoard) {
 		for(int r = Board.getNumberOfRows() - 1; r >= 0; r--) {
@@ -1447,15 +1444,46 @@ public class GUI extends JFrame implements ActionListener
 	}
 	
 	/**
-	 * Necessary in order to adhere to the Observer Pattern
+	 * Customizing method for a JFileChooser object.
+	 * This method deletes every extension but .txt, in order to let user choose only this type of file.
+	 * It disables the multi-choice selection.
+	 * 
+	 * @param fileChooser is the fileChooser to change the characteristics of 
+	 * @return fileChooser the JFileChooser instance
+	 * 
+	 * @author andre
+	 */
+	public static JFileChooser customizeFileChooser(JFileChooser fileChooser) {
+		//Forbids the user to select multiple files
+		fileChooser.setMultiSelectionEnabled(false);
+				
+		//Lets the user select only .txt files
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+		fileChooser.setFileFilter(filter);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		
+		return fileChooser;
+	}
+	
+	/**
+	 * Necessary in order to adhere to the Observer design pattern
 	 * @param load is the interface observing
+	 * 
+	 * @author andre
 	 */
 	public void registerEventListener(LoadInterface load) {
 		loadListener = load;
 	}
     
-	//For synchronous loading task
-	public void doTask() throws FileNotFoundException, CorruptedFileException, FullColumnException {
+	/**
+	 * For synchronous loading task.
+	 * Part of the implementation of the Observer design pattern.
+	 * @throws FileNotFoundException if the file is not found
+	 * @throws CorruptedFileException if the file is corrupted
+	 * 
+	 * @author andre
+	 */
+	public void doTask() throws FileNotFoundException, CorruptedFileException {
 		if(loadListener != null) {
 			match = loadListener.loadMatch(loadingFile.getName());
 		}
@@ -1470,58 +1498,60 @@ public class GUI extends JFrame implements ActionListener
 	 * 		- synchronous task of loading the selected file begins
 	 * 		- WHEN it ends, the match is finally initialized to the correct match stored in the given file
 	 * Now it is possible to play a stored match.
+	 * 
+	 * @param chooser is the JFileChooser object
 	 * @throws FullColumnException 
 	 * @throws CorruptedFileException 
 	 * @throws FileNotFoundException 
 	 */
-	public void selectSavedFileInterface() throws FileNotFoundException, CorruptedFileException, FullColumnException {
+	public int selectSavedFileInterface(JFileChooser chooser) {
 		loadingFile = null;
-		JFileChooser chooser = new JFileChooser("savedGames" + File.separator);
-		
-		//Forbids the user to select multiple files
-		chooser.setMultiSelectionEnabled(false);
-		
-		//Lets the user select only .txt files
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
-		chooser.setFileFilter(filter);
-		chooser.setAcceptAllFileFilterUsed(false);
-		
 		int status = chooser.showOpenDialog(biggestFrame);
-		
-		if(status == JFileChooser.APPROVE_OPTION) {
-			loadingFile = chooser.getSelectedFile();
-			
-			LoadInterface loader = new LoadMatch();
-			this.registerEventListener(loader);
-			this.doTask();	
-		}
+		return status;
 	}
 	
 	/**
 	 * Method for loading a match stored in a .txt file.
-	 * @throws FullColumnException
-	 * @throws IOException
+	 * 
+	 * @author andre
 	 */
-	public void loadGame() throws FullColumnException, IOException {
+	public void loadGame() {
+		JFileChooser fileChooser = new JFileChooser("savedGames" + File.separator);
+		fileChooser = customizeFileChooser(fileChooser);
+		
 		try {
-			selectSavedFileInterface();
+			int status = selectSavedFileInterface(fileChooser);
+			if(status == JFileChooser.APPROVE_OPTION) {
+				loadingFile = fileChooser.getSelectedFile();
+				
+				LoadInterface loader = new LoadMatch();
+				this.registerEventListener(loader);
+				this.doTask();	
+				
+				biggestFrame.dispose();
+				JFrame loadingFrame = new JFrame();
+				loadingFrame.setMinimumSize(new Dimension(WIDTH/2, HEIGHT - 20));
+				loadingFrame.setResizable(false);
+				loadingFrame = biggestFrame;
+				mainPanel.setVisible(false);
+				loadingFrame.setVisible(false);
+				
+				//Reinitialize components of the match
+				firstPlayerToken = match.getFirstPlayer().getToken();
+				secondPlayerToken = match.getSecondPlayer().getToken();
+				initializeBoardComponents(biggestFrame);
+				paintBoardWithColors(match.getBoard());		
+			}
+			else {
+				biggestFrame.dispose();
+				displayStartGameFrame();
+			}
 		} catch (CorruptedFileException e) {
 			corruptedFileHandler(e);
 			return;
+		} catch (FileNotFoundException e) {
+			fileNotFoundHandler(e);
 		}
-		biggestFrame.dispose();
-		JFrame loadingFrame = new JFrame("Loaded match");
-		loadingFrame.setMinimumSize(new Dimension(WIDTH/2, HEIGHT - 20));
-		loadingFrame.setResizable(false);
-		loadingFrame = biggestFrame;
-		mainPanel.setVisible(false);
-		loadingFrame.setVisible(false);
-		
-		//Reinitialize components of the match
-		firstPlayerToken = match.getFirstPlayer().getToken();
-		secondPlayerToken = match.getSecondPlayer().getToken();
-		initializeBoardComponents(biggestFrame);
-		paintBoardWithColors(match.getBoard());		
 	}	
 	
     /**
@@ -1535,6 +1565,9 @@ public class GUI extends JFrame implements ActionListener
 	
 	/**
 	 * Method for saving the match that is being played.
+	 * Simply calls the SaveMatch class to save the file and creates and displays UI.
+	 * 
+	 * @author andre
 	 */
 	public void saveGame() {
 			
@@ -1566,6 +1599,7 @@ public class GUI extends JFrame implements ActionListener
 		confirmButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		confirmButton.setBackground(PALETTE_COLOR_4);
 		confirmButton.setBorder(emptyBorder);
+		confirmButton.addMouseListener(new EnableHoverOnButton(confirmButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		confirmButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String fileName = "";
@@ -1576,7 +1610,12 @@ public class GUI extends JFrame implements ActionListener
 					Random r = new Random();
 					fileName = "match" + match.getFirstPlayer().getName() + "VS" + match.getSecondPlayer().getName() + r.nextInt(100);
 				}
-				SaveMatch saver = new SaveMatch(fileName, match);
+				try {
+					SaveMatch saver = new SaveMatch(fileName, match);
+				} catch (SavingFileException e2) {
+					savingFileErrorHandler(e2);
+					return;
+				}
 				
 				//Introduce a little delay (0.4 seconds) to let user see there is a change in the interface
 				try {
@@ -1611,6 +1650,7 @@ public class GUI extends JFrame implements ActionListener
 		    	yesButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		    	yesButton.setBackground(PALETTE_COLOR_4);
 		    	yesButton.setBorder(emptyBorder);
+		    	yesButton.addMouseListener(new EnableHoverOnButton(yesButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		    	yesButton.addActionListener(new ActionListener() {
 		    		public void actionPerformed(ActionEvent e) {
 		    			isEnded = false;
@@ -1629,6 +1669,7 @@ public class GUI extends JFrame implements ActionListener
 		    	noButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		    	noButton.setBackground(PALETTE_COLOR_4);
 		    	noButton.setBorder(emptyBorder);
+		    	noButton.addMouseListener(new EnableHoverOnButton(noButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		    	noButton.addActionListener(new ActionListener() {
 		    		public void actionPerformed(ActionEvent e) {
 		    			biggestFrame.dispose();
@@ -1679,6 +1720,162 @@ public class GUI extends JFrame implements ActionListener
 
     	biggestFrame.add(panel);
 	}
+	
+	/**
+     * Handles the situation of a player clicking again and again at a button corresponding to a full column.
+     * It is a modal view, because UI enters in a modal state in which he cannot do anything but pressing 
+     * the button.
+     * In order to catch his attention, it has been chosen to display this modal view as a brand new JFrame.
+     * Over that, the button text has been set to a message displaying a summary of what the error says:
+     * this choice is in line with Human-Computer interaction dogmas, because user usually does not read 
+     * what it is written in a pop-up, so his attention locus (that is set to the button in the moment he's 
+     * clicking it) sees what the button label says.
+     * In order to focus his attention completely on the pop-up, clicking the main frame is disabled 
+     * until he clicks the button in this view.
+     * This prevents from generating n new JFrame, where n is the number of clicks on the full column button.
+     * 
+     * @param e is the exception FullColumnException
+     * 
+     * @author andre
+     */
+    public void fullColumnHandler(FullColumnException e) {
+    	JFrame errorFrame = new JFrame("Column is full");
+		JButton errorButton = new JButton("I will choose another column");
+		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		errorButton.setBackground(PALETTE_COLOR_4);
+		errorButton.addMouseListener(new EnableHoverOnButton(errorButton, PALETTE_COLOR_2, PALETTE_COLOR_4));
+		errorButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				biggestFrame.setEnabled(true);
+				errorFrame.dispose();
+			}
+		});
+		errorFrame.setSize(750, 150);
+		JLabel errorLabel = new JLabel(e.getError());
+		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		biggestFrame.setEnabled(false);
+
+		errorFrame.setBackground(PALETTE_COLOR_1);
+		errorFrame.add(errorButton, BorderLayout.SOUTH);
+		errorFrame.add(errorLabel, BorderLayout.CENTER);
+		errorFrame.setVisible(true);
+    }
+    
+    /**
+     * Handles the situation in which a user selects a file that is corrupted
+     * (a file is said to be corrupted when the board is in an unsafe state. View IntegrityMatrix documentation).
+     * In order to catch his attention, it has been chosen to display this modal view as a brand new JFrame.
+     * Over that, the button text has been set to a message displaying a summary of what the error says:
+     * this choice is in line with Human-Computer interaction dogmas, because user usually does not read 
+     * what it is written in a pop-up, so his attention locus (that is set to the button in the moment he's 
+     * clicking it) sees what the button label says.
+     * In order to focus his attention completely on the pop-up, clicking the main frame is disabled 
+     * until he clicks the button in this view.
+     * 
+     * @param e is the exception CorruptedFileException
+     * 
+     * @author andre
+     */
+    public void corruptedFileHandler(CorruptedFileException e) {
+    	JFrame errorFrame = new JFrame("File is corrupted");
+		JButton errorButton = new JButton("I will choose another file");
+		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		errorButton.setBackground(PALETTE_COLOR_2);
+		errorButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				biggestFrame.setEnabled(true);
+				match = null;
+				biggestFrame.dispose();
+				displayStartGameFrame(); 
+				errorFrame.dispose();
+			}
+		});
+		errorFrame.setSize(WIDTH/2, 150);
+		JLabel errorLabel = new JLabel(e.getError());
+		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		biggestFrame.setEnabled(false);
+
+		errorFrame.setBackground(PALETTE_COLOR_1);
+		errorFrame.add(errorButton, BorderLayout.SOUTH);
+		errorFrame.add(errorLabel, BorderLayout.CENTER);
+		errorFrame.setVisible(true);
+    }
+    
+    /**
+     * Handles the situation of an error occurring when saving a file.
+     * In order to catch user's attention, it has been chosen to display this modal view as a brand new JFrame.
+     * Over that, the button text has been set to a message displaying a summary of what the error says:
+     * this choice is in line with Human-Computer interaction dogmas, because user usually does not read 
+     * what it is written in a pop-up, so his attention locus (that is set to the button in the moment he's 
+     * clicking it) sees what the button label says.
+     * In order to focus his attention completely on the pop-up, clicking the main frame is disabled 
+     * until he clicks the button in this view.
+     * 
+     * @param e is the exception SavingFileException
+     * 
+     * @author andre
+     */
+    public void savingFileErrorHandler(SavingFileException e) {
+    	JFrame errorFrame = new JFrame("Error saving match");
+		JButton errorButton = new JButton("Ok then");
+		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		errorButton.setBackground(PALETTE_COLOR_2);
+		errorButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				biggestFrame.setEnabled(true);
+				biggestFrame.dispose();
+				displayStartGameFrame(); 
+				errorFrame.dispose();
+			}
+		});
+		errorFrame.setSize(WIDTH/2, 150);
+		JLabel errorLabel = new JLabel(e.getError());
+		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		biggestFrame.setEnabled(false);
+
+		errorFrame.setBackground(PALETTE_COLOR_1);
+		errorFrame.add(errorButton, BorderLayout.SOUTH);
+		errorFrame.add(errorLabel, BorderLayout.CENTER);
+		errorFrame.setVisible(true);
+    }
+    
+    /**
+     * Handles the situation of a file not found.
+     * In order to catch user's attention, it has been chosen to display this modal view as a brand new JFrame.
+     * Over that, the button text has been set to a message displaying a summary of what the error says:
+     * this choice is in line with Human-Computer interaction dogmas, because user usually does not read 
+     * what it is written in a pop-up, so his attention locus (that is set to the button in the moment he's 
+     * clicking it) sees what the button label says.
+     * In order to focus his attention completely on the pop-up, clicking the main frame is disabled 
+     * until he clicks the button in this view.
+     * 
+     * @param e is the exception FileNotFoundException
+     * 
+     * @author andre
+     */
+    public void fileNotFoundHandler(FileNotFoundException e) {
+    	JFrame errorFrame = new JFrame("File not found");
+		JButton errorButton = new JButton("Ok, that's fine for me");
+		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		errorButton.setBackground(PALETTE_COLOR_2);
+		errorButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				biggestFrame.setEnabled(true);
+				biggestFrame.dispose();
+				displayStartGameFrame(); 
+				errorFrame.dispose();
+			}
+		});
+		errorFrame.setSize(WIDTH/2, 150);
+		JLabel errorLabel = new JLabel("File chosen was not found");
+		errorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
+		biggestFrame.setEnabled(false);
+
+		errorFrame.setBackground(PALETTE_COLOR_1);
+		errorFrame.add(errorButton, BorderLayout.SOUTH);
+		errorFrame.add(errorLabel, BorderLayout.CENTER);
+		errorFrame.setVisible(true);
+    }
       
 	/**
 	 * Simple class for deleting the informative text 
@@ -1689,6 +1886,8 @@ public class GUI extends JFrame implements ActionListener
 	 * the method executing an action when listening to mouse click
 	 * or a mouse pressed event, because it could be possible for a user
 	 * to select part of the text and then skip the Mouse Clicked trigger.
+	 * 
+	 * @author andre
 	 */
     class DeleteTextOneMouseListener implements MouseListener {
     	@Override
@@ -1729,6 +1928,8 @@ public class GUI extends JFrame implements ActionListener
 	 * the method executing an action when listening to mouse click
 	 * or a mouse pressed event, because it could be possible for a user
 	 * to select part of the text and then skip the Mouse Clicked trigger.
+	 * 
+	 * @author andre
 	 */
     class DeleteTextTwoMouseListener implements MouseListener {
     	@Override
@@ -1758,5 +1959,48 @@ public class GUI extends JFrame implements ActionListener
   		@Override
   		public void mouseExited(MouseEvent e) {
   		}
+    }
+    
+    /**
+     * This class changes the color of a button when entering it, and changes it again when exiting it.
+     * Useful to give the impression of a pressable button.
+     * Must implement MouseListener interface, so implementing all of its methods.
+     * For the purpose of the class only part of the implemented methods have a non-empty body.
+     * 
+     * @author andre
+     *
+     */
+    class EnableHoverOnButton implements MouseListener {
+    	
+    	JButton button;
+    	Color enteringColor;
+    	Color exitingColor;
+
+    	public EnableHoverOnButton(JButton button, Color enteringColor, Color exitingColor) {
+    		this.button = button;
+    		this.enteringColor = enteringColor;
+    		this.exitingColor = exitingColor;
+    	}
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {	
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			button.setBackground(enteringColor);
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+			button.setBackground(exitingColor);	
+		}
     }
 }

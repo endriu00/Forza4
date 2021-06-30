@@ -1,4 +1,0 @@
-First player: first player, token color: 0 250 0
-Second player: second player, token color: 255 0 0
-Turn: 1 
-Board: 

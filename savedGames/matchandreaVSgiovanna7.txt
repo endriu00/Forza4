@@ -1,4 +1,0 @@
-First player: andrea, token color: 0 250 0
-Second player: giovanna, token color: 255 0 0
-Turn: 1 
-Board: 

@@ -2,17 +2,33 @@ package gameComponents;
 
 import customException.ColumnOutOfRange;
 import customException.FullColumnException;
+
 /**
- * Griglia 7x6, matrice di Token.
+ * Board class is the class creating the board and managing it at a logic level, meaning regulating the insertion of a token in the gameBoard with proper controls,
+ * creating the board itself, controlling if a series of token placed in a correct way determine a win or a draw in the overlying match and providing methods
+ * particularly useful in other classes accessing them.
+ *
  */
 public class Board 
 {
+	/**
+	 * gameBoard is a matrix of token, so a Token object can be inserted in it. 
+	 * This allows controls to be made over tokens.
+	 */
 	private static Token[][] gameBoard;
+	
+	/**
+	 * Number of rows of the matrix. This number is defined in the domain of the problem.
+	 */
 	private static final int ROWS = 6;
+	
+	/**
+	 * Number of columns of the matrix. This number is defined in the domain of the problem.
+	 */
 	private static final int COLUMNS = 7;
 	
 	/**
-	 * Costruisce una griglia vuota.
+	 * Constructs the board.
 	 */
 	public Board()
 	{
@@ -20,7 +36,8 @@ public class Board
 	}
 	
 	/**
-	 * Stampa la griglia allo stato iniziale.
+	 * Prints the board in the standard output of the machine.
+	 * Only used for unit testing and debugging purpose.
 	 */
 	public static void printBoard()
 	{
@@ -59,7 +76,7 @@ public class Board
 	 * 
 	 * @param token is the token to be inserted in the gameBoard
 	 * @param column is the column in which the player wants to insert the token in
-	 * @throws FullColumnException 
+	 * @throws FullColumnException if the column trying to insert the token in is full.
 	 */
 	
 	public void insert(Token token, int column) throws FullColumnException {
@@ -69,14 +86,11 @@ public class Board
 		}
 		catch(ColumnOutOfRange e) {
 			return;
-		}
-		
+		}	
 		
 		if(isColumnFull(column)) {
 			throw new FullColumnException();
-		}
-		
-		
+		}		
 
 		if(gameBoard[ROWS-1][column] == null) 	
 		{
@@ -94,18 +108,6 @@ public class Board
 	} 
 	
 	/**
-	 * Controlla se la mossa è consentita, ossia se la colonna non è vuota e se la griglia non è piena.
-	 * @return true se la mossa è consentita.
-	 */
-	/*public boolean isAllowed()                    // Non dovrebbe servire
-	{
-		 if (isColumnFull() || isBoardFull())
-		    return false;
-		 return true;
-	}*/
-	
-	
-	/**
 	 * Method for determining if a given column is full.
 	 * To achieve this purpose, it sees the gameBoard in position row = 0, column = column:
 	 * if this position has no object inside (e.g. is null), the column is not full, because 
@@ -116,8 +118,7 @@ public class Board
 	 * @param column is the column to be checked
 	 * @return true if the column is full, false if the column has still got a space for another token.
 	 */
-	public boolean isColumnFull(int column)
-	{
+	public boolean isColumnFull(int column) {
 		if(gameBoard[0][column] == null) {
 			return false;
 		}
@@ -125,8 +126,8 @@ public class Board
 	}
 	
 	/**
-	 * Controlla se la griglia è piena.
-	 * @return true se la griglia è piena.
+	 * Controls if the board is full.
+	 * @return true if the board is full, false otherwise.
 	 */
 	public boolean isBoardFull()
 	{
@@ -144,8 +145,8 @@ public class Board
 	}
 	
 	/**
-	 * Controlla se la partita si è conclusa con un pareggio.
-	 * @return true se se la partita si è conclusa con un pareggio.
+	 * Controls if the match ended in a draw.
+	 * @return true if the match ended in a draw, 
 	 */
 	public boolean isDraw()
 	{
@@ -157,8 +158,8 @@ public class Board
 	}
 	
 	/**
-	 * Controlla se la partita è stata vinta da uno dei due giocatori.
-	 * @return true se la partita è stata vinta.
+	 * Controls if the match ended in a win.
+	 * @return true if someone has won the match.
 	 */
 	public boolean isWin()
 	{
@@ -171,9 +172,8 @@ public class Board
 	}
 	
 	/**
-	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
-	 * posizioni contigue per verticale.
-	 * @return true se c'è una vincita verticale.
+	 * Checks if there is a win determined by placing four tokens in a horizontal fashion.
+	 * @return true if there is an horizontal win, false otherwise.
 	 */
 	public boolean isHorizontalWin()  
 	{
@@ -192,9 +192,8 @@ public class Board
 	}
 	
 	/**
-	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
-	 * posizioni contigue per orizzontale.
-	 * @return true se c'è una vincita orizzontale.
+	 * Checks if there is a win determined by placing four tokens in a vertical fashion.
+	 * @return true if there is a vertical win, false otherwise.
 	 */
 	public boolean isVerticalWin()
 	{
@@ -213,9 +212,8 @@ public class Board
 	}
 	
 	/**
-	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
-	 * posizioni contigue per diagonale da destra in basso.
-	 * @return true se c'è una vincita diagonale.
+	 * Checks if there is a win determined by placing four tokens in a diagonal fashion, from bottom upward to the right.
+	 * @return true if there is a bottom-right diagonal win, false otherwise.
 	 */
 	public boolean isBottomRightDiagonalWin()
 	{
@@ -234,9 +232,8 @@ public class Board
 	}
 	
 	/**
-	 * Controlla se c'è una vincita data da quattro token dello stesso colore posizionati in
-	 * posizioni contigue per diagonale da sinistra in basso.
-	 * @return true se c'è una vincita diagonale.
+	 * Checks if there is a win determined by placing four tokens in a diagonal fashion, from bottom upward to the left.
+	 * @return true if there is a bottom-left diagonal win, false otherwise.
 	 */
 	public boolean isBottomLeftDiagonalWin()
 	{
