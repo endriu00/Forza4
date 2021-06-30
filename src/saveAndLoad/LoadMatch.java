@@ -5,150 +5,58 @@ import gameComponents.*;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Scanner;
 
+import customException.CorruptedFileException;
 import customException.FullColumnException;
 import gameComponents.Match;
 import gameComponents.Player;
 import utilities.IntegrityMatrix;
-import utilities.LoadInterface;
 
-public class LoadMatch implements LoadInterface {
-
+/**
+ * Class LoadMatch is the class supposed to give methods for loading a match from a file.
+ * Obviously, this file must be in a specific pattern (that is, the pattern in which it is saved, in the SaveMatch class).
+ * If the file is provided in a different way, LoadMatch will raise an exception.
+ * In order to adhere to the Observer design pattern, this class must implement LoadInterface interface.
+ * 
+ * @author andre
+ *
+ */
+public class LoadMatch implements LoadInterface {	
+		
 	/**
-	 * loadingFile is the file to be loaded. It is a File object.
-	 */
-	private File loadingFile;
-	
-	/**
-	 * loadedMatch is the match to be loaded.
-	 * It is practically the expected "output" of the class, the result it is expected from this class name.
-	 * It is crafted in the constructor with a series of method invocations for forming all the elements
-	 * that are necessary to restore the state of a match, so the Player(s), the turn before saving and quitting the match,
-	 * the Board situation with every token inside of it.
-	 */
-	private Match loadedMatch;
-	
-	/**
-	 * checkMatrix is the IntegrityMatrix object used to verify that the file leads to a Legal State for the Board,
-	 * so if the Board recreated is properly formed, without errors like floating tokens or tokens above tokens.
-	 * For further details, consult the IntegrityMatrix class.
-	 */
-	IntegrityMatrix checkMatrix; 
-	
-	/**
-	 * Variable used to check if the turn has been modified in the file or if some token has been added or deleted in a particular fashion.
-	 * The purpose here is to check if the bound numberOfTurns = numberOfTokenInserted + 1, because the first turn is the turn 1
-	 * and when a player save the match, he can save it only at the beginning of his turn, so it must be that the number of turns passed
-	 * are 1 greater than the number of token inserted in the Board.
-	 * This check is not included in the IntegrityMatrix class because it is linked to the number of turns, so it is strictly
-	 * a concern of this class.
-	 */
-	//private int numberOfToken;
-	
-	/**
-	 * Constructor for the class.
-	 * It takes as input a string, that is the file name, so that an object of type Scanner can access it and read from it
-	 * everything it needs to create the loadedMatch object.
+	 * This method takes as input a string, that is the file name, so that an object of type Scanner can access (and read from) it.
 	 * In order to separate methods responsibilities, it has been created a method for determining each component of the match constructor, 
 	 * so we have loadPlayer to load a type Player object, loadTurn to retrieve the turn of the saved match and so on.
 	 * 
-	 * If the file is not found, the exception caught is FileNotFoundException.
-	 * If the bound turn != numberOfToken + 1 is not verified, the exception is caught.
+	 * If the method isTampered returns true (signifying that the file the scanner is reading is corrupted or not properly modified),
+	 * throws a new CorruptedFileException to be handled in a calling class.
+	 * 
 	 * @param fileName is the name of the file from which load the match.
+	 * @throws FileNotFoundException when file trying to read is not found
+	 * @throws CorruptedFileException when file trying to read is corrupted
+	 * @return an object of type Match, the match that is correctly rebuilt
 	 */
-	public LoadMatch(String fileName) {		
-		
-		try (Scanner fileScanner = new Scanner(new File("savedGames" + File.separator + fileName + ".txt"))){
-			Player firstPlayer = loadPlayer(loadingFile, fileScanner, true);
-			Player secondPlayer = loadPlayer(loadingFile, fileScanner, false); 
-			int turn = loadTurn(loadingFile, fileScanner);
-			Board gameBoard = loadBoard(loadingFile, fileScanner);
-			
-//			//Checks the bound
-//			if(turn != numberOfToken + 1) {
-//				throw new IOException();
-//			}
-			
-			//Store new crafted match in loadedMatch variable
-			loadedMatch = new Match(gameBoard, firstPlayer, secondPlayer);
-			System.out.println("here");
-			//Finally, changes the turn (in the constructor it is always initialized to 1) to the correct turn
-			loadedMatch.setTurn(turn);
-			
-		} catch (FileNotFoundException e) {
-			//modify catch statement
-		} catch (IOException e) {
-			// TODO this exception is thrown if the number of turns is different from the number of token inserted + 1
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public LoadMatch() {
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * Method used to actually load the match.
-	 * It is simply a getter method for loadedMatch variable, but it contains a control
-	 * to check if it is not null, so if everything worked fine during the reconstruction 
-	 * of the match from the file. 
-	 * @return the match loaded from file.
-	 * @throws IOException
-	 */
-	public Match loadSavedMatch() throws IOException {
-		if(this.loadedMatch != null) return this.loadedMatch;
-		else throw new IOException();
-	}
-	
-	public Match loadMatch(String fileName) throws FileNotFoundException {
+	public Match loadMatch(String fileName) throws FileNotFoundException, CorruptedFileException {
 
 		Match loadedMatch = null;
-		File loadingFile = new File("savedGames" + File.separator + fileName + ".txt");
-//		try (Scanner fileScanner = new Scanner(loadingFile)) {
-//			Player firstPlayer = loadPlayer(loadingFile, fileScanner, true);
-//			Player secondPlayer = loadPlayer(loadingFile, fileScanner, false); 
-//			int turn = loadTurn(loadingFile, fileScanner);
-//			Board gameBoard = loadBoard(loadingFile, fileScanner);
-//			
-//			//Checks the bound
-////			if(turn != numberOfToken + 1) {
-////				throw new IOException();
-////			}
-//			
-//			//Store new crafted match in loadedMatch variable
-//			loadedMatch = new Match(gameBoard, firstPlayer, secondPlayer);
-//			System.out.println("here");
-//			//Finally, changes the turn (in the constructor it is always initialized to 1) to the correct turn
-//			loadedMatch.setTurn(turn);
-//			
-//		} catch (FileNotFoundException e) {
-//			//modify catch statement
-//		} catch (IOException e) {
-//			// TODO this exception is thrown if the number of turns is different from the number of token inserted + 1
-//			e.printStackTrace();
-//		}
-		Scanner fileScanner = new Scanner(new File("savedGames\\matchandreaVSgiovanna7.txt"));
+		File loadingFile = new File("savedGames" + File.separator + fileName);
+		Scanner fileScanner = new Scanner(loadingFile);
 		Player firstPlayer = loadPlayer(loadingFile, fileScanner, true);
 		Player secondPlayer = loadPlayer(loadingFile, fileScanner, false); 
 		int turn = loadTurn(loadingFile, fileScanner);
-		Board gameBoard = loadBoard(loadingFile, fileScanner);
-		
-		//Checks the bound
-//		if(turn != numberOfToken + 1) {
-//			throw new IOException();
-//		}
-		
-		//Store new crafted match in loadedMatch variable
-		loadedMatch = new Match(gameBoard, firstPlayer, secondPlayer);
-		System.out.println("here");
-		//Finally, changes the turn (in the constructor it is always initialized to 1) to the correct turn
-		loadedMatch.setTurn(turn);
-		//loadedMatch = new Match(null, new Player("ciao", null), null);
-		return loadedMatch;
-		//else throw new IOException();
+		Board gameBoard = loadBoard(loadingFile, fileScanner, firstPlayer, secondPlayer);
+
+		Scanner tokenCounterScanner = new Scanner(loadingFile);
+		int numberOfTokensInBoard = countTokens(loadingFile, tokenCounterScanner);
+		if(!isTampered(turn, numberOfTokensInBoard)){
+			//Store new crafted match in loadedMatch variable
+			loadedMatch = new Match(gameBoard, firstPlayer, secondPlayer);
+			//Finally, changes the turn (in the constructor it is always initialized to 1) to the correct turn
+			loadedMatch.setTurn(turn);
+			return loadedMatch;
+		}
+		else throw new CorruptedFileException();
 	}
 	
 	/**
@@ -206,7 +114,6 @@ public class LoadMatch implements LoadInterface {
 			fileScanner.nextLine();									//Advances past the next line
 
 		}
-		
 		return player;
 	}
 	
@@ -230,7 +137,29 @@ public class LoadMatch implements LoadInterface {
 		int turn = fileScanner.nextInt();							//Takes the turn
 		fileScanner.nextLine();										//Advances past the next line
 		return turn;
-		
+	}
+	
+	/**
+	 * Method for counting the number of token listed in the file.
+	 * 
+	 * @param fileName is the file containing the saved match
+	 * @param fileScanner is the Scanner object.
+	 * @return the number of token counted.
+	 */
+	private static int countTokens(File fileName, Scanner fileScanner) {
+		int tokens = 0;
+		//First phase: find Board section of the file 
+		fileScanner.nextLine();
+		fileScanner.nextLine();
+		fileScanner.nextLine();
+		fileScanner.nextLine();		
+
+		//Count how many tokens there are in the board
+		while(fileScanner.hasNextLine()) {
+			fileScanner.nextLine();
+			tokens++;
+		}
+		return tokens;
 	}
 	
 	/**
@@ -251,11 +180,12 @@ public class LoadMatch implements LoadInterface {
 	 * @param fileName is the file.
 	 * @param fileScanner is the scanner that reads the file.
 	 * @return the Board gameBoard
+	 * @throws FullColumnException 
+	 * @throws CorruptedFileException 
 	 */
-	private static Board loadBoard(File fileName, Scanner fileScanner) {	
+	private static Board loadBoard(File fileName, Scanner fileScanner, Player firstPlayer, Player secondPlayer) throws CorruptedFileException {	
 		
 		Board gameBoard = new Board();
-		int numberOfTokens = 0;
 		//Initialize the checkMatrix to the number of rows and columns of the board, so that it is like a mirror to the board
 		IntegrityMatrix checkMatrix = new IntegrityMatrix(Board.getNumberOfRows(), Board.getNumberOfColumns());
 		
@@ -264,13 +194,13 @@ public class LoadMatch implements LoadInterface {
 		fileScanner.nextLine();
 		
 		//Local variables 
-		Token token;
 		int currentRow;
 		int currentColumn;
-		int redComp;
-		int greenComp;
-		int blueComp;
-		
+		int redComp = 0;
+		int greenComp = 0;
+		int blueComp = 0;
+		Token firstToken = firstPlayer.getToken();
+		Token secondToken = secondPlayer.getToken();
 		
 		//Reads where are the tokens in the gameBoard from the provided file, fileName 
 		while(fileScanner.hasNextLine()) {																								
@@ -278,29 +208,39 @@ public class LoadMatch implements LoadInterface {
 			currentRow = fileScanner.nextInt();     //Takes the row number
 	                                                                                                                                                       
 			fileScanner.findInLine("Col: ");                                                                                                                                                                                           
-			currentColumn = fileScanner.nextInt();  //Takes the column number                                                                                                                                                 
+			currentColumn = fileScanner.nextInt();  //Takes the column number                         
 			
-			//Check the integrity of the position                                                                                                                                                                        
-			if(checkMatrix.checkIntegrity(currentRow, currentColumn)) {																   
-				
+			//Check the integrity of the position.      
+			//checkMatrix is the IntegrityMatrix object used to verify that the file leads to a Legal State for the Board,
+			//so if the Board recreated is properly formed, without errors like floating tokens or tokens above tokens.
+			//For further details, consult the IntegrityMatrix class.
+			if(checkMatrix.checkIntegrity(currentRow, currentColumn, Board.getNumberOfRows()-1, Board.getNumberOfColumns()-1)) {																   
 				//Token creation
 				redComp = fileScanner.nextInt();
 				greenComp = fileScanner.nextInt();
 				blueComp = fileScanner.nextInt();
-				token = new Token(new Color(redComp, greenComp, blueComp));		//maybe this could lead to consider token of the same color as not the same token??
-			
-				//Insert the token in the gameBoard
-				try {
-					gameBoard.insert(token, currentColumn);
-				} catch (FullColumnException e) {
-					//input was malformed. throw new Exception of sort. Corrupted file exception
+				//If token belongs to firstPlayer or to secondPlayer. Inserting a new object of type token would lead to insert different objects at all, with different references
+				//This would lead to n different tokens in the board, so logic would be completely gone.
+				if(redComp == firstToken.getTokenColor().getRed() && greenComp == firstToken.getTokenColor().getGreen() && blueComp == firstToken.getTokenColor().getBlue()) {
+					//Insert the token in the gameBoard
+					try {
+						gameBoard.insert(firstToken, currentColumn);
+					} catch (FullColumnException e) {
+						throw new CorruptedFileException();
+					}
 				}
-				
-				numberOfTokens++;
+				else if(redComp == secondToken.getTokenColor().getRed() && greenComp == secondToken.getTokenColor().getGreen() && blueComp == secondToken.getTokenColor().getBlue()) {	
+					//Insert the token in the gameBoard
+					try {
+						gameBoard.insert(secondToken, currentColumn);
+					} catch (FullColumnException e) {
+						throw new CorruptedFileException();
+					}
+				}	
 			}
 			else {
-				System.out.println(checkMatrix.getElemRow(currentRow, currentColumn));	//Should exit and throw an exception because file was bad formed.
-				//Launch an exception? REVISE EXCEPTION CHAPTER
+				//Integrity matrix says it is not safe to open the file because the board was wrong. 
+				throw new CorruptedFileException();
 			}
 			//Advances past the line
 			fileScanner.nextLine();	
@@ -308,4 +248,21 @@ public class LoadMatch implements LoadInterface {
 		return gameBoard;		
 	}
 	
+	/**
+	 * The purpose of this method is to check if the file trying to read is tampered, that happens in a variety of cases, but this checks
+	 * that the bound numberOfTurns = numberOfTokenInserted + 1 (+1 because the first turn is the turn 1
+	 * and when a player save the match, he can save it only at the beginning of his turn, so it must be that the number of turns passed
+	 * are greater than the number of token inserted in the Board + 1).
+	 * This check is not included in the IntegrityMatrix class because it is linked to the number of turns, information written in the saved file,
+	 * so it is strictly a concern of this class.	 
+	 * @param turn is the turn value
+	 * @param numberOfTokens is the number of tokens in the board
+	 * @return true if the file was tampered, so if someone inserted one or more token without hand crafting a correct value for turn, false otherwise.
+	 */
+	private static boolean isTampered(int turn, int numberOfTokens) {
+		if(turn != numberOfTokens + 1) {
+			return true;
+		}
+		return false;
+	}	
 }

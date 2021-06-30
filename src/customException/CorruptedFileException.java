@@ -1,7 +1,7 @@
 package customException;
 
 /**
- * FullColumnException class is a class for creating a customException.
+ * CorruptedFileException class is a class for creating a customException.
  * The structure is simple:
  * - the class extends Throwable in order to be considered an exception.
  * - when creating an object of this type, it initializes the variable errorString to 
@@ -11,12 +11,12 @@ package customException;
  * @author andre
  *
  */
-public class FullColumnException extends Throwable{
-	
-	private String errorString;
+public class CorruptedFileException extends Throwable {
 
-	public FullColumnException() {
-		errorString = "The column is full! Please try inserting the token in another allowed, not-full column!";
+	private String errorString;
+	
+	public CorruptedFileException() {
+		errorString = "File trying to read is corrupted.";
 	}
 	
 	public String getError() {

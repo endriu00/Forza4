@@ -1,7 +1,7 @@
 package customException;
 
 /**
- * FullColumnException class is a class for creating a customException.
+ * SavingFileException class is a class for creating a customException.
  * The structure is simple:
  * - the class extends Throwable in order to be considered an exception.
  * - when creating an object of this type, it initializes the variable errorString to 
@@ -11,15 +11,16 @@ package customException;
  * @author andre
  *
  */
-public class FullColumnException extends Throwable{
+public class SavingFileException extends Throwable {
 	
-	private String errorString;
-
-	public FullColumnException() {
-		errorString = "The column is full! Please try inserting the token in another allowed, not-full column!";
+	private String error;
+	
+	public SavingFileException() {
+		error = "It was not possible to save this match!";
 	}
 	
 	public String getError() {
-		return errorString;
+		return error;
 	}
+
 }

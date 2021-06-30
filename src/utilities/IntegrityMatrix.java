@@ -51,11 +51,13 @@ public class IntegrityMatrix {
 	 * but does not violate Illegal State rules.
 	 * @param i is the integer representing the row of the Board it is necessary to check the integrity of
 	 * @param j is the integer representing the column of the Board it is necessary to check the integrity of
+	 * @param boundaryValueRow is the max value allowed for a row
+	 * @param boundaryValueCol is the max value allowed for a column
 	 * @return true if checkIfAlreadyInserted returns false and checkIfProperCreatedColumn returns true,
 	 * 		   false in each other case.
 	 */
-	public boolean checkIntegrity(int i, int j) {
-		if(!checkIfAlreadyInserted(i, j) && checkIfProperCreatedColumn(i, j)) return true;
+	public boolean checkIntegrity(int i, int j, int boundaryValueRow, int boundaryValueCol) {
+		if(!checkIfAlreadyInserted(i, j, boundaryValueRow, boundaryValueCol) && checkIfProperCreatedColumn(i, j, boundaryValueRow, boundaryValueCol)) return true;
 		else return false;
 	}
 	
@@ -91,21 +93,23 @@ public class IntegrityMatrix {
 	 * Note that if the first element of the column is missing, this method won't notice it, but this case is handled in the LoadMatch class because it is outside of this class concern.
 	 * @param row is the row of the element to be checked.
 	 * @param col is the column of the element to be checked.
+	 * @param boundaryValueRow is the max value allowed for a row
+	 * @param boundaryValueCol is the max value allowed for a column
 	 * @return true if the column is a proper column, so if there is no missing piece in the column (so no floating token in the Board)
 	 * 		   false if the column is wrong, so if there is not an element between other two elements in a vertical assessment. 
 	 */
-	public boolean checkIfProperCreatedColumn(int row, int col) {
+	public boolean checkIfProperCreatedColumn(int row, int col, int boundaryValueRow, int boundaryValueCol) {
 		
 		//Handling out of bounds row and column numbers.
 		try {
-			if(col < 0 || col > 6) throw new ColumnOutOfRange();
+			if(!isColBoundRespected(col, boundaryValueCol)) throw new ColumnOutOfRange();
 		}
 		catch(ColumnOutOfRange e) {
 			return false;
 		}
 		
 		try {
-			if(row < 0 || row > 5) throw new RowOutOfRange();
+			if(!isRowBoundRespected(row, boundaryValueRow)) throw new RowOutOfRange();
 		}
 		catch(RowOutOfRange e) {
 			return false;
@@ -131,21 +135,23 @@ public class IntegrityMatrix {
 	 * 
 	 * @param row is the row of the element to be checked.
 	 * @param col is the column of the element to be checked.
+	 * @param boundaryValueRow is the max value allowed for a row
+	 * @param boundaryValueCol is the max value allowed for a column
 	 * @return true if the element is already in the checkMatrix, 
 	 * 		   false if it is a new element.
 	 */
-	public boolean checkIfAlreadyInserted(int row, int col) {
+	public boolean checkIfAlreadyInserted(int row, int col, int boundaryValueRow, int boundaryValueCol) {
 		
 		//Handling out of bounds row and column numbers.
 		try {
-			if(col < 0 || col > 6) throw new ColumnOutOfRange();
+			if(!isColBoundRespected(col, boundaryValueCol)) throw new ColumnOutOfRange();
 		}
 		catch(ColumnOutOfRange e) {
 			return true;
 		}
 		
 		try {
-			if(row < 0 || row > 5) throw new RowOutOfRange();
+			if(!isRowBoundRespected(row, boundaryValueRow)) throw new RowOutOfRange();
 		}
 		catch(RowOutOfRange e) {
 			return true;
@@ -168,5 +174,29 @@ public class IntegrityMatrix {
 	 */
 	public int getElemRow(int i, int j) {
 		return checkMatrix[i][j];
+	}
+	
+	/**
+	 * Checks if row value passed as input exceeds the boundary value permitted.
+	 * Note that a row cannot be negative, so value 0 is taken as a default.
+	 * @param row is the row in input
+	 * @param boundaryValueRow is the max value allowed
+	 * @return true if bound is respected, so if row is in the interval [0, boundaryValueRow], false otherwise
+	 */
+	public boolean isRowBoundRespected(int row, int boundaryValueRow) {
+		if(row < 0 || row > boundaryValueRow) return false;
+		return true;
+	}
+	
+	/**
+	 * Checks if column value passed as input exceeds the boundary value permitted.
+	 * Note that a column cannot be negative, so value 0 is taken as a default.
+	 * @param col is the column in input
+	 * @param boundaryValueCol is the max value allowed
+	 * @return true if bound is respected, so if col is in the interval [0, boundaryValueCol], false otherwise
+	 */
+	public boolean isColBoundRespected(int col, int boundaryValueCol) {
+		if(col < 0 || col > boundaryValueCol) return false;
+		return true;
 	}
 }

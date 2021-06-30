@@ -17,6 +17,8 @@ import gameComponents.Token;
  * 
  * Talking about the structure of the class, each test has got its static method.
  * Each method is then invoked in the main.
+ * 
+ * @author andre
  */
 public class BoardTester {
 	

@@ -4,10 +4,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import customException.SavingFileException;
 import gameComponents.*;
 
 /**
- * Class for saving a match
+ * Class for saving a match in a .txt file.
+ * The file is saved using a sort of conventions, like writing an information string about subsequent data (e.g. Board: -follows information about the board-).
+ * Each method is concerned with saving a different kind of information, so a method saves a player, another one saves the current turn and so on.
+ * Each file is stored in the savedGames folder of the project, independently from the OS on which the application runs.
  */
 public class SaveMatch {
 
@@ -33,10 +37,11 @@ public class SaveMatch {
 	 * 
 	 * @param matchName is the string representing the name of the match, given by the user
 	 * @param match is the playing match
+	 * @throws SavingFileException 
 	 */
-	public SaveMatch(String matchName, Match match) {
+	public SaveMatch(String matchName, Match match) throws SavingFileException {
 		savedMatch = new File("savedGames" + File.separator + matchName + ".txt");	
-		savePlayer(match.getFirstPlayer(), savedMatch, true, false);
+		savePlayer(match.getFirstPlayer(), savedMatch, true, false);		
 		savePlayer(match.getSecondPlayer(), savedMatch, false, true);
 		saveTurn(match, savedMatch, true);
 		saveBoard(match.getBoard(), savedMatch, true);
@@ -62,8 +67,9 @@ public class SaveMatch {
 	 * 		  If set to 'true', the object will append what it is writing to previous data in the file
 	 * 		  If set to 'false', the object will write new data starting from the first line of the file, 
 	 * 		  possibly overwriting what it was written before.
+	 * @throws SavingFileException if it was not possible to save the file.
 	 */
-	private static void savePlayer(Player player, File savingFile, boolean isFirstPlayer, boolean toBeAppended) {
+	private static void savePlayer(Player player, File savingFile, boolean isFirstPlayer, boolean toBeAppended) throws SavingFileException {
 		try (FileWriter write = new FileWriter(savingFile, toBeAppended)){
 			if(isFirstPlayer) {
 				write.write("First player: " + player.getName() + ", " + "token color: " 
@@ -86,10 +92,9 @@ public class SaveMatch {
 
 			}
 		} catch (IOException e) {
-			
+			throw new SavingFileException();
 		}
 	}
-	
 	
 	/**
 	 * Private method for storing the gameBoard situation in the file savingFile.
@@ -116,12 +121,13 @@ public class SaveMatch {
 	 * 		  If set to 'true', the object will append what it is writing to previous data in the file
 	 * 		  If set to 'false', the object will write new data starting from the first line of the file, 
 	 * 		  possibly overwriting what it was written before.
+	 * @throws SavingFileException if it was not possible to save the file.
 	 */
-	private static void saveBoard(Board gameBoard, File savingFile, boolean toBeAppended) {
+	private static void saveBoard(Board gameBoard, File savingFile, boolean toBeAppended) throws SavingFileException {
 		try(FileWriter write = new FileWriter(savingFile, toBeAppended)){
 			write.write("Board: \n");
-			for(int i = gameBoard.getNumberOfRows() - 1; i >= 0; i--) {
-				for(int j = 0; j < gameBoard.getNumberOfColumns(); j++) {
+			for(int i = Board.getNumberOfRows() - 1; i >= 0; i--) {
+				for(int j = 0; j < Board.getNumberOfColumns(); j++) {
 					if(gameBoard.getTokenInPosition(i, j) == null) continue;
 					write.write("Row: " + String.valueOf(i) + " Col: " + String.valueOf(j) + " " 
 								+ gameBoard.getTokenInPosition(i, j).getTokenColor().getRed() 
@@ -135,7 +141,7 @@ public class SaveMatch {
 			
 		}
 		catch(IOException e) {
-			
+			throw new SavingFileException();
 		}
 	}
 	
@@ -152,14 +158,14 @@ public class SaveMatch {
 	 * 		  If set to 'true', the object will append what it is writing to previous data in the file
 	 * 		  If set to 'false', the object will write new data starting from the first line of the file, 
 	 * 		  possibly overwriting what it was written before.
+	 * @throws SavingFileException if it was not possible to save the file.
 	 */
-	private static void saveTurn(Match match, File savingFile, boolean toBeAppended) {
+	private static void saveTurn(Match match, File savingFile, boolean toBeAppended) throws SavingFileException {
 		try(FileWriter write = new FileWriter(savingFile, toBeAppended)){
-			write.write("Turn: " + match.getTurn() + " \n");
-			
+			write.write("Turn: " + match.getTurn() + " \n");	
 		}
 		catch(IOException e) {
-			
+			throw new SavingFileException();
 		}
 	}
 	

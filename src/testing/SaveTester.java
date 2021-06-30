@@ -4,6 +4,7 @@ import gameComponents.Player;
 import gameComponents.Token;
 import java.awt.Color;
 import customException.FullColumnException;
+import customException.SavingFileException;
 import gameComponents.Board;
 import gameComponents.Match;
 import saveAndLoad.SaveMatch;
@@ -20,6 +21,8 @@ import saveAndLoad.SaveMatch;
  * 
  * Talking about the structure of the class, each test has got its static method.
  * Each method is then invoked in the main.
+ * 
+ * @author andre
  */
 public class SaveTester {
 	
@@ -30,11 +33,15 @@ public class SaveTester {
 		String testFileName = "testSaveFile";
 		
 		System.out.println("Testing...");
-		SaveMatch save = new SaveMatch(testFileName, match);
+		try {
+			SaveMatch save = new SaveMatch(testFileName, match);
+		} catch (SavingFileException e) {
+			System.out.println(e.getError());
+		}
 		System.out.println("File has been created.\n"
 				+ "Expected: \n"
 				+ "First player: Andrea, token color: 0 0 0\r\n" + 
-				"Second player: Erica, token color: 20 220 20\r\n" + 
+				"Second player: Chiara, token color: 20 220 20\r\n" + 
 				"Turn: 7 \r\n" + 
 				"Board: \r\n" + 
 				"Row: 5 Col: 0 0 0 0\r\n" + 
@@ -64,7 +71,7 @@ public class SaveTester {
 		Player p1 = new Player(p1Name, t1);
 		
 		Token t2 = new Token(new Color(20, 220, 20));
-		String p2Name = "Erica";
+		String p2Name = "Chiara";
 		Player p2 = new Player(p2Name, t2);
 		
 		Board b = new Board();

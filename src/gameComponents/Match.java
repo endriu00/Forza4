@@ -1,38 +1,50 @@
 package gameComponents;
 
-import java.util.Scanner;
-
 import customException.FullColumnException;
-import saveAndLoad.SaveMatch;
 
-/*Match class*/
+/**
+ * Match class is the class representing the match of a game, so everything concerning who is actually playing, which turn is it,
+ * the gameBoard and its state (so what tokens are in it), whose turn is it and so on.
+ * Conceptually talking, this class is part of the gameComponents package, that represents where the logic of the application
+ * lies in. This means that other classes interact with this package and, ideally, with this class only, being the direct 
+ * frontier of the external view of the internal logic.
+ * @author andre
+ *
+ */
 public class Match {
 
-	/* Variable turn is the variable indicating the turn of the match. 
+	/** 
+	 * Variable turn is the variable indicating the turn of the match. 
 	 * According to the number of boxes in the gameboard, the last possible turn for as match is the 42nd:
-	 * as stated in the Gameboard class, the number of rows is 6, while the number of columns is 7; 
+	 * as stated in the Board class, the number of rows is 6, while the number of columns is 7; 
 	 * if we calculate the product rows x columns, we obtain the number 42, that is the total amount of 
 	 * fillable boxes in which players can insert the token. So, if neither of the players has won till the end 
 	 * and the gameboard is full, they must have reached the 42nd turn of the match.
 	 * 
-	 * First turn is set to 1, in order to give readability.
+	 * First turn is set to 1, in order to give user readability.
 	 * */
 	private int turn;
 	
-	/* Variable gameboard is the gameboard of the match */
+	/**
+	 *  Variable gameboard is the gameboard of the match 
+	 */
 	private Board gameBoard;
 	
-	
-	/* Variable firstPlayer is the first player of the match, the one who begins inserting token. 
-	 * firstPlayer will play during odd turns (he begins the match at turn = 1, he will play again at turn = 3, and so on). */
+	/**
+	 * firstPlayer is the player ideally inserted first in the match. It does not represent the player playing first in the match.
+	 */
 	private Player firstPlayer;
 	
-	/* Variable secondPlayer is the second player of the match. 
-	 * secondPlayer will play during even turns (he begins the match at turn = 2 and will play again at turn = 4, ...). */
+	/**
+	 * secondPlayer is the player ideally inserted second in the match. It does not represent the player playing second in the match.
+	 */
 	private Player secondPlayer;
 	
-	/* Variable firstPlayerTurn is true if the first player plays first.*/
-	private boolean firstPlayerTurn;
+	/**
+	 *  Variable isFirstPlayerPlaying is true if the first player is playing, false otherwise.
+	 *  This determines the correct succeeding of turns in the match.
+	 */
+	private boolean isFirstPlayerPlaying;
 	
 	/**
 	 * Basic constructor for the Match class
@@ -61,96 +73,101 @@ public class Match {
 		this.secondPlayer = p2;
 		this.turn = 1;
 	}
-	
-	public int getTurn() {
-		return turn;
-	}
 			
 	/**
-	 * Metodo che stabilisce chi tra i due giocatori esegue il turno.
-	 * @return firstPlayerTurn true se ha il turno, false altrimenti.
+	 * Method for determining which player plays first.
+	 * This player could be first or second player.
+	 * 
+	 * @return isFirstPlayerPlaying true if firstPlayer plays first, false otherwise.
 	 */
 	public boolean whoPlaysFirst()
 	{
-		firstPlayerTurn = Math.random() <= .5;
-		return firstPlayerTurn;
+		isFirstPlayerPlaying = Math.random() <= .5;
+		return isFirstPlayerPlaying;
 	}
 	
 	/**
-	 * Metodo che stabilisce se la partita è finita.
-	 * @param gameBoard
-	 * @return true se la partita è finita.
+	 * Method for inserting a token in a given column in the gameBoard of the match.
+	 * It simply calls the insert method of the Board class to complete the mediation between classes.
+	 * @param token is the token to be inserted.
+	 * @param column is the column where the token has to be inserted.
+	 * @throws FullColumnException exception of a full column.
 	 */
-	public boolean isEndGame(Board gameBoard)
-	{
-		if (gameBoard.isBoardFull() || gameBoard.isDraw() || gameBoard.isWin())
-		{
-			return true;
-		}
-		return false;
-	}
-	
 	public void insertInBoard(Token token, int column) throws FullColumnException {
 		this.gameBoard.insert(token, column);
-	}
-	
-	/**
-	 * Method used for save game and quit.
-	 * 1. Integrate with GUI
-	 * 2. Change method to ask player the name of the match to be saved (this is part of the integration)
-	 * 3. Provide res directory
-	 */
-	public void saveGameAndQuit() {
-		SaveMatch save = new SaveMatch("Partita1", this);
-		
 	}
 	
 	/*From here it starts a series of useful method intended to be used in other classes*/
 	
 	/**
-	 * Method for getting firstPlayerTurn 
-	 * @return firstPlayerTurn variable value
+	 * Method for getting isFirstPlayerPlaying.
+	 * @return isFirstPlayerPlaying variable value.
 	 */
-	public boolean getFirstPlayerTurn() {
-		return this.firstPlayerTurn;
+	public boolean getIsFirstPlayerPlaying() {
+		return this.isFirstPlayerPlaying;
 	}
 	
 	/**
-	 * Method that returns the first player of the match
-	 * @return the first player
+	 * Method that returns the first player of the match.
+	 * @return the first player.
 	 */
 	public Player getFirstPlayer() {
 		return this.firstPlayer;
 	}
 	
 	/**
-	 * Method that returns the second player of the match
-	 * @return the second player
+	 * Method that returns the second player of the match.
+	 * @return the second player.
 	 */
 	public Player getSecondPlayer() {
 		return this.secondPlayer;
 	}
 	
 	/**
-	 * Method that returns the gameboard of the match
-	 * @return the gameboard
+	 * Method that returns the gameboard of the match.
+	 * @return the gameboard.
 	 */
 	public Board getBoard() {
 		return this.gameBoard;
+	}	
+	
+	/**
+	 * Method that returns the turn of the match being played.
+	 * @return turn the current turn of the match.
+	 */
+	public int getTurn() {
+		return turn;
 	}
 	
-	public void setFirstPlayerTurn(boolean firstPlayerTurn) {
-		this.firstPlayerTurn = firstPlayerTurn;
+	/**
+	 * Method for setting isFirstPlayerPlaying variable.
+	 * @param isFirstPlayerPlaying is true if first player plays first.
+	 */
+	public void setFirstPlayerPlaying(boolean firstPlayerTurn) {
+		this.isFirstPlayerPlaying = firstPlayerTurn;
 	}
 	
+	/**
+	 * Method for setting Player firstPlayer. 
+	 * @param firstPlayer is a player of the match, namely the first being inserted. This is not necessarily the player beginning the match.
+	 */
 	public void setFirstPlayer(Player firstPlayer) {
 		this.firstPlayer = firstPlayer;
 	}
 	
+	/**
+	 * Method for setting Player secondPlayer.
+	 * @param secondPlayer is a player of the match, namely the second being inserted. 
+	 * This is not necessarily the player making his move after the first player, but could be the player beginning the match.
+	 */
 	public void setSecondPlayer(Player secondPlayer) {
 		this.secondPlayer = secondPlayer;
 	}
 	
+	/**
+	 * Method for setting the Board of the match.
+	 * @param gameBoard is the Board object to be set.
+	 */
 	public void setBoard(Board gameBoard) {
 		this.gameBoard = gameBoard;
 	}

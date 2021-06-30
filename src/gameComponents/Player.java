@@ -1,6 +1,10 @@
 package gameComponents;
 
-/*Class that represents a player */
+/**
+ * Class that represents a player. This is the actor of the game, because it represents the user, with two different characteristics:
+ * a name and a token. This class presents useful methods for getting and setting these characteristics.
+ * @author andre
+ */
 public class Player {
 
 	/*Variable that represents the name of the player */
