@@ -28,6 +28,18 @@ public class SaveTester {
 	
 	public static void main(String...strings) {
 		
+		System.out.println("\n\nWELCOME TO THIS UNIT TEST!\n"
+				+ "\n"
+				+ "Here we will test the behavior of the methods of the class "
+				+ "SaveMatch\n"
+				+ "In the class, it has been written, for each test, the purpose of the test, so a short explanation, \n"
+				+ "an expected result, and the effective result of the test.\nEasy to understand, if the expected result \n" 
+				+ "and the result itself are the same, the test has been successful.\n\n");
+		
+		System.out.println("Let's begin!\n\n");
+		
+		System.out.println("||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
+		System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n\n\n");
 
 		Match match = createTestMatch();
 		String testFileName = "testSaveFile";
@@ -38,7 +50,7 @@ public class SaveTester {
 		} catch (SavingFileException e) {
 			System.out.println(e.getError());
 		}
-		System.out.println("File has been created.\n"
+		System.out.println("File has been created.\n\n"
 				+ "Expected: \n"
 				+ "First player: Andrea, token color: 0 0 0\r\n" + 
 				"Second player: Chiara, token color: 20 220 20\r\n" + 

@@ -1,0 +1,11 @@
+First player: h, token color: 205 245 247
+Second player: dhddh, token color: 0 170 0
+Turn: 8 
+Board: 
+Row: 5 Col: 1 205 245 247
+Row: 5 Col: 2 0 170 0
+Row: 5 Col: 3 205 245 247
+Row: 4 Col: 2 205 245 247
+Row: 4 Col: 3 0 170 0
+Row: 3 Col: 2 0 170 0
+Row: 3 Col: 3 205 245 247

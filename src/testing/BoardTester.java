@@ -12,7 +12,7 @@ import gameComponents.Token;
  * In the class, it has been written, for each test, the purpose of the test, so a short explanation, 
  * an expected result, and the effective result of the test. Easy to understand, if the expected result
  * and the result itself are the same, the test has been successful.
- * In order to view these tests, you are provided a main method that will show you the testing results 
+ * In order to view these tests, you are provided with a main method that will show you the testing results 
  * in the standard output view. To not harden the view, it has been provided a catchy view.
  * 
  * Talking about the structure of the class, each test has got its static method.
@@ -24,13 +24,26 @@ public class BoardTester {
 	
 	public static void main(String...strings) throws FullColumnException {
 		
+		System.out.println("\n\nWELCOME TO THIS UNIT TEST!\n"
+				+ "\n"
+				+ "Here we will test the behavior of the methods of the class "
+				+ "Board\n"
+				+ "In the class, it has been written, for each test, the purpose of the test, so a short explanation, \n"
+				+ "an expected result, and the effective result of the test.\nEasy to understand, if the expected result \n" 
+				+ "and the result itself are the same, the test has been successful.\n\n");
+		
+		System.out.println("Let's begin!\n\n");
+		
+		System.out.println("||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
+		System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n\n\n");
+		
 		Board gameBoard = new Board();
 		Token testingToken = new Token(new Color(0, 0, 0));
 		Token otherTestingToken = new Token(new Color(255, 255, 255));
 		
-		System.out.println("Test for a column number out of bound. "
+		System.out.println("Test for a column number out of bound.\n"
 				+ "This means a test for a column that has a number greater than the number of columns "
-				+ "in the board.");
+				+ "in the board.\n");
 		System.out.println("Expected: Column number not allowed!");
 		System.out.println("Testing...");
 		testInsertOutOfColumnBound(gameBoard, testingToken);
@@ -39,7 +52,7 @@ public class BoardTester {
 		System.out.println("---------------------------------------------------------------------\n");
 		
 		gameBoard = new Board();
-		System.out.println("Test for an insert in a full column.");
+		System.out.println("Test for an insert in a full column.\n");
 		System.out.println("Expected: The column is full! Please try inserting the token in another allowed, not-full column!");
 		System.out.println("Testing...");
 		testFullColumn(gameBoard);		
@@ -50,7 +63,7 @@ public class BoardTester {
 		gameBoard = new Board();
 		System.out.println("Test for verifying the board can be full. In this case, it does not matter that every token is the same.\n"
 				+ "Another test has been made for verifying one can win with the correct rules!");
-		System.out.println("isBoardFull method output must be true.\n"
+		System.out.println("isBoardFull method output must be true.\n\n"
 				+ "Expected: true.");
 		System.out.println("Testing...");
 		testIsBoardFull(gameBoard, testingToken);
@@ -61,7 +74,7 @@ public class BoardTester {
 		gameBoard = new Board();
 		System.out.println("Test for verifying there can be a diagonal win, ie a win with the same tokens placed in a diagonal pattern,\n"
 				+ "with the diagonal starting at the bottom and ending up upgoing to the right.");
-		System.out.println("isBottomRightDiagonalWin must be true.\n"
+		System.out.println("isBottomRightDiagonalWin must be true.\n\n"
 				+ "Expected: true.");
 		System.out.println("Testing...");
 		testIsBottomRightDiagonalWin(gameBoard, testingToken, otherTestingToken);
@@ -72,7 +85,7 @@ public class BoardTester {
 		gameBoard = new Board();
 		System.out.println("Test for verifying there can be a diagonal win, ie a win with the same tokens placed in a diagonal pattern,\n"
 				+ "with the diagonal starting at the bottom and ending up upgoing to the left.");
-		System.out.println("isBottomLeftDiagonalWin must be true.\n"
+		System.out.println("isBottomLeftDiagonalWin must be true.\n\n"
 				+ "Expected: true.");
 		System.out.println("Testing...");
 		testIsBottomLeftDiagonalWin(gameBoard, testingToken, otherTestingToken);
@@ -82,7 +95,7 @@ public class BoardTester {
 		
 		gameBoard = new Board();
 		System.out.println("Test for verifying there can be a vertical win, ie a win with the same tokens placed in a vertical pattern");
-		System.out.println("isVerticalWin must be true.\n"
+		System.out.println("isVerticalWin must be true.\n\n"
 				+ "Expected: true.");
 		System.out.println("Testing...");
 		testIsVerticalWin(gameBoard, testingToken);
@@ -92,7 +105,7 @@ public class BoardTester {
 		
 		gameBoard = new Board();
 		System.out.println("Test for verifying there can be a horizontal win, ie a win with the same tokens placed in a horizontal pattern");
-		System.out.println("isHorizontalWin must be true.\n"
+		System.out.println("isHorizontalWin must be true.\n\n"
 				+ "Expected: true.");
 		System.out.println("Testing...");
 		testIsHorizontalWin(gameBoard, testingToken);
@@ -102,7 +115,7 @@ public class BoardTester {
 		
 		gameBoard = new Board();
 		System.out.println("Test for verifying there can be a draw, ie a situation in which no player wins, so the board is full but no onw wins.");
-		System.out.println("isDraw must be true.\n"
+		System.out.println("isDraw must be true.\n\n"
 				+ "Expected: true.");
 		System.out.println("Testing...");
 		testIsDraw(gameBoard, testingToken, otherTestingToken);
@@ -112,8 +125,8 @@ public class BoardTester {
 		
 		gameBoard = new Board();
 		System.out.println("Test for getting the token in position i, j, so testing getTokenInPosition(int i, int j) method.");
-		System.out.println("This method returns a token (read the address of a token).\n"
-				+ "Expected: gameComponents.Token@someNumbers.");
+		System.out.println("This method returns a token (read the address of a token).\n\n"
+				+ "Expected: gameComponents.Token@chars.");
 		System.out.println("Testing...");
 		testGetTokenInPosition(gameBoard, testingToken);
 		System.out.println("Test finished.\n");
@@ -122,7 +135,7 @@ public class BoardTester {
 		
 		System.out.println("Test for getting the number of rows of the board.\n"
 				+ "Note that it is a static, final value because of its definition in the domain of the project.");
-		System.out.println("It is expected an int representing the number of rows.\n"
+		System.out.println("It is expected an int representing the number of rows.\n\n"
 				+ "Expected: 6");
 		System.out.println("Testing...");
 		testGetRows();
@@ -133,7 +146,7 @@ public class BoardTester {
 
 		System.out.println("Test for getting the number of columns of the board.\n"
 				+ "Note that it is a static, final value because of its definition in the domain of the project.");
-		System.out.println("It is expected an int representing the number of columns.\n"
+		System.out.println("It is expected an int representing the number of columns.\n\n"
 				+ "Expected: 7");
 		System.out.println("Testing...");
 		testGetColumns();

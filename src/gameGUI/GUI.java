@@ -256,7 +256,6 @@ public class GUI extends JFrame implements ActionListener {
 	    biggestFrame.add(mainPanel);
 		biggestFrame.setVisible(true);
 	}
-	
 
     /**
      * Initialize match players. 
@@ -450,9 +449,7 @@ public class GUI extends JFrame implements ActionListener {
      */
     public void showColorGrid(Player p) {
     	mutexPlayer = p;
-        colorsTopPanel.setVisible(true);   
-        
-    	
+        colorsTopPanel.setVisible(true);    	
     }
     
     /**
@@ -469,13 +466,11 @@ public class GUI extends JFrame implements ActionListener {
     	player.setToken(new Token(colorButton.getBackground()));
     	colorButton.setEnabled(false);
     	colorButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 4));
-    	colorButton.add(new JLabel(" P1")).setFont(gamingFont.deriveFont(LARGER_SIZE));
+    	colorButton.add(new JLabel("  X ")).setFont(gamingFont.deriveFont(LARGER_SIZE));
 		colorsTopPanel.setVisible(false);
 		mainPanel.setVisible(true);
 		playerPanel.setVisible(true);
-    }
-    
-    
+    }  
     
     /**
      * Creates the color chooser interface.
@@ -484,9 +479,7 @@ public class GUI extends JFrame implements ActionListener {
      * (taken from a pool of constants in the field section).
      * Player clicking on a button selects it.
      * Once selected, the player will have his token colored like the clicked button.
-     * 
-     * @param player is the player invoking this interface
-     * 
+     *  
      * @author andre
      */
     public void createColorChooserGrid() {
@@ -497,8 +490,8 @@ public class GUI extends JFrame implements ActionListener {
     	JPanel labelPanel = new JPanel(new GridBagLayout());	
     	labelPanel.setBackground(PALETTE_COLOR_3);
     	
-    	JLabel colorLabel = new JLabel("Click on a color to choose it!");
-    	colorLabel.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
+    	JLabel colorLabel = new JLabel("Click on a color to choose it! You can only choose once");
+    	colorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
     	constraints.gridx = 3;
     	constraints.ipady = 34;
     	labelPanel.add(colorLabel, constraints);
@@ -1158,14 +1151,18 @@ public class GUI extends JFrame implements ActionListener {
 		//If the match ended in a draw
 		if (match.getBoard().isDraw()) {
 			informativeLabel.setText("The match ended in a draw. Thanks for playing!");
+			turnLabel.setText("Congratulations both!");
+			turnLabel.setForeground(PALETTE_COLOR_1);
 			informativeLabel.setForeground(PALETTE_COLOR_1);
 		}
 		//If someone won the match
 		else if (match.getBoard().isWin()) {
 			informativeLabel.setText(winnerName + " " + "won! Thanks for playing!");
+			turnLabel.setText("Congratulations " + winnerName + "!");
+			turnLabel.setForeground(PALETTE_COLOR_1);
 			informativeLabel.setForeground(PALETTE_COLOR_1);
 	    }	
-
+		
   		startGameButton = new JButton("Start a new Game");
   		startGameButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
   		startGameButton.setBackground(PALETTE_COLOR_1);
@@ -1273,8 +1270,8 @@ public class GUI extends JFrame implements ActionListener {
 	    					match.insertInBoard(match.getFirstPlayer().getToken(), column);
 	    					//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 	    					//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-	    					turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn. Turn " + match.getTurn());
 	    					match.setTurn(match.getTurn()+1);
+	    					turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn. Turn " + match.getTurn());
 	    		       		checkResults(match.getFirstPlayer().getName());
 	    					match.setFirstPlayerPlaying(!match.getIsFirstPlayerPlaying());
 							return;
@@ -1292,8 +1289,8 @@ public class GUI extends JFrame implements ActionListener {
 				match.insertInBoard(match.getFirstPlayer().getToken(), column);
 				//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 				//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-				turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn. Turn " + match.getTurn());
 				match.setTurn(match.getTurn()+1);
+				turnLabel.setText("It is " + match.getSecondPlayer().getName() + "'s turn. Turn " + match.getTurn());
 			} catch (FullColumnException e) {
 				fullColumnHandler(e);			
 				return;
@@ -1317,8 +1314,8 @@ public class GUI extends JFrame implements ActionListener {
 							match.insertInBoard(match.getSecondPlayer().getToken(), column);
 							//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 							//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-							turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn. Turn " + match.getTurn());
 							match.setTurn(match.getTurn()+1);
+							turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn. Turn " + match.getTurn());
 							checkResults(match.getSecondPlayer().getName());
 							match.setFirstPlayerPlaying(!match.getIsFirstPlayerPlaying());
 							return;
@@ -1338,8 +1335,8 @@ public class GUI extends JFrame implements ActionListener {
 				match.insertInBoard(match.getSecondPlayer().getToken(), column);
 				//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
 				//accordingly, but it is necessary to specify whose turn is next when triggering the event.
-				turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn. Turn " + match.getTurn());
 				match.setTurn(match.getTurn()+1);
+				turnLabel.setText("It is " + match.getFirstPlayer().getName() + "'s turn. Turn " + match.getTurn());
 				
 			} catch (FullColumnException e) {
 				fullColumnHandler(e);			
@@ -1500,9 +1497,7 @@ public class GUI extends JFrame implements ActionListener {
 	 * Now it is possible to play a stored match.
 	 * 
 	 * @param chooser is the JFileChooser object
-	 * @throws FullColumnException 
-	 * @throws CorruptedFileException 
-	 * @throws FileNotFoundException 
+	 * @return the status of the showOpenDialog method. Status can be APPROVE_OPTION if user pressed the continue button or CANCEL_OPTION if pressed the cancel.
 	 */
 	public int selectSavedFileInterface(JFileChooser chooser) {
 		loadingFile = null;

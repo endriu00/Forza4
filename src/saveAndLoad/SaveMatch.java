@@ -37,7 +37,7 @@ public class SaveMatch {
 	 * 
 	 * @param matchName is the string representing the name of the match, given by the user
 	 * @param match is the playing match
-	 * @throws SavingFileException 
+	 * @throws SavingFileException if there was an error saving the file
 	 */
 	public SaveMatch(String matchName, Match match) throws SavingFileException {
 		savedMatch = new File("savedGames" + File.separator + matchName + ".txt");	
@@ -167,10 +167,5 @@ public class SaveMatch {
 		catch(IOException e) {
 			throw new SavingFileException();
 		}
-	}
-	
-	
-	
-	
-	
+	}	
 }

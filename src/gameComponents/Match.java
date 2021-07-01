@@ -82,7 +82,7 @@ public class Match {
 	 */
 	public boolean whoPlaysFirst()
 	{
-		isFirstPlayerPlaying = Math.random() <= .5;
+		isFirstPlayerPlaying = Math.random() <= 0.5;
 		return isFirstPlayerPlaying;
 	}
 	
@@ -141,10 +141,10 @@ public class Match {
 	
 	/**
 	 * Method for setting isFirstPlayerPlaying variable.
-	 * @param isFirstPlayerPlaying is true if first player plays first.
+	 * @param firstPlayerPlaying is true if first player is playing.
 	 */
-	public void setFirstPlayerPlaying(boolean firstPlayerTurn) {
-		this.isFirstPlayerPlaying = firstPlayerTurn;
+	public void setFirstPlayerPlaying(boolean firstPlayerPlaying) {
+		this.isFirstPlayerPlaying = firstPlayerPlaying;
 	}
 	
 	/**
@@ -172,6 +172,10 @@ public class Match {
 		this.gameBoard = gameBoard;
 	}
 	
+	/**
+	 * Method for setting the turn of the match.
+	 * @param turn is the turn to be set.
+	 */
 	public void setTurn(int turn) {
 		this.turn = turn;
 	}

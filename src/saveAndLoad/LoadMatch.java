@@ -15,7 +15,7 @@ import utilities.IntegrityMatrix;
 
 /**
  * Class LoadMatch is the class supposed to give methods for loading a match from a file.
- * Obviously, this file must be in a specific pattern (that is, the pattern in which it is saved, in the SaveMatch class).
+ * Obviously, this file must have an internal specific pattern (that is, the pattern in which it is saved, in the SaveMatch class).
  * If the file is provided in a different way, LoadMatch will raise an exception.
  * In order to adhere to the Observer design pattern, this class must implement LoadInterface interface.
  * 
@@ -76,7 +76,7 @@ public class LoadMatch implements LoadInterface {
 	 * @param fileName is the file.
 	 * @param fileScanner is the scanner that reads the file.
 	 * @param isFirstPlayer indicates if the player reading is the first or not.
-	 * @return
+	 * @return the player object loaded
 	 */
 	private static Player loadPlayer(File fileName, Scanner fileScanner, boolean isFirstPlayer) {
 		Player player;
@@ -179,9 +179,10 @@ public class LoadMatch implements LoadInterface {
 	 * 
 	 * @param fileName is the file.
 	 * @param fileScanner is the scanner that reads the file.
-	 * @return the Board gameBoard
-	 * @throws FullColumnException 
-	 * @throws CorruptedFileException 
+	 * @param firstPlayer player number one of the match.
+	 * @param secondPlayer player number two of the match.
+	 * @return the Board gameBoard.
+	 * @throws CorruptedFileException when a file is corrupted or not integer as stated by the IntegrityMatrix.
 	 */
 	private static Board loadBoard(File fileName, Scanner fileScanner, Player firstPlayer, Player secondPlayer) throws CorruptedFileException {	
 		
