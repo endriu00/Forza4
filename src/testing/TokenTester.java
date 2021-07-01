@@ -21,11 +21,24 @@ public class TokenTester {
 
 	public static void main(String... strings) {
 		
+		System.out.println("\n\nWELCOME TO THIS UNIT TEST!\n"
+				+ "\n"
+				+ "Here we will test the behavior of the methods of the class "
+				+ "Token\n"
+				+ "In the class, it has been written, for each test, the purpose of the test, so a short explanation, \n"
+				+ "an expected result, and the effective result of the test.\nEasy to understand, if the expected result \n" 
+				+ "and the result itself are the same, the test has been successful.\n\n");
+		
+		System.out.println("Let's begin!\n\n");
+		
+		System.out.println("||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
+		System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n\n\n");
+		
 		Token token = new Token(new Color(144, 144, 144));
 		
 		System.out.println("Test for getting the token color, so for testing getTokenColor().");
 		System.out.println("This method should return the token color, that is actually an object with an address"
-				+ ", \nso it will be shown each component of the color (e.g. red, green, blue in the common format).\n"
+				+ ", \nso it will be shown each component of the color (e.g. red, green, blue in the common format).\n\n"
 				+ "Expected: \n"
 				+ "Red component: 144\n"
 				+ "Green component: 144\n"

@@ -39,7 +39,7 @@ public class Board
 	 * Prints the board in the standard output of the machine.
 	 * Only used for unit testing and debugging purpose.
 	 */
-	public static void printBoard()
+	public void printBoard()
 	{
 		System.out.println("\n");
 		for (int i = 0; i < ROWS; i++)
@@ -279,7 +279,7 @@ public class Board
 	 * Although the number of columns is indicated in the description and in the domain of
 	 * the project, this method is provided in order to make order and depend exclusively 
 	 * on this class to know the number of columns 
-	 * @return
+	 * @return the number of columns of the board
 	 */
 	public static int getNumberOfColumns() {
 		return COLUMNS;

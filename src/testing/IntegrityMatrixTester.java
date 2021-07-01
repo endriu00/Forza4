@@ -3,13 +3,35 @@ package testing;
 import utilities.IntegrityMatrix;
 
 /**
- * Testing the class IntegrityMatrix with all of its most important methods.
+ * Class for testing methods and behavior of the class IntegrityMatrix, as this class name suggests.
+ * This is fundamentally a unit testing.
+ * In the class, it has been written, for each test, the purpose of the test, so a short explanation, 
+ * an expected result, and the effective result of the test. Easy to understand, if the expected result
+ * and the result itself are the same, the test has been successful.
+ * In order to view these tests, you are provided a main method that will show you the testing results 
+ * in the standard output view. To not harden the view, it has been provided a catchy view.
+ * 
+ * Talking about the structure of the class, each test has got its static method.
+ * Each method is then invoked in the main.
+ * 
  * @author andre
- *
  */
 public class IntegrityMatrixTester {
 
 	public static void main(String... strings) {
+		
+		System.out.println("\n\nWELCOME TO THIS UNIT TEST!\n"
+				+ "\n"
+				+ "Here we will test the behavior of the methods of the class "
+				+ "IntegrityMatrix\n"
+				+ "In the class, it has been written, for each test, the purpose of the test, so a short explanation, \n"
+				+ "an expected result, and the effective result of the test.\nEasy to understand, if the expected result \n" 
+				+ "and the result itself are the same, the test has been successful.\n\n");
+		
+		System.out.println("Let's begin!\n\n");
+		
+		System.out.println("||||||||||||||||||||||||||||||||||||||||||||||||||||||\n");
+		System.out.println("VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV\n\n\n");
 		
 		int rows = 6;
 		int columns = 7;

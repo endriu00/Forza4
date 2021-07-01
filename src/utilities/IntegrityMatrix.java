@@ -4,7 +4,7 @@ import customException.ColumnOutOfRange;
 import customException.RowOutOfRange;
 
 /**
- * class for checking the integrity of the Board contained in the saved file.
+ * Class for checking the integrity of the Board contained in the saved file.
  */
 public class IntegrityMatrix {
 
