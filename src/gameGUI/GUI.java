@@ -203,6 +203,7 @@ public class GUI extends JFrame implements ActionListener {
 		startGameButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		startGameButton.setBackground(PALETTE_COLOR_4);
 		startGameButton.setBorder(emptyBorder);
+		startGameButton.setOpaque(true);
 	  	startGameButton.addMouseListener(new EnableHoverOnButton(startGameButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		startGameButton.addActionListener(new ActionListener() 
 		{
@@ -217,6 +218,7 @@ public class GUI extends JFrame implements ActionListener {
 		loadButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		loadButton.setBackground(PALETTE_COLOR_4);
 		loadButton.setBorder(emptyBorder);
+		loadButton.setOpaque(true);
 	  	loadButton.addMouseListener(new EnableHoverOnButton(loadButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
         loadButton.addActionListener(this);
                
@@ -253,6 +255,7 @@ public class GUI extends JFrame implements ActionListener {
 		mainPanel.setVisible(true);
 		
 		mainPanel.setBackground(PALETTE_COLOR_1);
+		mainPanel.setOpaque(true);
 	    biggestFrame.add(mainPanel);
 		biggestFrame.setVisible(true);
 	}
@@ -272,6 +275,7 @@ public class GUI extends JFrame implements ActionListener {
 	  	startMatchButton = new JButton("Start");
 	  	startMatchButton.setBackground(PALETTE_COLOR_4);
 	  	startMatchButton.setBorder(emptyBorder);
+		startMatchButton.setOpaque(true);
 	  	startMatchButton.addMouseListener(new EnableHoverOnButton(startMatchButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 	  	startMatchButton.addActionListener(new ActionListener() {
 	  		public void actionPerformed(ActionEvent e) {
@@ -322,6 +326,7 @@ public class GUI extends JFrame implements ActionListener {
 	  	firstPlayerColor.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 	  	firstPlayerColor.setBackground(PALETTE_COLOR_3);
 	  	firstPlayerColor.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
+	  	firstPlayerColor.setOpaque(true);
 		firstPlayerColor.addMouseListener(new EnableHoverOnButton(firstPlayerColor, PALETTE_COLOR_2, PALETTE_COLOR_3));
 	  	firstPlayerColor.addActionListener(new ActionListener() {
 	  		public void actionPerformed(ActionEvent e) {
@@ -363,6 +368,7 @@ public class GUI extends JFrame implements ActionListener {
 		JButton secondPlayerColor = new JButton("Choose a color");
 		secondPlayerColor.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		secondPlayerColor.setBackground(PALETTE_COLOR_3);
+		secondPlayerColor.setOpaque(true);
 		secondPlayerColor.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
 		secondPlayerColor.addMouseListener(new EnableHoverOnButton(secondPlayerColor, PALETTE_COLOR_2, PALETTE_COLOR_3));
 
@@ -431,8 +437,10 @@ public class GUI extends JFrame implements ActionListener {
 		match.setSecondPlayer(secondPlayer);
 		
 		playerPanel.setBackground(PALETTE_COLOR_1);
+		playerPanel.setOpaque(true);
 	  	mainPanel.setBackground(PALETTE_COLOR_1);
-	
+	  	mainPanel.setOpaque(true);
+	  	
 	  	biggestFrame.add(playerPanel, BorderLayout.CENTER);
 	  	biggestFrame.add(mainPanel, BorderLayout.SOUTH);
   	 
@@ -489,6 +497,7 @@ public class GUI extends JFrame implements ActionListener {
     	
     	JPanel labelPanel = new JPanel(new GridBagLayout());	
     	labelPanel.setBackground(PALETTE_COLOR_3);
+    	labelPanel.setOpaque(true);
     	
     	JLabel colorLabel = new JLabel("Click on a color to choose it! You can only choose once");
     	colorLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
@@ -519,6 +528,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[0][0] = new JButton();
         
         colors[0][0].setBackground(TOKEN_COLOR_1);
+        colors[0][0].setOpaque(true);
         colors[0][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[0][0], mutexPlayer);
@@ -529,6 +539,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[0][1] = new JButton();
 
         colors[0][1].setBackground(TOKEN_COLOR_2);
+        colors[0][1].setOpaque(true);
         colors[0][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[0][1], mutexPlayer);
@@ -539,6 +550,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[0][2] = new JButton();
 
         colors[0][2].setBackground(TOKEN_COLOR_3);
+        colors[0][2].setOpaque(true);
         colors[0][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[0][2], mutexPlayer);
@@ -549,6 +561,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[0][3] = new JButton();
         
         colors[0][3].setBackground(TOKEN_COLOR_4);
+        colors[0][3].setOpaque(true);
         colors[0][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[0][3], mutexPlayer);
@@ -559,6 +572,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[0][4] = new JButton();
         
         colors[0][4].setBackground(TOKEN_COLOR_5);
+        colors[0][4].setOpaque(true);
         colors[0][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[0][4], mutexPlayer);
@@ -569,6 +583,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[0][5] = new JButton();
         
         colors[0][5].setBackground(TOKEN_COLOR_6);
+        colors[0][5].setOpaque(true);
         colors[0][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[0][5], mutexPlayer);
@@ -579,6 +594,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[1][0] = new JButton();
         
         colors[1][0].setBackground(TOKEN_COLOR_7);
+        colors[1][0].setOpaque(true);
         colors[1][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[1][0], mutexPlayer);
@@ -589,6 +605,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[1][1] = new JButton();
 
         colors[1][1].setBackground(TOKEN_COLOR_8);
+        colors[1][1].setOpaque(true);
         colors[1][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[1][1], mutexPlayer);
@@ -599,6 +616,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[1][2] = new JButton();
 
         colors[1][2].setBackground(TOKEN_COLOR_9);
+        colors[1][2].setOpaque(true);
         colors[1][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[1][2], mutexPlayer);
@@ -609,6 +627,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[1][3] = new JButton();
 
         colors[1][3].setBackground(TOKEN_COLOR_10);
+        colors[1][3].setOpaque(true);
         colors[1][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[1][3], mutexPlayer);
@@ -619,6 +638,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[1][4] = new JButton();
         
         colors[1][4].setBackground(TOKEN_COLOR_11);
+        colors[1][4].setOpaque(true);
         colors[1][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[1][4], mutexPlayer);
@@ -629,6 +649,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[1][5] = new JButton();
         
         colors[1][5].setBackground(TOKEN_COLOR_12);
+        colors[1][5].setOpaque(true);
         colors[1][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[1][5], mutexPlayer);
@@ -639,6 +660,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[2][0] = new JButton();
 
         colors[2][0].setBackground(TOKEN_COLOR_13);
+        colors[2][0].setOpaque(true);
         colors[2][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[2][0], mutexPlayer);
@@ -649,6 +671,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[2][1] = new JButton();
 
         colors[2][1].setBackground(TOKEN_COLOR_14);
+        colors[2][1].setOpaque(true);
         colors[2][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[2][1], mutexPlayer);
@@ -659,6 +682,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[2][2] = new JButton();
 
         colors[2][2].setBackground(TOKEN_COLOR_15);
+        colors[2][2].setOpaque(true);
         colors[2][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[2][2], mutexPlayer);
@@ -669,6 +693,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[2][3] = new JButton();
 
         colors[2][3].setBackground(TOKEN_COLOR_16);
+        colors[2][3].setOpaque(true);
         colors[2][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[2][3], mutexPlayer);
@@ -679,6 +704,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[2][4] = new JButton();
         
         colors[2][4].setBackground(TOKEN_COLOR_17);
+        colors[2][4].setOpaque(true);
         colors[2][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[2][4], mutexPlayer);
@@ -689,6 +715,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[2][5] = new JButton();
         
         colors[2][5].setBackground(TOKEN_COLOR_18);
+        colors[2][5].setOpaque(true);
         colors[2][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[2][5], mutexPlayer);
@@ -699,6 +726,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[3][0] = new JButton();
 
         colors[3][0].setBackground(TOKEN_COLOR_19);
+        colors[3][0].setOpaque(true);
         colors[3][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[3][0], mutexPlayer);
@@ -709,6 +737,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[3][1] = new JButton();
 
         colors[3][1].setBackground(TOKEN_COLOR_20);
+        colors[3][1].setOpaque(true);
         colors[3][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[3][1], mutexPlayer);
@@ -719,6 +748,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[3][2] = new JButton();
 
         colors[3][2].setBackground(TOKEN_COLOR_21);
+        colors[3][2].setOpaque(true);
         colors[3][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[3][2], mutexPlayer);
@@ -729,6 +759,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[3][3] = new JButton();
 
         colors[3][3].setBackground(TOKEN_COLOR_22);
+        colors[3][3].setOpaque(true);
         colors[3][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[3][3], mutexPlayer);
@@ -739,6 +770,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[3][4] = new JButton();
         
         colors[3][4].setBackground(TOKEN_COLOR_23);
+        colors[3][4].setOpaque(true);
         colors[3][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[3][4], mutexPlayer);
@@ -749,6 +781,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[3][5] = new JButton();
         
         colors[3][5].setBackground(TOKEN_COLOR_24);
+        colors[3][5].setOpaque(true);
         colors[3][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[3][5], mutexPlayer);
@@ -759,6 +792,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[4][0] = new JButton();
         
         colors[4][0].setBackground(TOKEN_COLOR_25);
+        colors[4][0].setOpaque(true);
         colors[4][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[4][0], mutexPlayer);
@@ -769,6 +803,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[4][1] = new JButton();
 
         colors[4][1].setBackground(TOKEN_COLOR_26);
+        colors[4][1].setOpaque(true);
         colors[4][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[4][1], mutexPlayer);
@@ -779,6 +814,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[4][2] = new JButton();
 
         colors[4][2].setBackground(TOKEN_COLOR_27);
+        colors[4][2].setOpaque(true);
         colors[4][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[4][2], mutexPlayer);
@@ -789,6 +825,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[4][3] = new JButton();
 
         colors[4][3].setBackground(TOKEN_COLOR_28);
+        colors[4][3].setOpaque(true);
         colors[4][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[4][3], mutexPlayer);
@@ -799,6 +836,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[4][4] = new JButton();
         
         colors[4][4].setBackground(TOKEN_COLOR_29);
+        colors[4][4].setOpaque(true);
         colors[4][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[4][4], mutexPlayer);
@@ -809,6 +847,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[4][5] = new JButton();
         
         colors[4][5].setBackground(TOKEN_COLOR_30);
+        colors[4][5].setOpaque(true);
         colors[4][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[4][5], mutexPlayer);
@@ -819,6 +858,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[5][0] = new JButton();
         
         colors[5][0].setBackground(TOKEN_COLOR_31);
+        colors[5][0].setOpaque(true);
         colors[5][0].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[5][0], mutexPlayer);
@@ -829,6 +869,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[5][1] = new JButton();
 
         colors[5][1].setBackground(TOKEN_COLOR_32);
+        colors[5][1].setOpaque(true);
         colors[5][1].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[5][1], mutexPlayer);
@@ -839,6 +880,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[5][2] = new JButton();
 
         colors[5][2].setBackground(TOKEN_COLOR_33);
+        colors[5][2].setOpaque(true);
         colors[5][2].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[5][2], mutexPlayer);
@@ -849,6 +891,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[5][3] = new JButton();
 
         colors[5][3].setBackground(TOKEN_COLOR_34);
+        colors[5][3].setOpaque(true);
         colors[5][3].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[5][3], mutexPlayer);
@@ -859,6 +902,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[5][4] = new JButton();
         
         colors[5][4].setBackground(TOKEN_COLOR_35);
+        colors[5][4].setOpaque(true);
         colors[5][4].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[5][4], mutexPlayer);
@@ -869,6 +913,7 @@ public class GUI extends JFrame implements ActionListener {
         colors[5][5] = new JButton();
         
         colors[5][5].setBackground(TOKEN_COLOR_36);
+        colors[5][5].setOpaque(true);
         colors[5][5].addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		setColorCorrespondingToButton(colors[5][5], mutexPlayer);
@@ -877,6 +922,7 @@ public class GUI extends JFrame implements ActionListener {
         colorPanel.add(colors[5][5]);
        
         colorsTopPanel.setBackground(PALETTE_COLOR_1);
+        colorsTopPanel.setOpaque(true);
     }
     
     /**
@@ -955,6 +1001,7 @@ public class GUI extends JFrame implements ActionListener {
         quitButton = new JButton("Quit");
         quitButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         quitButton.setBackground(PALETTE_COLOR_1);
+        quitButton.setOpaque(true);
         quitButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
 		quitButton.addMouseListener(new EnableHoverOnButton(quitButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
         quitButton.addActionListener(this);
@@ -962,6 +1009,7 @@ public class GUI extends JFrame implements ActionListener {
         resetButton = new JButton("Reset");
         resetButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         resetButton.setBackground(PALETTE_COLOR_1);
+        resetButton.setOpaque(true);
         resetButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
 		resetButton.addMouseListener(new EnableHoverOnButton(resetButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
         resetButton.addActionListener(this);
@@ -969,6 +1017,7 @@ public class GUI extends JFrame implements ActionListener {
         saveButton = new JButton("Save");
         saveButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
         saveButton.setBackground(PALETTE_COLOR_1);
+        saveButton.setOpaque(true);
         saveButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
 		saveButton.addMouseListener(new EnableHoverOnButton(saveButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
         saveButton.addActionListener(this);
@@ -1004,11 +1053,17 @@ public class GUI extends JFrame implements ActionListener {
         
         gameContainer.setBackground(PALETTE_COLOR_1);
         bottomButtonPanel.setBackground(PALETTE_COLOR_3);
+        bottomButtonPanel.setOpaque(true);
         informativePanel.setBackground(PALETTE_COLOR_2);
+        informativePanel.setOpaque(true);
 		downPanel.setBackground(PALETTE_COLOR_3);
+		downPanel.setOpaque(true);
 		playerPanel.setBackground(PALETTE_COLOR_3);
+		playerPanel.setOpaque(true);
 		turnPanel.setBackground(PALETTE_COLOR_3);
+		turnPanel.setOpaque(true);
 		topPanel.setBackground(PALETTE_COLOR_3);
+		topPanel.setOpaque(true);
 
         frame.add(gameContainer);
 
@@ -1026,6 +1081,7 @@ public class GUI extends JFrame implements ActionListener {
         columnButtons[0] = new JButton(1 + "");
         columnButtons[0].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[0].setBackground(PALETTE_COLOR_3);
+        columnButtons[0].setOpaque(true);
         columnButtons[0].setBorder(BorderFactory.createEmptyBorder(5, -1, 5, -1));
         columnButtons[0].addMouseListener(new EnableHoverOnButton(columnButtons[0], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[0].addActionListener(new ActionListener() {
@@ -1038,6 +1094,7 @@ public class GUI extends JFrame implements ActionListener {
         columnButtons[1] = new JButton(2 + "");
         columnButtons[1].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[1].setBackground(PALETTE_COLOR_3);
+        columnButtons[1].setOpaque(true);
         columnButtons[1].setBorder(emptyBorder);
         columnButtons[1].addMouseListener(new EnableHoverOnButton(columnButtons[1], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[1].addActionListener(new ActionListener() {
@@ -1050,6 +1107,7 @@ public class GUI extends JFrame implements ActionListener {
         columnButtons[2] = new JButton(3 + "");
         columnButtons[2].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[2].setBackground(PALETTE_COLOR_3);
+        columnButtons[2].setOpaque(true);
         columnButtons[2].setBorder(emptyBorder);
         columnButtons[2].addMouseListener(new EnableHoverOnButton(columnButtons[2], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[2].addActionListener(new ActionListener() {
@@ -1062,6 +1120,7 @@ public class GUI extends JFrame implements ActionListener {
         columnButtons[3] = new JButton(4 + "");
         columnButtons[3].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[3].setBackground(PALETTE_COLOR_3);
+        columnButtons[3].setOpaque(true);
         columnButtons[3].setBorder(emptyBorder);
         columnButtons[3].addMouseListener(new EnableHoverOnButton(columnButtons[3], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[3].addActionListener(new ActionListener() {
@@ -1074,6 +1133,7 @@ public class GUI extends JFrame implements ActionListener {
         columnButtons[4] = new JButton(5 + "");
         columnButtons[4].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[4].setBackground(PALETTE_COLOR_3);
+        columnButtons[4].setOpaque(true);
         columnButtons[4].setBorder(emptyBorder);
         columnButtons[4].addMouseListener(new EnableHoverOnButton(columnButtons[4], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[4].addActionListener(new ActionListener() {
@@ -1086,6 +1146,7 @@ public class GUI extends JFrame implements ActionListener {
         columnButtons[5] = new JButton(6 + "");
         columnButtons[5].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[5].setBackground(PALETTE_COLOR_3);
+        columnButtons[5].setOpaque(true);
         columnButtons[5].setBorder(emptyBorder);
         columnButtons[5].addMouseListener(new EnableHoverOnButton(columnButtons[5], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[5].addActionListener(new ActionListener() {
@@ -1098,6 +1159,7 @@ public class GUI extends JFrame implements ActionListener {
         columnButtons[6] = new JButton(7 + "");
         columnButtons[6].setFont(gamingFont.deriveFont(SMALLEST_SIZE));
         columnButtons[6].setBackground(PALETTE_COLOR_3);
+        columnButtons[6].setOpaque(true);
         columnButtons[6].setBorder(emptyBorder);
         columnButtons[6].addMouseListener(new EnableHoverOnButton(columnButtons[6], PALETTE_COLOR_4, PALETTE_COLOR_3));
         columnButtons[6].addActionListener(new ActionListener() {
@@ -1166,6 +1228,7 @@ public class GUI extends JFrame implements ActionListener {
   		startGameButton = new JButton("Start a new Game");
   		startGameButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
   		startGameButton.setBackground(PALETTE_COLOR_1);
+  		startGameButton.setOpaque(true);
   		startGameButton.setBorder(BorderFactory.createEmptyBorder(5, 22, 5, 22));
   		startGameButton.addMouseListener(new EnableHoverOnButton(startGameButton, PALETTE_COLOR_2, PALETTE_COLOR_1));
   		startGameButton.addActionListener(new ActionListener() 
@@ -1206,7 +1269,9 @@ public class GUI extends JFrame implements ActionListener {
     	gameContainer.remove(downPanel);
         gameContainer.add(endGamePanel, constraints);
         endGamePanelButtons.setBackground(PALETTE_COLOR_3);
+        endGamePanelButtons.setOpaque(true);
         endGamePanel.setBackground(PALETTE_COLOR_3);
+        endGamePanel.setOpaque(true);
         endGamePanel.setVisible(true);
 		
 	}
@@ -1265,7 +1330,6 @@ public class GUI extends JFrame implements ActionListener {
 	    		if(!match.getBoard().isColumnFull(column)) {					
 	    			if (!boardCellsPanel[tempRow+1][column].getBackground().equals(Color.pink)) {
 	    				changeColorInBoard(match.getFirstPlayer().getToken(), tempRow, column);
-	    				//boardCellsPanel[tempRow][column].setBackground(match.getFirstPlayer().getToken().getTokenColor());
 	    				try {
 	    					match.insertInBoard(match.getFirstPlayer().getToken(), column);
 	    					//When pressing a button, the turn owner changes, so if it was first player's turn, these code changes the board
@@ -1593,6 +1657,7 @@ public class GUI extends JFrame implements ActionListener {
 		JButton confirmButton = new JButton("Confirm");
 		confirmButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		confirmButton.setBackground(PALETTE_COLOR_4);
+		confirmButton.setOpaque(true);
 		confirmButton.setBorder(emptyBorder);
 		confirmButton.addMouseListener(new EnableHoverOnButton(confirmButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		confirmButton.addActionListener(new ActionListener() {
@@ -1630,6 +1695,7 @@ public class GUI extends JFrame implements ActionListener {
 		    	
 		  	  	JPanel prettier = new JPanel();
 				prettier.setBackground(PALETTE_COLOR_3);
+				prettier.setOpaque(true);
 				
 		    	JLabel continueLabel = new JLabel("Do you want to play again?");
 				continueLabel.setFont(gamingFont.deriveFont(SMALLER_SIZE));
@@ -1644,6 +1710,7 @@ public class GUI extends JFrame implements ActionListener {
 		    	JButton yesButton = new JButton("Play again!");
 		    	yesButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		    	yesButton.setBackground(PALETTE_COLOR_4);
+		    	yesButton.setOpaque(true);
 		    	yesButton.setBorder(emptyBorder);
 		    	yesButton.addMouseListener(new EnableHoverOnButton(yesButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		    	yesButton.addActionListener(new ActionListener() {
@@ -1663,6 +1730,7 @@ public class GUI extends JFrame implements ActionListener {
 		    	JButton noButton = new JButton("No, thanks");
 		    	noButton.setFont(gamingFont.deriveFont(MEDIUM_SIZE));
 		    	noButton.setBackground(PALETTE_COLOR_4);
+		    	noButton.setOpaque(true);
 		    	noButton.setBorder(emptyBorder);
 		    	noButton.addMouseListener(new EnableHoverOnButton(noButton, PALETTE_COLOR_3, PALETTE_COLOR_4));
 		    	noButton.addActionListener(new ActionListener() {
@@ -1700,6 +1768,7 @@ public class GUI extends JFrame implements ActionListener {
 		noteLabel2.setFont(gamingFont.deriveFont(SMALLEST_SIZE));
 		noteLabel2.setBorder(BorderFactory.createEmptyBorder(0, 10, 20, 10));
   	  	notePanel.setBackground(PALETTE_COLOR_3);
+  	  	notePanel.setOpaque(true);
   	  	notePanel.add(noteLabel1);
   	  	notePanel.add(noteLabel2);
   	  	constraints.ipadx = 0;
@@ -1711,6 +1780,7 @@ public class GUI extends JFrame implements ActionListener {
 		
 		gameContainer.setVisible(false);
 		panel.setBackground(PALETTE_COLOR_1);
+		panel.setOpaque(true);
 		panel.setVisible(true);
 
     	biggestFrame.add(panel);
@@ -1738,6 +1808,7 @@ public class GUI extends JFrame implements ActionListener {
 		JButton errorButton = new JButton("I will choose another column");
 		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		errorButton.setBackground(PALETTE_COLOR_4);
+		errorButton.setOpaque(true);
 		errorButton.addMouseListener(new EnableHoverOnButton(errorButton, PALETTE_COLOR_2, PALETTE_COLOR_4));
 		errorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1776,6 +1847,7 @@ public class GUI extends JFrame implements ActionListener {
 		JButton errorButton = new JButton("I will choose another file");
 		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		errorButton.setBackground(PALETTE_COLOR_2);
+		errorButton.setOpaque(true);
 		errorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				biggestFrame.setEnabled(true);
@@ -1815,6 +1887,7 @@ public class GUI extends JFrame implements ActionListener {
 		JButton errorButton = new JButton("Ok then");
 		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		errorButton.setBackground(PALETTE_COLOR_2);
+		errorButton.setOpaque(true);
 		errorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				biggestFrame.setEnabled(true);
@@ -1853,6 +1926,7 @@ public class GUI extends JFrame implements ActionListener {
 		JButton errorButton = new JButton("Ok, that's fine for me");
 		errorButton.setFont(gamingFont.deriveFont(SMALLER_SIZE));
 		errorButton.setBackground(PALETTE_COLOR_2);
+		errorButton.setOpaque(true);
 		errorButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				biggestFrame.setEnabled(true);
