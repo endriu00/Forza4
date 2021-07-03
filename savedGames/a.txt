@@ -1,0 +1,10 @@
+First player: first player, token color: 0 250 0
+Second player: second player, token color: 255 0 0
+Turn: 7 
+Board: 
+Row: 5 Col: 2 255 0 0
+Row: 5 Col: 3 0 250 0
+Row: 4 Col: 2 0 250 0
+Row: 4 Col: 3 255 0 0
+Row: 3 Col: 2 255 0 0
+Row: 3 Col: 3 0 250 0
