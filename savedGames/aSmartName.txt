@@ -1,0 +1,27 @@
+First player: andrea, token color: 20 20 20
+Second player: oscar, token color: 0 255 71
+Turn: 24 
+Board: 
+Row: 5 Col: 1 0 255 71
+Row: 5 Col: 3 0 255 71
+Row: 5 Col: 4 0 255 71
+Row: 5 Col: 5 20 20 20
+Row: 5 Col: 6 20 20 20
+Row: 4 Col: 1 20 20 20
+Row: 4 Col: 3 20 20 20
+Row: 4 Col: 4 20 20 20
+Row: 4 Col: 5 0 255 71
+Row: 4 Col: 6 0 255 71
+Row: 3 Col: 1 0 255 71
+Row: 3 Col: 3 0 255 71
+Row: 3 Col: 4 0 255 71
+Row: 3 Col: 5 20 20 20
+Row: 3 Col: 6 20 20 20
+Row: 2 Col: 1 20 20 20
+Row: 2 Col: 3 20 20 20
+Row: 2 Col: 4 20 20 20
+Row: 2 Col: 5 0 255 71
+Row: 2 Col: 6 0 255 71
+Row: 1 Col: 1 0 255 71
+Row: 1 Col: 3 0 255 71
+Row: 1 Col: 5 20 20 20

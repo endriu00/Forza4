@@ -1,0 +1,18 @@
+First player: a, token color: 205 245 247
+Second player: b, token color: 20 20 20
+Turn: 21 
+Board: 
+Row: 5 Col: 0 20 20 20
+Row: 5 Col: 1 205 245 247
+Row: 5 Col: 2 20 20 20
+Row: 5 Col: 3 205 245 247
+Row: 5 Col: 4 20 20 20
+Row: 5 Col: 5 20 20 20
+Row: 5 Col: 6 205 245 247
+Row: 4 Col: 1 20 20 20
+Row: 4 Col: 2 205 245 247
+Row: 4 Col: 4 20 20 20
+Row: 4 Col: 5 205 245 247
+Row: 3 Col: 1 205 245 247
+Row: 3 Col: 2 20 20 20
+Row: 3 Col: 4 205 245 247
